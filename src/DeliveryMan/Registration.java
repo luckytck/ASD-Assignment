@@ -1,22 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DeliveryMan;
-    
-/**
- *
- * @author ken_0
- */
-public class Registration extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Registration
-     */
+import java.awt.Color;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+public class Registration extends javax.swing.JFrame {
+    private List<DeliveryMan> deliveryManList = new ArrayList<>();
+    
     public Registration() {
         initComponents();
+        initializeList();
         jtfName.grabFocus();
+        jlblError.setText("");
+        jradMale.setActionCommand("Male");
+        jradFemale.setActionCommand("Female");
+        String output = String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-10s\n", "ID", "NAME", "GENDER", "CONTACT NO.", "EMAIL", "STATUS");
+        int count = 0;
+        for (int i = 0; i < deliveryManList.size(); i++) {
+            if (deliveryManList.get(i) != null) {
+                output += deliveryManList.get(i).toString();
+                count++;
+            }
+            else{
+                break;
+            }
+        }
+        System.out.print(output);
+        DeliveryMan.setNextId(1000+count);
     }
 
     /**
@@ -39,12 +56,18 @@ public class Registration extends javax.swing.JFrame {
         jradMale = new javax.swing.JRadioButton();
         jradFemale = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
-        jbtnRegister = new javax.swing.JButton();
+        jbtnClose = new javax.swing.JButton();
         jtfEmail = new javax.swing.JTextField();
-        jftfContactNumber = new javax.swing.JFormattedTextField();
         jlblError = new javax.swing.JLabel();
+        jbtnRegister = new javax.swing.JButton();
+        jtfContactNumber = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jlblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jlblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -68,27 +91,50 @@ public class Registration extends javax.swing.JFrame {
         jLabel4.setText("Home Address:");
 
         jbgGender.add(jradMale);
+        jradMale.setSelected(true);
         jradMale.setText("Male");
+        jradMale.setToolTipText("");
 
         jbgGender.add(jradFemale);
         jradFemale.setText("Female");
+        jradFemale.setToolTipText("");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Email:");
 
-        jbtnRegister.setText("Register");
+        jbtnClose.setText("Close");
+        jbtnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCloseActionPerformed(evt);
+            }
+        });
 
         jtfEmail.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-
-        try {
-            jftfContactNumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-########")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
+        jtfEmail.setForeground(new java.awt.Color(0, 0, 0));
 
         jlblError.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jlblError.setForeground(java.awt.Color.red);
         jlblError.setText("Error Message");
+
+        jbtnRegister.setText("Register");
+        jbtnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnRegisterActionPerformed(evt);
+            }
+        });
+
+        jtfContactNumber.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jtfContactNumber.setForeground(java.awt.Color.lightGray);
+        jtfContactNumber.setText("01#-########");
+        jtfContactNumber.setToolTipText("");
+        jtfContactNumber.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfContactNumberFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfContactNumberFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,35 +146,34 @@ public class Registration extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jlblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(107, 107, 107)
+                                .addGap(52, 52, 52)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jbtnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(1, 1, 1)
                                 .addComponent(jbtnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(52, 52, 52)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlblError)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jradMale, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(jradFemale, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jtfHomeAddress)
-                                        .addComponent(jtfName, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jtfEmail)
-                                        .addComponent(jftfContactNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)))))
-                        .addGap(0, 49, Short.MAX_VALUE)))
+                            .addComponent(jlblError)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jradMale, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jradFemale, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jtfHomeAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                .addComponent(jtfName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                .addComponent(jtfEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                .addComponent(jtfContactNumber, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)))
+                        .addGap(0, 48, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -148,7 +193,7 @@ public class Registration extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jftfContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtfContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,20 +202,96 @@ public class Registration extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 54, Short.MAX_VALUE)
-                        .addComponent(jbtnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlblError)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlblError)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbtnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jbtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRegisterActionPerformed
+        String name = jtfName.getText();
+        String gender = jbgGender.getSelection().getActionCommand();
+        String contactNumber = jtfContactNumber.getText();
+        String homeAddress = jtfHomeAddress.getText();
+        String email = jtfEmail.getText();
+        
+        if (name.isEmpty() || gender.isEmpty() || contactNumber.equals("01#-########") || homeAddress.isEmpty() || email.isEmpty()) {
+            jlblError.setText("Please fill in all the fields.");
+        }
+        else{
+            int option = JOptionPane.showConfirmDialog(null, "Do you want to register this delivery man?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            if(option == JOptionPane.YES_OPTION){
+                DeliveryMan deliveryMan = new DeliveryMan(name, gender, contactNumber, email, homeAddress);
+                deliveryManList.add(deliveryMan);
+                jtfName.setText("");
+                jradMale.setSelected(true);
+                jtfContactNumber.setText("");
+                jtfHomeAddress.setText("");
+                jtfEmail.setText("");
+                jtfName.grabFocus();
+            }
+        }
+    }//GEN-LAST:event_jbtnRegisterActionPerformed
+
+    private void jbtnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCloseActionPerformed
+        try {
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("deliveryMan.dat"));
+            ooStream.writeObject(deliveryManList);
+            ooStream.close();
+            this.dispose();
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Cannot save to file", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jbtnCloseActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("deliveryMan.dat"));
+            ooStream.writeObject(deliveryManList);
+            ooStream.close();
+            this.dispose();
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Cannot save to file", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jtfContactNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfContactNumberFocusLost
+        if (jtfContactNumber.getText().isEmpty()) {
+            jtfContactNumber.setForeground(Color.LIGHT_GRAY);
+            jtfContactNumber.setText("01#-########");
+        }
+    }//GEN-LAST:event_jtfContactNumberFocusLost
+
+    private void jtfContactNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfContactNumberFocusGained
+        if (jtfContactNumber.getText().equals("01#-########")) {
+            jtfContactNumber.setForeground(Color.BLACK);
+            jtfContactNumber.setText("");
+        }
+    }//GEN-LAST:event_jtfContactNumberFocusGained
+
+    private void initializeList(){
+        try {
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("deliveryMan.dat"));
+            deliveryManList = (ArrayList) (oiStream.readObject());
+            oiStream.close();
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Cannot read from file", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Class not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -213,12 +334,13 @@ public class Registration extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.ButtonGroup jbgGender;
+    private javax.swing.JButton jbtnClose;
     private javax.swing.JButton jbtnRegister;
-    private javax.swing.JFormattedTextField jftfContactNumber;
     private javax.swing.JLabel jlblError;
     private javax.swing.JLabel jlblTitle;
     private javax.swing.JRadioButton jradFemale;
     private javax.swing.JRadioButton jradMale;
+    private javax.swing.JTextField jtfContactNumber;
     private javax.swing.JTextField jtfEmail;
     private javax.swing.JTextField jtfHomeAddress;
     private javax.swing.JTextField jtfName;
