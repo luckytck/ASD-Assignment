@@ -10,10 +10,12 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import java.util.regex.*;
 
 public class Registration extends javax.swing.JFrame {
+
     private List<DeliveryMan> deliveryManList = new ArrayList<>();
-    
+
     public Registration() {
         initComponents();
         initializeList();
@@ -21,19 +23,16 @@ public class Registration extends javax.swing.JFrame {
         jlblError.setText("");
         jradMale.setActionCommand("Male");
         jradFemale.setActionCommand("Female");
-        String output = String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-10s\n", "ID", "NAME", "GENDER", "CONTACT NO.", "EMAIL", "STATUS");
+
         int count = 0;
         for (int i = 0; i < deliveryManList.size(); i++) {
             if (deliveryManList.get(i) != null) {
-                output += deliveryManList.get(i).toString();
                 count++;
-            }
-            else{
+            } else {
                 break;
             }
         }
-        System.out.print(output);
-        DeliveryMan.setNextId(1000+count);
+        DeliveryMan.setNextId(1000 + count);
     }
 
     /**
@@ -61,6 +60,8 @@ public class Registration extends javax.swing.JFrame {
         jlblError = new javax.swing.JLabel();
         jbtnRegister = new javax.swing.JButton();
         jtfContactNumber = new javax.swing.JTextField();
+        jtfIdentityCardNo = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -74,21 +75,25 @@ public class Registration extends javax.swing.JFrame {
         jlblTitle.setText("Delivery Man Registration");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Name:");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel1.setText("Name :");
 
         jtfName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jtfName.setToolTipText("");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Gender:");
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Gender :");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Contact Number:");
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("Contact Number :");
 
         jtfHomeAddress.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setText("Home Address:");
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel4.setText("Home Address :");
 
         jbgGender.add(jradMale);
         jradMale.setSelected(true);
@@ -100,8 +105,11 @@ public class Registration extends javax.swing.JFrame {
         jradFemale.setToolTipText("");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setText("Email:");
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Email Address :");
 
+        jbtnClose.setBackground(new java.awt.Color(204, 0, 0));
+        jbtnClose.setForeground(new java.awt.Color(255, 255, 255));
         jbtnClose.setText("Close");
         jbtnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,12 +118,23 @@ public class Registration extends javax.swing.JFrame {
         });
 
         jtfEmail.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jtfEmail.setForeground(new java.awt.Color(0, 0, 0));
+        jtfEmail.setForeground(java.awt.Color.lightGray);
+        jtfEmail.setText("something@someserver.com");
+        jtfEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfEmailFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfEmailFocusLost(evt);
+            }
+        });
 
         jlblError.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jlblError.setForeground(java.awt.Color.red);
         jlblError.setText("Error Message");
 
+        jbtnRegister.setBackground(new java.awt.Color(0, 102, 0));
+        jbtnRegister.setForeground(new java.awt.Color(255, 255, 255));
         jbtnRegister.setText("Register");
         jbtnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,45 +155,58 @@ public class Registration extends javax.swing.JFrame {
             }
         });
 
+        jtfIdentityCardNo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jtfIdentityCardNo.setForeground(java.awt.Color.lightGray);
+        jtfIdentityCardNo.setText("######-##-####");
+        jtfIdentityCardNo.setToolTipText("");
+        jtfIdentityCardNo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfIdentityCardNoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfIdentityCardNoFocusLost(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("Identity Card No :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jlblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jlblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbtnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(52, 52, 52)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jbtnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(1, 1, 1)
-                                .addComponent(jbtnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jlblError)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jradMale, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jradFemale, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jtfHomeAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                .addComponent(jtfName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                .addComponent(jtfEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                .addComponent(jtfContactNumber, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)))
-                        .addGap(0, 48, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jtfIdentityCardNo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jradMale, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jradFemale, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jtfContactNumber, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfHomeAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblError, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jbtnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,13 +219,17 @@ public class Registration extends javax.swing.JFrame {
                     .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfIdentityCardNo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jradMale, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jradFemale, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtfContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,37 +240,63 @@ public class Registration extends javax.swing.JFrame {
                     .addComponent(jtfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlblError)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                    .addComponent(jbtnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRegisterActionPerformed
-        String name = jtfName.getText();
-        String gender = jbgGender.getSelection().getActionCommand();
-        String contactNumber = jtfContactNumber.getText();
-        String homeAddress = jtfHomeAddress.getText();
-        String email = jtfEmail.getText();
-        
-        if (name.isEmpty() || gender.isEmpty() || contactNumber.equals("01#-########") || homeAddress.isEmpty() || email.isEmpty()) {
+        String name = jtfName.getText().trim();
+        String gender = jbgGender.getSelection().getActionCommand().trim();
+        String contactNumber = jtfContactNumber.getText().trim();
+        String homeAddress = jtfHomeAddress.getText().trim();
+        String email = jtfEmail.getText().trim();
+        String identityCardNo = jtfIdentityCardNo.getText().trim();
+
+        if (name.isEmpty() || gender.isEmpty() || contactNumber.equals("01#-########") || homeAddress.isEmpty() || email.equals("something@someserver.com") || identityCardNo.equals("######-##-####")) {
             jlblError.setText("Please fill in all the fields.");
-        }
-        else{
+        } else if (!validateIdentityCardNo(identityCardNo)) {
+            jlblError.setText("Please enter a valid IC Number.");
+            jtfIdentityCardNo.setText("");
+            jtfIdentityCardNo.grabFocus();
+        } else if (!validateContactNumber(contactNumber)) {
+            jlblError.setText("Please enter a valid contact number.");
+            jtfContactNumber.setText("");
+            jtfContactNumber.grabFocus();
+        } else if (!validateEmail(email)) {
+            jlblError.setText("Please enter a valid email address.");
+            jtfEmail.setText("");
+            jtfEmail.grabFocus();
+        } else {
             int option = JOptionPane.showConfirmDialog(null, "Do you want to register this delivery man?", "Confirmation", JOptionPane.YES_NO_OPTION);
-            if(option == JOptionPane.YES_OPTION){
-                DeliveryMan deliveryMan = new DeliveryMan(name, gender, contactNumber, email, homeAddress);
+            if (option == JOptionPane.YES_OPTION) {
+                DeliveryMan deliveryMan = new DeliveryMan(name, gender, contactNumber, email, homeAddress, identityCardNo);
                 deliveryManList.add(deliveryMan);
+                JOptionPane.showMessageDialog(null, "Registered Successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 jtfName.setText("");
+                jtfIdentityCardNo.setText("");
                 jradMale.setSelected(true);
                 jtfContactNumber.setText("");
                 jtfHomeAddress.setText("");
                 jtfEmail.setText("");
+                jlblError.setText("");
                 jtfName.grabFocus();
+                
+                String result = String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-14s  %-10s\n", "ID", "NAME", "GENDER", "CONTACT NO.", "EMAIL", "IC NO.", "STATUS");
+                for (int i = 0; i < deliveryManList.size(); i++) {
+                    if (deliveryManList.get(i) != null) {
+                        result += deliveryManList.get(i).toString();
+                    } else {
+                        break;
+                    }
+                }
+                System.out.println("Updated Delivery Man List :");
+                System.out.println(result);
             }
         }
     }//GEN-LAST:event_jbtnRegisterActionPerformed
@@ -279,7 +341,35 @@ public class Registration extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtfContactNumberFocusGained
 
-    private void initializeList(){
+    private void jtfEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfEmailFocusLost
+        if (jtfEmail.getText().isEmpty()) {
+            jtfEmail.setForeground(Color.LIGHT_GRAY);
+            jtfEmail.setText("something@someserver.com");
+        }
+    }//GEN-LAST:event_jtfEmailFocusLost
+
+    private void jtfEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfEmailFocusGained
+        if (jtfEmail.getText().equals("something@someserver.com")) {
+            jtfEmail.setForeground(Color.BLACK);
+            jtfEmail.setText("");
+        }
+    }//GEN-LAST:event_jtfEmailFocusGained
+
+    private void jtfIdentityCardNoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfIdentityCardNoFocusLost
+        if (jtfIdentityCardNo.getText().isEmpty()) {
+            jtfIdentityCardNo.setForeground(Color.LIGHT_GRAY);
+            jtfIdentityCardNo.setText("######-##-####");
+        }
+    }//GEN-LAST:event_jtfIdentityCardNoFocusLost
+
+    private void jtfIdentityCardNoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfIdentityCardNoFocusGained
+        if (jtfIdentityCardNo.getText().equals("######-##-####")) {
+            jtfIdentityCardNo.setForeground(Color.BLACK);
+            jtfIdentityCardNo.setText("");
+        }
+    }//GEN-LAST:event_jtfIdentityCardNoFocusGained
+
+    private void initializeList() {
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("deliveryMan.dat"));
             deliveryManList = (ArrayList) (oiStream.readObject());
@@ -292,6 +382,40 @@ public class Registration extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Class not found", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    private boolean validateEmail(String email) {
+        String EMAIL_PATTERN = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher regrexMatcher = pattern.matcher(email);
+        if (regrexMatcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean validateContactNumber(String contactNumber) {
+        String CONTACTNO_PATTERN = "^01[0-9]{1}-[0-9]{7,8}$";
+        Pattern pattern = Pattern.compile(CONTACTNO_PATTERN);
+        Matcher regrexMatcher = pattern.matcher(contactNumber);
+        if (regrexMatcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean validateIdentityCardNo(String identityCardNo) {
+        String ICNO_PATTERN = "^[0-9]{6}-[0-9]{2}-[0-9]{4}$";
+        Pattern pattern = Pattern.compile(ICNO_PATTERN);
+        Matcher regrexMatcher = pattern.matcher(identityCardNo);
+        if (regrexMatcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -333,6 +457,7 @@ public class Registration extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.ButtonGroup jbgGender;
     private javax.swing.JButton jbtnClose;
     private javax.swing.JButton jbtnRegister;
@@ -343,6 +468,7 @@ public class Registration extends javax.swing.JFrame {
     private javax.swing.JTextField jtfContactNumber;
     private javax.swing.JTextField jtfEmail;
     private javax.swing.JTextField jtfHomeAddress;
+    private javax.swing.JTextField jtfIdentityCardNo;
     private javax.swing.JTextField jtfName;
     // End of variables declaration//GEN-END:variables
 }
