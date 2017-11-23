@@ -14,17 +14,19 @@ public class DeliveryMan implements Serializable {
     private String email;
     private String homeAddress;
     private String identityCardNo;
+    private double basicSalary;
     private String status;   
 
-    public DeliveryMan(String name, String gender, String contactNumber, String email, String homeAddress, String identityCardNo) {
+    public DeliveryMan(String name, String gender, String contactNumber, String email, String homeAddress, String identityCardNo, double basicSalary) {
         this.id = nextId++;
         this.name = name;
         this.gender = gender;
         this.contactNumber = contactNumber;
         this.email = email;
         this.homeAddress = homeAddress;
-        this.status = "Active";
+        this.status = "Employed";
         this.identityCardNo = identityCardNo;
+        this.basicSalary = basicSalary;
     }
 
     public int getId() {
@@ -54,6 +56,10 @@ public class DeliveryMan implements Serializable {
     public String getIdentityCardNo(){
         return identityCardNo;
     }
+    
+    public double getBasicSalary(){
+        return basicSalary;
+    }
 
     public String getStatus() {
         return status;
@@ -61,6 +67,14 @@ public class DeliveryMan implements Serializable {
 
     public static int getNextId() {
         return nextId;
+    }
+    
+    public void setName(String name){
+        this.name = name;
+    }
+    
+    public void setGender(String gender){
+        this.gender = gender;
     }
 
     public void setContactNumber(String contactNumber) {
@@ -78,6 +92,10 @@ public class DeliveryMan implements Serializable {
     public void setIdentityCardNo(String identityCardNo){
         this.identityCardNo = identityCardNo;
     }
+    
+    public void setBasicSalary(double basicSalary){
+        this.basicSalary = basicSalary;
+    }
 
     public void setStatus(String status) {
         this.status = status;
@@ -88,16 +106,16 @@ public class DeliveryMan implements Serializable {
     }
 
     public String toString() {
-        return String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-14s   %-10s\n", id, name, gender, contactNumber, email, identityCardNo, status);
+        return String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-14s   %-12.2f   %-10s\n", id, name, gender, contactNumber, email, identityCardNo, basicSalary, status);
     }
 
     public static void main(String args[]) {
         //Testing
         DeliveryMan[] test = new DeliveryMan[10];
-        test[0] = new DeliveryMan("Tan Cheong Kiat", "Male", "012-3456789", "testing@gmail.com", "Jalan Suasana 3/4", "970219-14-6459");
-        test[1] = new DeliveryMan("Tan Qi Han", "Male", "012-3456789", "testing@gmail.com", "KL", "970116-12-5897");
-        test[2] = new DeliveryMan("Wong Li Yi", "Female", "012-3456789", "testing@gmail.com", "Melaka", "970521-22-5526");
-        String output = String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-14s  %-10s\n", "ID", "NAME", "GENDER", "CONTACT NO.", "EMAIL", "IC NO.", "STATUS");
+        test[0] = new DeliveryMan("Tan Cheong Kiat", "Male", "012-3456789", "testing@gmail.com", "Jalan Suasana 3/4", "970219-14-6459", 1800.00);
+        test[1] = new DeliveryMan("Tan Qi Han", "Male", "012-3456789", "testing@gmail.com", "KL", "970116-12-5897", 1800.00);
+        test[2] = new DeliveryMan("Wong Li Yi", "Female", "012-3456789", "testing@gmail.com", "Melaka", "970521-22-5526", 1800.00);
+        String output = String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-14s   %-12s   %-10s\n", "ID", "NAME", "GENDER", "CONTACT_NO.", "EMAIL", "IC_NO.", "BASIC_SALARY", "STATUS");
         for (int i = 0; i < test.length; i++) {
             if (test[i] != null) {
                 output += test[i].toString();
