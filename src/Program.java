@@ -179,6 +179,88 @@ public class Program {
                         }
                     } while (loop[1]);
                 } else if (option[0] == 2) { //Wong Li Yi - Delivery Man: Update Delivery Man Working Status
+                    List<DeliveryMan> deliveryManList = initializeList("deliveryMan.dat");
+                    int count;
+                    do {
+                        loop[1] = false;
+                        count = 0;
+                        System.out.println("D e l i v e r y   M a n   L i s t");
+                        System.out.println("=================================");
+                        String result = String.format("%-3s %-4s  %-20s   %-6s    %-12s   %-20s   %-14s   %-12s   %-10s\n", "NO.", "ID", "NAME", "GENDER", "CONTACT NO.", "EMAIL", "IC NO.", "BASIC_SALARY", "STATUS");
+                        for (int i = 0; i < deliveryManList.size(); i++) {
+                            if (deliveryManList.get(i) != null) {
+                                result += String.format("%-3s %s", i + 1 + ".", deliveryManList.get(i));
+                                count++;
+                            }
+                        }
+                        System.out.println(result);
+                        if (count == 0) {
+                            System.out.println("No delivery man found in database.");
+                        } else {
+                            System.out.print("Login as which delivery man? (-1 to exit): ");
+                            try {
+                                option[1] = scanner.nextInt();
+                                scanner.nextLine();
+                                if ((option[1] <= 0 || option[1] > count) && option[1] != -1) {
+                                    System.out.println("Invalid Option!!! Please choose an option from the list~");
+                                    loop[1] = true;
+                                } else if (option[1] == -1) {
+                                    System.out.println("Thank you for using this system.");
+                                    System.exit(0);
+                                } else {
+                                    do {
+                                        loop[2] = false;
+                                        System.out.println("Update Delivery Man Working Status");
+                                        System.out.println("=======================");
+                                        String strDm = "Name: " + deliveryManList.get(option[1] - 1).getName() + "\n" + "Contact No: " + deliveryManList.get(option[1] - 1).getContactNumber()
+                                                + "\n" + "Working Status: " + deliveryManList.get(option[1] - 1).getWorkingStatus();
+                                        System.out.println(strDm);
+                                        System.out.println("=======================");
+                                        System.out.println("1. Available");
+                                        System.out.println("2. Break");
+                                        System.out.println("3. Delivering");
+                                        System.out.println("4. Offline");
+                                        System.out.print("Enter selection (-1 to exit): ");
+
+                                        try {
+                                            option[2] = scanner.nextInt();
+                                            scanner.nextLine();
+                                            if ((option[2] < 1 || option[2] > 4) && option[2] != -1) {
+                                                System.out.println("\nInvalid Option!!! Please choose an option from the list~");
+                                                loop[2] = true;
+                                            } else if (option[2] == 1) {
+                                                deliveryManList.get(option[1] - 1).setWorkingStatus("Available");
+                                                updateList(deliveryManList, "deliveryMan.dat");
+                                                System.out.println("Working status has been updated to Available");
+                                            } else if (option[2] == 2) {
+                                                deliveryManList.get(option[1] - 1).setWorkingStatus("Break");
+                                                updateList(deliveryManList, "deliveryMan.dat");
+                                                System.out.println("Working status has been updated to Break");
+                                            } else if (option[2] == 3) {
+                                                deliveryManList.get(option[1] - 1).setWorkingStatus("Delivering");
+                                                updateList(deliveryManList, "deliveryMan.dat");
+                                                System.out.println("Working status has been updated to Delivering");
+                                            } else if (option[2] == 4) {
+                                                deliveryManList.get(option[1] - 1).setWorkingStatus("Offline");
+                                                updateList(deliveryManList, "deliveryMan.dat");
+                                                System.out.println("Working status has been updated to Offline");
+                                            } else if (option[2] == -1) {
+                                                System.exit(0);
+                                            }
+                                        } catch (Exception e) {
+                                            System.out.println("Invalid Option!!! Please enter numeric value only~");
+                                            scanner.nextLine();
+                                            loop[2] = true;
+                                        }
+                                    } while (loop[2]);
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Invalid Option!!! Please enter numeric value only~");
+                                scanner.nextLine();
+                                loop[1] = true;
+                            }
+                        }
+                    } while (loop[1]);
 
                 } else if (option[0] == 3) { //Tan Qi Han - Affiliate: Add Menu
 
