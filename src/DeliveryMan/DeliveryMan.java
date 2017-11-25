@@ -18,7 +18,7 @@ public class DeliveryMan implements Serializable {
     private String status;   
     private String workingStatus;
 
-    public DeliveryMan(String name, String gender, String contactNumber, String email, String homeAddress, String identityCardNo, double basicSalary,String workingStatus) {
+    public DeliveryMan(String name, String gender, String contactNumber, String email, String homeAddress, String identityCardNo, double basicSalary) {
         this.id = nextId++;
         this.name = name;
         this.gender = gender;
@@ -28,7 +28,7 @@ public class DeliveryMan implements Serializable {
         this.status = "Employed";
         this.identityCardNo = identityCardNo;
         this.basicSalary = basicSalary;
-        this.workingStatus = workingStatus;
+        this.workingStatus = "Offline";
     }
 
     public int getId() {
@@ -122,9 +122,9 @@ public class DeliveryMan implements Serializable {
     public static void main(String args[]) {
         //Testing
         DeliveryMan[] test = new DeliveryMan[10];
-        test[0] = new DeliveryMan("Tan Cheong Kiat", "Male", "012-3456789", "testing@gmail.com", "Jalan Suasana 3/4", "970219-14-6459", 1800.00,"Offline");
-        test[1] = new DeliveryMan("Tan Qi Han", "Male", "012-3456789", "testing@gmail.com", "KL", "970116-12-5897", 1800.00,"Offline");
-        test[2] = new DeliveryMan("Wong Li Yi", "Female", "012-3456789", "testing@gmail.com", "Melaka", "970521-22-5526", 1800.00,"Offline");
+        test[0] = new DeliveryMan("Tan Cheong Kiat", "Male", "012-3456789", "testing@gmail.com", "Jalan Suasana 3/4", "970219-14-6459", 1800.00);
+        test[1] = new DeliveryMan("Tan Qi Han", "Male", "012-3456789", "testing@gmail.com", "KL", "970116-12-5897", 1800.00);
+        test[2] = new DeliveryMan("Wong Li Yi", "Female", "012-3456789", "testing@gmail.com", "Melaka", "970521-22-5526", 1800.00);
         String output = String.format("%-4s  %-20s   %-6s    %-12s   %-20s   %-14s   %-12s   %-10s\n", "ID", "NAME", "GENDER", "CONTACT_NO.", "EMAIL", "IC_NO.", "BASIC_SALARY", "STATUS");
         for (int i = 0; i < test.length; i++) {
             if (test[i] != null) {
