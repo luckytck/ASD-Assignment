@@ -15,26 +15,7 @@ public class addItem{
     private static List<MenuItem> FoodList = new ArrayList<>();
     private static List<MenuItem> BeverageList = new ArrayList<>();
         
-    public static void hardcode(){
-        MenuItem item3= new MenuItem("apple juice",3.2);
-        MenuItem item4= new MenuItem("orange juice",3.2);
-      
-        BeverageList.add(item3);
-        BeverageList.add(item4);
-      
-        try {
-      ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("Beverage.dat"));
-      ooStream.writeObject(BeverageList);
-      //ooStream.close();
-      ooStream.close();
-    } catch (FileNotFoundException ex) {
-        System.out.println("File not found");
-    } catch (IOException ex) {
-        System.out.println("Cannot save to file");
-      
-    }
-        
-    }
+   
     public static void printBeverage(){
          try {
       ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("Beverage.dat"));
