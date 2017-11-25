@@ -1,7 +1,9 @@
 
 package Affiliate;
 
-public class MenuItem {
+import java.io.Serializable;
+
+public class MenuItem implements Serializable{
     private String name;
     private double price;
     private double discountRate;
@@ -24,7 +26,7 @@ public class MenuItem {
         this.price=price;
     }
     void setDiscountRate(double discountRate){
-        this.discountRate=discountRate;
+        this.discountRate=discountRate/100;
     }
     void setStatus(boolean status){
      this.status=status;
@@ -43,7 +45,18 @@ public class MenuItem {
     }
     @Override
     public String toString(){
-     return String.format("%s %.2f %.2f %s",name,price,discountRate,status);
+        String message;
+        if(status==true)
+        {
+            message="Available";
+        }else
+        {
+            message="not Available";
+        }
+           
+        
+        
+     return String.format("%15s %10.2f %10.0f%% %20s",name,price,discountRate*100,message);
     }
     
     
