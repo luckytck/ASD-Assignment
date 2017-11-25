@@ -14,11 +14,12 @@ public class addItem{
     
     private static List<MenuItem> FoodList = new ArrayList<>();
     private static List<MenuItem> BeverageList = new ArrayList<>();
-        
+    private static List<Affiliate> AffiliateList = new ArrayList<>();
+    private static int affiliateindex;
    
-    public static void printBeverage(){
+    public static void printBeverage(String restaurantName){
          try {
-      ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("Beverage.dat"));
+      ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(restaurantName+"Beverage.dat"));
       BeverageList = (ArrayList) (oiStream.readObject());
 
        oiStream.close();
@@ -41,9 +42,9 @@ public class addItem{
         System.out.println(outputStr);
          
     }
-    public static void printFood(){
+    public static void printFood(String restaurantName){
          try {
-      ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("Food.dat"));
+      ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(restaurantName+"Food.dat"));
       FoodList = (ArrayList) (oiStream.readObject());
 
        oiStream.close();
@@ -75,13 +76,14 @@ public class addItem{
         
         return false;
     } 
-    public static void addFood(String name,double price,double discountrate){
+    public static void addFood(String name,double price,double discountrate,String restaurantName){
          MenuItem item1=new MenuItem(name,price);
          item1.setDiscountRate(discountrate);
         FoodList.add(item1);
 
          try {
-      ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("Food.dat"));
+             
+      ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(restaurantName+"Food.dat"));
       ooStream.writeObject(FoodList);
       //ooStream.close();
       ooStream.close();
@@ -92,13 +94,13 @@ public class addItem{
       
     }       
     }
-    public static void addBeverage(String name,double price,double discountrate){
+    public static void addBeverage(String name,double price,double discountrate,String restaurantName){
         MenuItem item1=new MenuItem(name,price);
          item1.setDiscountRate(discountrate);
         BeverageList.add(item1);
 
          try {
-      ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("Beverage.dat"));
+      ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(restaurantName+"Beverage.dat"));
       ooStream.writeObject(BeverageList);
       //ooStream.close();
       ooStream.close();
@@ -109,24 +111,49 @@ public class addItem{
       
     }       
     }
-  
+  public static void getRestaurant(){
+       try {
+      ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("Affiliate.dat"));
+      AffiliateList = (ArrayList) (oiStream.readObject());
+       oiStream.close();
+    } catch (FileNotFoundException ex) {
+             System.out.println("File not found");
+    } catch (IOException ex) {
+             System.out.println("Cannot read from file");
+    } catch (ClassNotFoundException ex) {
+             System.out.println("Class not found");
+    }
+       String str="";
+      for(int a=0;a<AffiliateList.size();++a){
+          str+=String.format("%d. %s\n",a+1,AffiliateList.get(a).getRestaurant_Name());
+      }
+          System.out.println(str); 
+  }
+  public static String getRestaurantName(int index){
+      
+      return AffiliateList.get(index).getRestaurant_Name();
+  }
+ 
     
      public static void main(String[] args){
         Scanner scanner=new Scanner(System.in);
-     
-        System.out.println("Which type of menu you want to add? :");
+        
+         getRestaurant();
+         System.out.print("Select a restaurant to add menu item:");
+         affiliateindex=scanner.nextInt()-1;
+         scanner.nextLine();
+         System.out.println("");  
+         
+             System.out.println("Which type of menu you want to add? :");
         System.out.println("1.Food");
         System.out.println("2.Beverage");
         System.out.print("Enter the number of your choice :");
-        int choice=scanner.nextInt();
-        
-       
-        
+        int choice=scanner.nextInt();        
         switch(choice){
             case 1:
             {          
                 
-              printFood();
+              printFood(getRestaurantName(affiliateindex));
                 System.out.print("Do you want to add new item?(Yes=Y)");
               char answer2=scanner.next().charAt(0);
               scanner.nextLine();
@@ -153,9 +180,9 @@ public class addItem{
                    }while(!checkValid(Name,price,discountrate));
                   if(checkValid(Name,price,discountrate))
                   {
-                      addFood(Name,price,discountrate);
+                      addFood(Name,price,discountrate,getRestaurantName(affiliateindex));
                       System.out.println("Your item has been added successful.");
-                      printFood();
+                      printFood(getRestaurantName(affiliateindex));
                   }
               }
               else
@@ -166,7 +193,7 @@ public class addItem{
             }
             case 2:{
                 
-                 printBeverage();
+                 printBeverage(getRestaurantName(affiliateindex));
                 System.out.print("Do you want to add new item?(Yes=Y)");
               char answer2=scanner.next().charAt(0);
               scanner.nextLine();
@@ -193,9 +220,9 @@ public class addItem{
                    }while(!checkValid(Name,price,discountrate));
                   if(checkValid(Name,price,discountrate))
                   {
-                      addBeverage(Name,price,discountrate);
+                      addBeverage(Name,price,discountrate,getRestaurantName(affiliateindex));
                       System.out.println("Your item has been added successful.");
-                      printBeverage();
+                      printBeverage(getRestaurantName(affiliateindex));
                       
                   }
               }
@@ -208,8 +235,12 @@ public class addItem{
             }
             default:
                 break;
-        }
-     }
+        } 
+         }
+        
+         
+      
+     
 
    
 }
