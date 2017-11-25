@@ -220,7 +220,18 @@ pattern=Pattern.compile("\\d{2,3}-\\d{7,8}");
                     output += String.format("%d", i + 1) + affiliatelist.get(i).tostring();
 
                 }
-                System.out.println(output); 
+                System.out.println(output);                
+         try {
+      ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("Affiliate.dat"));
+      ooStream.writeObject(affiliatelist);
+      //ooStream.close();
+      ooStream.close();
+    } catch (FileNotFoundException ex) {
+        System.out.println("File not found");
+    } catch (IOException ex) {
+        System.out.println("Cannot save to file");
+      
+    }       
             }
            
 
@@ -231,16 +242,9 @@ pattern=Pattern.compile("\\d{2,3}-\\d{7,8}");
     }//GEN-LAST:event_jbtnRegisterActionPerformed
 
     private void jbtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelActionPerformed
-        try {
-            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("Affiliates.dat"));
-            ooStream.writeObject(affiliatelist);
-
+       
             this.dispose();
-        } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Cannot save to file", "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
+      
 
 
     }//GEN-LAST:event_jbtnCancelActionPerformed
