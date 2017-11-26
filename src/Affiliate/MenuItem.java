@@ -19,28 +19,28 @@ public class MenuItem implements Serializable{
         
     }
     
-    void setName(String name){
+    public void setName(String name){
         this.name=name;
     }
-    void setPrice(double price){
+    public void setPrice(double price){
         this.price=price;
     }
-    void setDiscountRate(double discountRate){
+    public void setDiscountRate(double discountRate){
         this.discountRate=discountRate/100;
     }
-    void setStatus(boolean status){
+    public void setStatus(boolean status){
      this.status=status;
     }
-    String getName(){
+    public String getName(){
         return name;
     }
-    double getPrice(){
+    public double getPrice(){
         return price;
     }
-    double getDiscountRate(){
+    public double getDiscountRate(){
         return discountRate;
     }
-    boolean getStatus(){
+    public boolean getStatus(){
      return status;   
     }
     @Override

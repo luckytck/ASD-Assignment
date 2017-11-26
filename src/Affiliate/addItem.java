@@ -12,10 +12,10 @@ import java.util.*;
 
 public class addItem{
     
-    private static List<MenuItem> FoodList = new ArrayList<>();
-    private static List<MenuItem> BeverageList = new ArrayList<>();
-    private static List<Affiliate> AffiliateList = new ArrayList<>();
-    private static int affiliateindex;
+    public static List<MenuItem> FoodList = new ArrayList<>();
+    public static List<MenuItem> BeverageList = new ArrayList<>();
+    public static List<Affiliate> AffiliateList = new ArrayList<>();
+    public static int affiliateindex;
    
     public static void printBeverage(String restaurantName){
          try {
