@@ -229,21 +229,37 @@ public class Program {
                                                 System.out.println("\nInvalid Option!!! Please choose an option from the list~");
                                                 loop[2] = true;
                                             } else if (option[2] == 1) {
-                                                deliveryManList.get(option[1] - 1).setWorkingStatus("Available");
-                                                updateList(deliveryManList, "deliveryMan.dat");
-                                                System.out.println("Working status has been updated to Available");
+                                                   if(deliveryManList.get(option[1] - 1).getWorkingStatus().matches("Available")){
+                                                        System.out.println("You already in this status.");  
+                                                 }else{
+                                                        deliveryManList.get(option[1] - 1).setWorkingStatus("Available");
+                                                        updateList(deliveryManList, "deliveryMan.dat");
+                                                        System.out.println("Working status has been updated to Available");
+                                                   }
                                             } else if (option[2] == 2) {
-                                                deliveryManList.get(option[1] - 1).setWorkingStatus("Break");
-                                                updateList(deliveryManList, "deliveryMan.dat");
-                                                System.out.println("Working status has been updated to Break");
+                                                if(deliveryManList.get(option[1] - 1).getWorkingStatus().matches("Break")){
+                                                        System.out.println("You already in this status.");  
+                                                 }else{
+                                                    deliveryManList.get(option[1] - 1).setWorkingStatus("Break");
+                                                    updateList(deliveryManList, "deliveryMan.dat");
+                                                    System.out.println("Working status has been updated to Break");
+                                                                                                   }
                                             } else if (option[2] == 3) {
+                                                   if(deliveryManList.get(option[1] - 1).getWorkingStatus().matches("Delivering")){
+                                                        System.out.println("You already in this status.");  
+                                                 }else{
                                                 deliveryManList.get(option[1] - 1).setWorkingStatus("Delivering");
                                                 updateList(deliveryManList, "deliveryMan.dat");
                                                 System.out.println("Working status has been updated to Delivering");
+                                                   }
                                             } else if (option[2] == 4) {
-                                                deliveryManList.get(option[1] - 1).setWorkingStatus("Offline");
-                                                updateList(deliveryManList, "deliveryMan.dat");
-                                                System.out.println("Working status has been updated to Offline");
+                                                 if(deliveryManList.get(option[1] - 1).getWorkingStatus().matches("Offline")){
+                                                        System.out.println("You already in this status.");  
+                                                 }else{
+                                                        deliveryManList.get(option[1] - 1).setWorkingStatus("Offline");
+                                                        updateList(deliveryManList, "deliveryMan.dat");
+                                                        System.out.println("Working status has been updated to Offline");
+                                                 }
                                             } else if (option[2] == -1) {
                                                 System.exit(0);
                                             }
