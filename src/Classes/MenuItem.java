@@ -65,7 +65,7 @@ public class MenuItem implements Serializable{
 
     @Override
     public String toString() {
-        return String.format("%-15s %-20s %10s %12s %-15s", name, description, String.format("%.2f", price), String.format("%.0f",discountRate*100) + "%", status);
+        return String.format("%-30s %-30s %10s %12s %-15s", name, description, String.format("%.2f", price), String.format("%.0f",discountRate*100) + "%", status);
     }
     
     public static void main(String[] args) {
@@ -73,7 +73,7 @@ public class MenuItem implements Serializable{
         MenuItem item2 = new MenuItem("Nasi Goreng", "", 5.00, 10);
         MenuItem item3 = new MenuItem("Lobster burger", "Special Promotion", 50.00, 10);
         
-        System.out.println(String.format("%-15s %-20s %10s %12s %-15s", "NAME", "DESCRIPTION", "PRICE(RM)", "DISCOUNT(%)", "STATUS"));
+        System.out.println(String.format("%-30s %-30s %10s %12s %-15s", "NAME", "DESCRIPTION", "PRICE(RM)", "DISCOUNT(%)", "STATUS"));
         System.out.println(item1);
         System.out.println(item2);
         System.out.println(item3);

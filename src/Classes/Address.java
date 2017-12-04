@@ -53,6 +53,6 @@ public class Address implements Serializable{
 
     @Override
     public String toString() {
-        return String.format("%-30s", address + ", " + postcode + " " + city + ", " + state);
+        return String.format("%-80s", address + ", " + postcode + " " + city + ", " + state);
     }
 }

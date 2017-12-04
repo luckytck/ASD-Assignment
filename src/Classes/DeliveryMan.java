@@ -78,11 +78,16 @@ public class DeliveryMan extends User implements Serializable{
     }
     
     public static void main(String[] args) {
+        //Create Addresses
         Address address1 = new Address("Jalan Suasana 3/4, Bandar Tun Hussein Onn", "Selangor", "Cheras", 43200);
         Address address2 = new Address("Jalan Han 1/2, Taman Han", "Kuala Lumpur", "Setapak", 53300);
-        User user1 = new DeliveryMan("970219-14-6459","luckytck97@gmail.com", 2000.00, address1, "luckytck", "1234", "Tan Cheong Kiat", 'M', "011-37997626");
+        
+        //Create Delivery Men
+        DeliveryMan user1 = new DeliveryMan("970219-14-6459","luckytck97@gmail.com", 2000.00, address1, "luckytck", "1234", "Tan Cheong Kiat", 'M', "011-37997626");
         DeliveryMan user2 = new DeliveryMan("971115-14-1455","qihan@gmail.com", 1900.00, address2, "hanhan", "1234", "Tan Qi Han", 'M', "012-3456789");
-        System.out.println(String.format("%-10s %-20s %-6s %-12s %-14s %-20s %-12s %-80s %-10s %-14s", "USERNAME", "NAME", "GENDER", "CONTACT_NO", "NRIC", "EMAIL", "BASIC_SALARY", "ADDRESS", "STATUS", "WORKING_STATUS"));
+        
+        //Print Delivery Men Details
+        System.out.println(String.format("%-4s %-10s %-20s %-6s %-12s %-14s %-20s %-12s %-80s %-10s %-14s", "ID", "USERNAME", "NAME", "GENDER", "CONTACT_NO", "NRIC", "EMAIL", "BASIC_SALARY", "ADDRESS", "STATUS", "WORKING_STATUS"));
         System.out.println(user1);
         System.out.println(user2);
     }

@@ -87,7 +87,7 @@ public class Affiliate extends User implements Serializable{
 
     @Override
     public String toString() {
-        return super.toString() + String.format(" %-20s %-12s %-12s %-15s %-80s", restaurantName, businessRegNo, GSTRegNo, restaurantContactNo, address);
+        return super.toString() + String.format(" %-30s %-12s %-12s %-15s %-80s", restaurantName, businessRegNo, GSTRegNo, restaurantContactNo, address);
     }
     
     //You can put validation method in here. e.g below
@@ -103,8 +103,8 @@ public class Affiliate extends User implements Serializable{
         Address address2 = new Address("90, Jalan Peel, Maluri,", "Kuala Lumpur", "Wilayah Persekutuan", 55100);
         //2 way to declare Affiliate object
         User affiliate1 = new Affiliate("Tealive", "962113-K", "000808083456", "03-62113891", address1, "chatime", "1234", "Bryan Loo", 'M', "012-3456789");
-        Affiliate affiliate2 = new Affiliate("OldTown White Coffee", "830776-U", "000801587200", "03-12566852", address2, "fish&co", "1234", "Goh Ching Mun", 'M', "011-45621445");
-        System.out.println(String.format("%-10s %-20s %-6s %-12s %-20s %-12s %-12s %-15s %-80s", "USERNAME", "OWNER_NAME", "GENDER", "CONTACT_NO", "RESTAURANT_NAME", "BUSS_REG_No", "GST_REG_NO", "REST_CONTACT_NO", "ADDRESS"));
+        Affiliate affiliate2 = new Affiliate("OldTown White Coffee", "830776-U", "000801587200", "03-12566852", address2, "oldtown", "1234", "Goh Ching Mun", 'M', "011-45621445");
+        System.out.println(String.format("%-4s %-10s %-20s %-6s %-12s %-30s %-12s %-12s %-15s %-80s", "ID", "USERNAME", "OWNER_NAME", "GENDER", "CONTACT_NO", "RESTAURANT_NAME", "BUSS_REG_No", "GST_REG_NO", "REST_CONTACT_NO", "ADDRESS"));
         System.out.println(affiliate1);
         System.out.println(affiliate2);
         //Note - If you want use getter & setter in child class, u need cast it to the child class first e.g below
@@ -128,7 +128,7 @@ public class Affiliate extends User implements Serializable{
         affiliate2.setFood(food1);
         //Example to retrive food from the affiliate class
         List<MenuItem> food2 = affiliate2.getFood();
-        System.out.println(String.format("%-15s %-20s %10s %12s %-15s", "NAME", "DESCRIPTION", "PRICE(RM)", "DISCOUNT(%)", "STATUS"));
+        System.out.println(String.format("%-30s %-30s %10s %12s %-15s", "NAME", "DESCRIPTION", "PRICE(RM)", "DISCOUNT(%)", "STATUS"));
         for (int i = 0; i < food2.size(); i++) {
             System.out.println(food2.get(i).toString());
         }

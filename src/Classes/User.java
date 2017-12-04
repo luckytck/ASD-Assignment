@@ -4,11 +4,13 @@ package Classes;
 import java.io.Serializable;
 
 public class User implements Serializable{
+    private int id;
     private String username;
     private String password;
     private String name;
     private char gender;
     private String contactNo;
+    private static int nextID = 1000;
 
     public User() {
     }
@@ -19,6 +21,7 @@ public class User implements Serializable{
         this.name = name;
         this.gender = gender;
         this.contactNo = contactNo;
+        this.id = nextID++;
     }
 
     public String getUsername() {
@@ -63,6 +66,6 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return String.format("%-10s %-20s %-6s %-12s",username,name,gender,contactNo);
+        return String.format("%-4d %-10s %-20s %-6s %-12s", id,username,name,gender,contactNo);
     }
 }
