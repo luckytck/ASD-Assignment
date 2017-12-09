@@ -3,6 +3,10 @@ package Classes;
 
 import ADTs.LinkedList;
 import ADTs.ListInterface;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class Affiliate extends User implements Serializable{
@@ -104,6 +108,7 @@ public class Affiliate extends User implements Serializable{
         //2 way to declare Affiliate object
         User affiliate1 = new Affiliate("Tealive", "962113-K", "000808083456", "03-62113891", address1, "chatime", "1234", "Bryan Loo", 'M', "012-3456789");
         Affiliate affiliate2 = new Affiliate("OldTown White Coffee", "830776-U", "000801587200", "03-12566852", address2, "oldtown", "1234", "Goh Ching Mun", 'M', "011-45621445");
+         Affiliate affiliate3 = new Affiliate("OldTown White Coffee", "830776-U", "000801587200", "03-12566852", address2, "Ali BABA", "1234", "Goh Ching Mun", 'M', "011-45621445");
         System.out.println(String.format("%-4s %-10s %-20s %-6s %-12s %-30s %-12s %-12s %-15s %-80s", "ID", "USERNAME", "OWNER_NAME", "GENDER", "CONTACT_NO", "RESTAURANT_NAME", "BUSS_REG_No", "GST_REG_NO", "REST_CONTACT_NO", "ADDRESS"));
         System.out.println(affiliate1);
         System.out.println(affiliate2);
@@ -119,19 +124,42 @@ public class Affiliate extends User implements Serializable{
         }
         //Example to store food to the affiliate class
         ListInterface<MenuItem> food1 = new LinkedList<>();
+         ListInterface<MenuItem> beverage1 = new LinkedList<>();
         MenuItem item1 = new MenuItem("Mee Goreng", "", 4.00, 0);
         MenuItem item2 = new MenuItem("Nasi Goreng", "", 5.00, 10);
         MenuItem item3 = new MenuItem("Lobster burger", "Special Promotion", 50.00, 10);
+           MenuItem item4 = new MenuItem("burger juice", "Special Promotion", 50.00, 10);
+           MenuItem item5 = new MenuItem("Nasi tea", "", 5.00, 10);
         food1.add(item1);
         food1.add(item2);
         food1.add(item3);
+        beverage1.add(item4);
+        beverage1.add(item5);
         affiliate2.setFood(food1);
+        affiliate3.setFood(food1);
+        affiliate3.setBeverage(beverage1);
         //Example to retrive food from the affiliate class
         ListInterface<MenuItem> food2 = affiliate2.getFood();
         System.out.println(String.format("%-30s %-30s %10s %12s %-15s", "NAME", "DESCRIPTION", "PRICE(RM)", "DISCOUNT(%)", "STATUS"));
         for (int i = 1; i <= food2.getNumberOfEntries(); i++) {
             System.out.println(food2.getEntry(i).toString());
         }
+        
+        ListInterface<Affiliate> A=new LinkedList<>();
+        A.add(affiliate3);
+        A.add(affiliate2);
+         try {
+
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream("Affiliate.dat"));
+            ooStream.writeObject(A);          
+            ooStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot save to file");
+
+        }
+        
         
     }
 }
