@@ -15,7 +15,7 @@ public class LinkedList<T> implements ListInterface<T>, Serializable {
         clear();
     }
 
-    private class Node implements Serializable{
+    private class Node implements Serializable {
 
         private T data;
         private Node next;
@@ -82,9 +82,13 @@ public class LinkedList<T> implements ListInterface<T>, Serializable {
         if (givenPosition >= 1 && givenPosition <= numberOfEntries) {
             if (givenPosition == 1) {
                 data = firstNode.data;
-                Node lastNode = firstNode.previous;
-                firstNode = firstNode.next;
-                firstNode.previous = lastNode;
+                if (firstNode == firstNode.next) {
+                    firstNode = null;
+                } else {
+                    Node lastNode = firstNode.previous;
+                    firstNode = firstNode.next;
+                    firstNode.previous = lastNode;
+                }
             } else {
                 Node nodeBefore = firstNode;
                 for (int i = 1; i < givenPosition - 1; i++) {
@@ -110,16 +114,11 @@ public class LinkedList<T> implements ListInterface<T>, Serializable {
     public boolean replace(int givenPosition, T newEntry) {
         boolean isReplaced = false;
         if (givenPosition >= 1 && givenPosition <= numberOfEntries) {
-            if (givenPosition == 1) {
-                firstNode.data = newEntry;
-            } else {
-                Node nodeBefore = firstNode;
-                for (int i = 1; i < givenPosition - 1; i++) {
-                    nodeBefore = nodeBefore.next;
-                }
-                Node nodeCurrent = nodeBefore.next;
-                nodeCurrent.data = newEntry;
+            Node nodeCurrent = firstNode;
+            for (int i = 1; i <= givenPosition - 1; i++) {
+                nodeCurrent = nodeCurrent.next;
             }
+            nodeCurrent.data = newEntry;
             isReplaced = true;
         }
         return isReplaced;
@@ -129,16 +128,11 @@ public class LinkedList<T> implements ListInterface<T>, Serializable {
     public T getEntry(int givenPosition) {
         T data = null;
         if (givenPosition >= 1 && givenPosition <= numberOfEntries) {
-            if (givenPosition == 1) {
-                return firstNode.data;
-            } else {
-                Node nodeBefore = firstNode;
-                for (int i = 1; i < givenPosition - 1; i++) {
-                    nodeBefore = nodeBefore.next;
-                }
-                data = nodeBefore.next.data;
-                return data;
+            Node nodeCurrent = firstNode;
+            for (int i = 1; i <= givenPosition - 1; i++) {
+                nodeCurrent = nodeCurrent.next;
             }
+            data = nodeCurrent.data;
         }
         return data;
     }
@@ -183,12 +177,12 @@ public class LinkedList<T> implements ListInterface<T>, Serializable {
         for (int i = 1; i <= list.getNumberOfEntries(); i++) {
             System.out.print(list.getEntry(i) + " ");
         }
-        System.out.println("\nReplace 10 at position 1: " + list.replace(1, 10));
+        System.out.println("\nReplace 10 at position 5: " + list.replace(5, 10));
         System.out.print("List: ");
         for (int i = 1; i <= list.getNumberOfEntries(); i++) {
             System.out.print(list.getEntry(i) + " ");
         }
-        System.out.println("\nRemove data at position 1: " + list.remove(1));
+        System.out.println("\nRemove data at position 5: " + list.remove(5));
         System.out.print("List: ");
         for (int i = 1; i <= list.getNumberOfEntries(); i++) {
             System.out.print(list.getEntry(i) + " ");
@@ -197,6 +191,12 @@ public class LinkedList<T> implements ListInterface<T>, Serializable {
         System.out.println("Contains 10: " + list.contains(10));
         System.out.println("Is Full? : " + list.isFull());
         System.out.println("Is Empty? : " + list.isEmpty());
-        
+        for (int i = list.getNumberOfEntries(); i >= 1; i--) {
+            System.out.print("Remove data at position " + i + ": ");
+            System.out.print(list.remove(i) + "\n");
+        }
+        System.out.println(list.add(1));
+        System.out.println(list.add(2));
+        System.out.println(list.getEntry(2));
     }
 }
