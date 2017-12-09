@@ -1,12 +1,13 @@
 
 package Classes;
 
-import java.util.ArrayList;
+import ADTs.LinkedList;
+import ADTs.ListInterface;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-public class Delivery {
+public class Delivery implements Serializable{
     private int deliveryNo;
     private Order order;
     private DeliveryMan deliveryMan;
@@ -102,7 +103,7 @@ public class Delivery {
         OrderItem orderItem2 = new OrderItem(item2, 1, "Less Sugar");
         
         //Add OrderItems into itemList
-        List<OrderItem> itemList = new ArrayList<>();
+        ListInterface<OrderItem> itemList = new LinkedList<>();
         itemList.add(orderItem1);
         itemList.add(orderItem2);
         

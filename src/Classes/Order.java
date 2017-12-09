@@ -1,17 +1,18 @@
 
 package Classes;
 
+import ADTs.LinkedList;
+import ADTs.ListInterface;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-public class Order {
+public class Order implements Serializable{
     private int orderNo;
-    private List<OrderItem> itemList;
+    private ListInterface<OrderItem> itemList;
     private Customer customer;
     private Affiliate affiliate;
     private GregorianCalendar orderDate;
@@ -22,7 +23,7 @@ public class Order {
         this.orderNo = nextOrderNo++;
     }
 
-    public Order(List<OrderItem> itemList, Customer customer, Affiliate affiliate, GregorianCalendar orderDate) {
+    public Order(ListInterface<OrderItem> itemList, Customer customer, Affiliate affiliate, GregorianCalendar orderDate) {
         this.itemList = itemList;
         this.customer = customer;
         this.affiliate = affiliate;
@@ -39,11 +40,11 @@ public class Order {
         this.orderNo = orderNo;
     }
 
-    public List<OrderItem> getItemList() {
+    public ListInterface<OrderItem> getItemList() {
         return itemList;
     }
 
-    public void setItemList(List<OrderItem> itemList) {
+    public void setItemList(ListInterface<OrderItem> itemList) {
         this.itemList = itemList;
     }
 
@@ -90,8 +91,8 @@ public class Order {
     public double calTotalAmount(){
         double total = 0;
         if (itemList != null) {
-            for (int i = 0; i < itemList.size(); i++) {
-                total += itemList.get(i).calSubTotal();
+            for (int i = 1; i < itemList.getNumberOfEntries(); i++) {
+                total += itemList.getEntry(i).calSubTotal();
             }
         }
         return total;
@@ -135,7 +136,7 @@ public class Order {
         OrderItem orderItem2 = new OrderItem(item2, 1, "Less Sugar");
         
         //Add OrderItems into itemList
-        List<OrderItem> itemList = new ArrayList<>();
+        ListInterface<OrderItem> itemList = new LinkedList<>();
         itemList.add(orderItem1);
         itemList.add(orderItem2);
         
@@ -161,8 +162,8 @@ public class Order {
         
         //Print itemList Details from order1
         System.out.println(String.format("%-30s %-10s %-8S %-20s %10s", "NAME", "UNIT_PRICE", "QUANTITY", "REMARK", "SUB_TOTAL"));
-        for (int i = 0; i < order1.getItemList().size(); i++) {
-            System.out.println(order1.getItemList().get(i).toString());
+        for (int i = 1; i < order1.getItemList().getNumberOfEntries(); i++) {
+            System.out.println(order1.getItemList().getEntry(i).toString());
         }
         System.out.printf("%71s %10s\n", "Total = ", String.format("%.2f", order1.calTotalAmount()));
     }

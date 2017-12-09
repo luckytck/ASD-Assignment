@@ -1,11 +1,12 @@
 
 package Classes;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
-public class Clocking {
+public class Clocking implements Serializable{
     private DeliveryMan deliveryMan;
     private GregorianCalendar clockInTime;
     private GregorianCalendar clockOutTime;

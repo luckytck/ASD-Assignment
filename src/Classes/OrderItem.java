@@ -1,9 +1,9 @@
 
 package Classes;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class OrderItem {
+public class OrderItem implements Serializable{
     private MenuItem menuItem;
     private int quantity;
     private String remark;

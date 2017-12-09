@@ -1,9 +1,9 @@
 
 package Classes;
 
+import ADTs.LinkedList;
+import ADTs.ListInterface;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Affiliate extends User implements Serializable{
     private String restaurantName;
@@ -11,8 +11,8 @@ public class Affiliate extends User implements Serializable{
     private String GSTRegNo; //Format - 12-digit number e.g 000130928640
     private String restaurantContactNo; //Format - 03-########
     private Address address;
-    private List<MenuItem> food;
-    private List<MenuItem> beverage;
+    private ListInterface<MenuItem> food;
+    private ListInterface<MenuItem> beverage;
 
     public Affiliate() {
     }
@@ -69,19 +69,19 @@ public class Affiliate extends User implements Serializable{
         this.address = address;
     }
 
-    public List<MenuItem> getFood() {
+    public ListInterface<MenuItem> getFood() {
         return food;
     }
 
-    public void setFood(List<MenuItem> food) {
+    public void setFood(ListInterface<MenuItem> food) {
         this.food = food;
     }
 
-    public List<MenuItem> getBeverage() {
+    public ListInterface<MenuItem> getBeverage() {
         return beverage;
     }
 
-    public void setBeverage(List<MenuItem> beverage) {
+    public void setBeverage(ListInterface<MenuItem> beverage) {
         this.beverage = beverage;
     }
 
@@ -118,7 +118,7 @@ public class Affiliate extends User implements Serializable{
             System.out.println("830776-U = " + "False");
         }
         //Example to store food to the affiliate class
-        List<MenuItem> food1 = new ArrayList<>();
+        ListInterface<MenuItem> food1 = new LinkedList<>();
         MenuItem item1 = new MenuItem("Mee Goreng", "", 4.00, 0);
         MenuItem item2 = new MenuItem("Nasi Goreng", "", 5.00, 10);
         MenuItem item3 = new MenuItem("Lobster burger", "Special Promotion", 50.00, 10);
@@ -127,10 +127,10 @@ public class Affiliate extends User implements Serializable{
         food1.add(item3);
         affiliate2.setFood(food1);
         //Example to retrive food from the affiliate class
-        List<MenuItem> food2 = affiliate2.getFood();
+        ListInterface<MenuItem> food2 = affiliate2.getFood();
         System.out.println(String.format("%-30s %-30s %10s %12s %-15s", "NAME", "DESCRIPTION", "PRICE(RM)", "DISCOUNT(%)", "STATUS"));
-        for (int i = 0; i < food2.size(); i++) {
-            System.out.println(food2.get(i).toString());
+        for (int i = 1; i <= food2.getNumberOfEntries(); i++) {
+            System.out.println(food2.getEntry(i).toString());
         }
         
     }
