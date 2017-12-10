@@ -6,13 +6,16 @@ import ADTs.ListInterface;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 public class Delivery implements Serializable{
     private int deliveryNo;
     private Order order;
     private DeliveryMan deliveryMan;
     private GregorianCalendar deliveryDate;
+    private GregorianCalendar deliveredTime;
     private int distanceTravelled;
+    private String status;
     private static int nextDeliveryNo = 1000;
 
     public Delivery() {
@@ -25,6 +28,7 @@ public class Delivery implements Serializable{
         this.deliveryDate = deliveryDate;
         this.deliveryNo = nextDeliveryNo++;
         this.distanceTravelled = 0;
+        this.status = "Delivering";
     }
 
     public int getDeliveryNo() {
@@ -74,6 +78,33 @@ public class Delivery implements Serializable{
     public static void setNextDeliveryNo(int nextDeliveryNo) {
         Delivery.nextDeliveryNo = nextDeliveryNo;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public GregorianCalendar getDeliveredTime() {
+        return deliveredTime;
+    }
+
+    public void setDeliveredTime(GregorianCalendar deliveredTime) {
+        this.deliveredTime = deliveredTime;
+    }
+    
+    public int calTimeTaken(){
+        int minutes = 0;
+        if (deliveredTime != null && deliveryDate != null) {
+            long start = deliveryDate.getTimeInMillis();
+            long end = deliveredTime.getTimeInMillis();
+            long different = end - start;
+            minutes = (int)TimeUnit.MILLISECONDS.toMinutes(different);
+        } 
+        return minutes;
+    }
     
     public String printDeliveryDate(){
         return String.format("%02d/%02d/%04d", deliveryDate.get(Calendar.DAY_OF_MONTH), (deliveryDate.get(Calendar.MONTH) + 1), deliveryDate.get(Calendar.YEAR));
@@ -81,7 +112,7 @@ public class Delivery implements Serializable{
     
     @Override
     public String toString() {
-        return String.format("%-11s %-8s %-20s %-13s %22s", deliveryNo, order.getOrderNo(), deliveryMan.getName(), printDeliveryDate(), distanceTravelled);
+        return String.format("%-11s %-8s %-20s %-13s %16s %22s %-10s", deliveryNo, order.getOrderNo(), deliveryMan.getName(), printDeliveryDate(), calTimeTaken(), distanceTravelled, status);
     }
     
     public static void main(String[] args) {
@@ -128,12 +159,15 @@ public class Delivery implements Serializable{
         DeliveryMan user1 = new DeliveryMan("970219-14-6459","luckytck97@gmail.com", 2000.00, address3, "luckytck", "1234", "Tan Cheong Kiat", 'M', "011-37997626");
         
         //Create Delivery
-        Delivery delivery1 = new Delivery(order1, user1, new GregorianCalendar());
-        //Set Distance Travelled
+        Delivery delivery1 = new Delivery(order1, user1, new GregorianCalendar(2017, 11, 8, 13, 0, 0));
+        
+        //Update Delivered Order
         delivery1.setDistanceTravelled(2000);
+        delivery1.deliveredTime = new GregorianCalendar(2017, 11, 8, 13, 28, 33);
+        delivery1.setStatus("Delivered");
         
         //Print Delivery
-        System.out.printf("%-11s %-8s %-20s %-13s %22s\n", "DELIVERY_NO", "ORDER_NO", "DELIVERY_MAN", "DELIVERY_DATE", "DISTANCE_TRAVELLED(m)");
+        System.out.printf("%-11s %-8s %-20s %-13s %16s %22s %-10s\n", "DELIVERY_NO", "ORDER_NO", "DELIVERY_MAN", "DELIVERY_DATE", "TIME_TAKEN(mins)", "DISTANCE_TRAVELLED(m)", "STATUS");
         System.out.println(delivery1);
 
     }

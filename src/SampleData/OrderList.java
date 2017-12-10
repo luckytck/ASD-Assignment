@@ -2,7 +2,9 @@ package SampleData;
 
 
 import ADTs.LinkedList;
+import ADTs.LinkedQueue;
 import ADTs.ListInterface;
+import ADTs.QueueInterface;
 import Classes.Address;
 import Classes.Affiliate;
 import Classes.Customer;
@@ -21,6 +23,7 @@ import java.util.GregorianCalendar;
 
 public class OrderList {
     public static final String ORDERFILE = "order.dat";
+    public static final String PENDINGDELIVERYFILE = "pendingDelivery.dat";
     public static final String AFFILIATEFILE = "affiliate.dat";
     public static final String CUSTOMERFILE = "customer.dat";
     
@@ -51,6 +54,34 @@ public class OrderList {
             System.out.println("Cannot save to file");
         }
     }
+    
+    private static <T> QueueInterface<T> initializeQueue(String fileName) { //Return a Queue from .dat file
+        QueueInterface<T> list = new LinkedQueue<>();
+        try {
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
+            list = (LinkedQueue) (oiStream.readObject());
+            oiStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot read from file");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found");
+        }
+        return list;
+    }
+    
+    private static <T> void storeQueue(QueueInterface<T> list, String fileName) { //Store a Queue into .dat file
+        try {
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
+            ooStream.writeObject(list);
+            ooStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot save to file");
+        }
+    }
 
     public static void main(String[] args) {
         //Retrieve Affiliate List from affiliate.dat
@@ -69,32 +100,50 @@ public class OrderList {
         itemList1.add(item3);
         
         ListInterface<OrderItem> itemList2 = new LinkedList<>();
-        OrderItem item4 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(1), 2, "Hot");
+        OrderItem item4 = new OrderItem(affiliateList.getEntry(2).getBeverage().getEntry(1), 2, "Hot");
         OrderItem item5 = new OrderItem(affiliateList.getEntry(2).getFood().getEntry(1), 1, "");
-        OrderItem item6 = new OrderItem(affiliateList.getEntry(1).getFood().getEntry(3), 1, "");
+        OrderItem item6 = new OrderItem(affiliateList.getEntry(2).getFood().getEntry(2), 1, "");
         itemList2.add(item4);
         itemList2.add(item5);
         itemList2.add(item6);
         
+        ListInterface<OrderItem> itemList3 = new LinkedList<>();
+        OrderItem item7 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(1), 1, "");
+        OrderItem item8 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(2), 1, "Half Ice");
+        OrderItem item9 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(3), 1, "Half Sugar");
+        OrderItem item10 = new OrderItem(affiliateList.getEntry(1).getFood().getEntry(2), 2, "");
+        itemList3.add(item7);
+        itemList3.add(item8);
+        itemList3.add(item9);
+        itemList3.add(item10);
+        
         //Create Order
         Order order1 = new Order(itemList1, customerList.getEntry(1), affiliateList.getEntry(1), new GregorianCalendar(2017, 11, 5, 8, 0, 0));
         Order order2 = new Order(itemList2, customerList.getEntry(2), affiliateList.getEntry(2), new GregorianCalendar(2017, 11, 6, 9, 0, 0));
+        Order order3 = new Order(itemList3, customerList.getEntry(3), affiliateList.getEntry(1), new GregorianCalendar(2017, 11, 6, 13, 0, 0));
         
         //Create Order List
         ListInterface<Order> orderList = new LinkedList<>();
         orderList.add(order1);
         orderList.add(order2);
+        orderList.add(order3);
+        QueueInterface<Order> orderQueue = new LinkedQueue<>();
+        orderQueue.enqueue(order1);
+        orderQueue.enqueue(order2);
+        orderQueue.enqueue(order3);
         
         //Store orderList into order.dat
         storeList(orderList, ORDERFILE);
+        storeQueue(orderQueue, PENDINGDELIVERYFILE);
         
         //Retrieve orderList from order.dat to sampleList
         ListInterface<Order> sampleList = initializeList(ORDERFILE);
+        QueueInterface<Order> sampleQueue = initializeQueue(PENDINGDELIVERYFILE);
         
-        //Print sampleList Details
+        //Print sampleQueue Details
         System.out.println(String.format("%-8s %-15s %-30s %-12s %-10s %-10s %-20s", "ORDER_NO", "CUSTOMER", "AFFILIATE", "TOTAL_AMOUNT", "ORDER_DATE", "ORDER_TIME", "STATUS"));
-        for (int i = 1; i <= sampleList.getNumberOfEntries(); i++) {
-            System.out.println(sampleList.getEntry(i));
+        while (!sampleQueue.isEmpty()){
+            System.out.println(sampleQueue.dequeue());
         }
         
     }

@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 /**
  * LinkedQueue.java A class that implements the ADT queue by using a circular
- * doubly chain of nodes that has head references only. NOTE: This version does not
- * include the setNextNode, getNextNode, setData and getData methods in the Node
- * class
+ * doubly chain of nodes, with the node implemented as an inner class.
  */
 public class LinkedQueue<T> implements QueueInterface<T>, Serializable {
 

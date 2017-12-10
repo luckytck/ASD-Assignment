@@ -116,7 +116,7 @@ public class AffiliateList {
         //Print OldTown's Food List
         System.out.println("\nOldTown Food List");
         System.out.println(String.format("%-30s %-30s %10s %12s %-15s", "NAME", "DESCRIPTION", "PRICE(RM)", "DISCOUNT(%)", "STATUS"));
-        for (int i = 1; i < affiliate2.getFood().getNumberOfEntries(); i++) {
+        for (int i = 1; i <= affiliate2.getFood().getNumberOfEntries(); i++) {
             System.out.println(affiliate2.getFood().getEntry(i));
         }
         

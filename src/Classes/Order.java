@@ -28,7 +28,7 @@ public class Order implements Serializable{
         this.customer = customer;
         this.affiliate = affiliate;
         this.orderDate = orderDate;
-        this.orderNo = nextOrderNo;
+        this.orderNo = nextOrderNo++;
         this.status = "Pending Delivery";
     }
 
@@ -91,7 +91,7 @@ public class Order implements Serializable{
     public double calTotalAmount(){
         double total = 0;
         if (itemList != null) {
-            for (int i = 1; i < itemList.getNumberOfEntries(); i++) {
+            for (int i = 1; i <= itemList.getNumberOfEntries(); i++) {
                 total += itemList.getEntry(i).calSubTotal();
             }
         }
@@ -114,7 +114,7 @@ public class Order implements Serializable{
     
     @Override
     public String toString() {
-        return String.format("%-8d %-15s %-15s %12s %-10s %-10s %-20s", orderNo, customer.getName(), affiliate.getRestaurantName(), String.format("%.2f",calTotalAmount()), printOrderDate(), printOrderTime(), status);
+        return String.format("%-8d %-15s %-30s %12s %-10s %-10s %-20s", orderNo, customer.getName(), affiliate.getRestaurantName(), String.format("%.2f",calTotalAmount()), printOrderDate(), printOrderTime(), status);
     }
     
     public static void main(String[] args) {
@@ -157,7 +157,7 @@ public class Order implements Serializable{
         Order order1 = new Order(itemList, customer1, affiliate1, currentDate);
         
         //Print Order1 Details
-        System.out.println(String.format("%-8s %-15s %-15s %-12s %-10s %-10s %-20s", "ORDER_NO", "CUSTOMER", "AFFILIATE", "TOTAL_AMOUNT", "ORDER_DATE", "ORDER_TIME", "STATUS"));
+        System.out.println(String.format("%-8s %-15s %-30s %-12s %-10s %-10s %-20s", "ORDER_NO", "CUSTOMER", "AFFILIATE", "TOTAL_AMOUNT", "ORDER_DATE", "ORDER_TIME", "STATUS"));
         System.out.println(order1);
         
         //Print itemList Details from order1
