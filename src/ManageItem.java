@@ -159,7 +159,7 @@ public class ManageItem {
         System.out.println("=========================================================================================");
                                 System.out.println("1.Food");
                                 System.out.println("2.Beverage");
-                                System.out.print("which menu's item you want to delete? (-1 to back):");
+                                System.out.print("which menu's item you want to modify? (-1 to back):");
                                 choice= scanner.nextInt();
         return choice;
     }
