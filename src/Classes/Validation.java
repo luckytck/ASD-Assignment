@@ -21,7 +21,7 @@ public class Validation {
         }
         return isValid;
     }
-    private boolean ValidateEmail(String email) {
+    public static boolean ValidateEmail(String email) {
         String EMAIL_PATTERN = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$";
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher regrexMatcher = pattern.matcher(email);
@@ -32,7 +32,7 @@ public class Validation {
         }
     }
 
-    private boolean ValidateContactNumber(String contactNumber) {
+    public static boolean ValidateContactNumber(String contactNumber) {
         String CONTACTNO_PATTERN = "^01[0-9]{1}-[0-9]{7,8}$";
         Pattern pattern = Pattern.compile(CONTACTNO_PATTERN);
         Matcher regrexMatcher = pattern.matcher(contactNumber);
@@ -43,7 +43,7 @@ public class Validation {
         }
     }
 
-    private boolean ValidateIdentityCardNo(String identityCardNo) {
+    public static boolean ValidateIdentityCardNo(String identityCardNo) {
         String ICNO_PATTERN = "^[0-9]{6}-[0-9]{2}-[0-9]{4}$";
         Pattern pattern = Pattern.compile(ICNO_PATTERN);
         Matcher regrexMatcher = pattern.matcher(identityCardNo);
