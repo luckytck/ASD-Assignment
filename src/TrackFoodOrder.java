@@ -4,9 +4,6 @@ import ADTs.ListInterface;
 import ADTs.QueueInterface;
 import Classes.Customer;
 import Classes.Order;
-import static DeliveryMan.PendingDelivery.PENDINGDELIVERYFILE;
-import static SampleData.CustomerList.CUSTOMERFILE;
-import SampleData.OrderList;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -79,10 +76,10 @@ public class TrackFoodOrder {
         if(ValidateAccount(username,password)){
              System.out.println("\nFood Ordered List");
              System.out.println("===========");
-             QueueInterface<Order> orderQueue = initializeQueue(PENDINGDELIVERYFILE);
+          
               ListInterface<Customer> sampleList = initializeList(CUSTOMERFILE);
               ListInterface<Order> orderList = initializeList(ORDERFILE);
-                    if (!orderQueue.isEmpty()) {
+                    if (!orderList.isEmpty()) {
                         String checkUsername;
                         for(int i = 1; i <= sampleList.getNumberOfEntries( ); i++ ){
                             checkUsername = sampleList.getEntry(i).getUsername();
@@ -91,12 +88,9 @@ public class TrackFoodOrder {
                                 System.out.println("Order No \t Restaurant \t Order Date \t Order Time \t Order Status \t\t Estimated Remaining Time " );
                                  System.out.println(orderList.getEntry(i).getOrderNo() + "\t"+ orderList.getEntry(i).getAffiliate().getRestaurantName() + "\t"+ orderList.getEntry(i).printOrderDate()  + "\t"+ orderList.getEntry(i).printOrderTime() + "\t"+ orderList.getEntry(i).getStatus()  + "\t"+ "35 minute(s) left");
                             }
-                                
+       
                         }
-                      
-                                 
 
-                       
                     }
             
         }else
