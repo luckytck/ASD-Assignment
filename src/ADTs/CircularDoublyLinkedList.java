@@ -3,8 +3,7 @@ package ADTs;
 import java.io.Serializable;
 
 /**
- * LinkedList.java A class that implements the ADT list by using a circular
- * doubly chain of nodes, with the node implemented as an inner class.
+ * @author Tan Cheong Kiat
  */
 public class CircularDoublyLinkedList<T> implements ListInterface<T>, Serializable {
 

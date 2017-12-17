@@ -2,6 +2,7 @@
 import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
+import Classes.Address;
 import Classes.DeliveryMan;
 import Classes.File;
 import Classes.Order;
@@ -228,7 +229,7 @@ public class Main {
                                                 System.out.println("Operation List");
                                                 System.out.println("==============");
                                                 System.out.println("1. Add New Delivery Man");
-                                                System.out.println("2. Update Delivery Man Details");
+                                                System.out.println("2. Update Delivery Man Contact Details");
                                                 System.out.println("3. Update Delivery Man Status");
                                                 System.out.println("4. Generate Daily Report");
                                                 System.out.println("0. Logout");
@@ -243,9 +244,11 @@ public class Main {
                                                     if (selection[2] == 1) {
                                                         //TODO: Add New Delivery Man
                                                         addNewDeliveryMan();
+                                                        loop[3] = true;
                                                     } else if (selection[2] == 2) {
                                                         //TODO: Update Delivery Man Details
-                                                        updateDeliveryManDetails();
+                                                        updateDeliveryManContactDetails();
+                                                        loop[3] = true;
                                                     } else if (selection[2] == 3) {
                                                         //TODO: Update Delivery Man Status
                                                         updateDeliveryManStatus();
@@ -391,23 +394,229 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
         DeliveryMan.setNextID(1000 + deliveryManList.getNumberOfEntries());
-        boolean loop;
+        char addOther;
         do {
-            loop = false;
             System.out.println("Add New Delivery Man");
             System.out.println("====================");
             System.out.println("Please enter following details:");
-            System.out.print("Username    : ");
-            System.out.print("Password    : ");
-            System.out.print("Name        : ");
-            System.out.print("Gender (M/F): ");
-            System.out.println("Contact No:");
-        } while (loop);
-        
+            System.out.print("                 Username : ");
+            String username = scanner.nextLine();
+            while (Validation.CheckDuplicateUsername(username, deliveryManList)) {
+                System.out.println("Sorry, this username already exist.");
+                System.out.println("Please try other username.");
+                System.out.print("                 Username : ");
+                username = scanner.nextLine();
+            }
+            System.out.print("                 Password : ");
+            String password = scanner.nextLine();
+            System.out.print("                     Name : ");
+            String name = scanner.nextLine();
+            System.out.print("             Gender (M/F) : ");
+            while (!scanner.hasNext("[mMfF]{1}")) {
+                System.out.println("Please enter character [M/F] only");
+                System.out.print("             Gender (M/F) : ");
+                scanner.next();
+            }
+            char gender = scanner.next().charAt(0);
+            System.out.print("Contact No.(01#-########) : ");
+            while (!scanner.hasNext("01[0-9]{1}-[0-9]{7,8}")) {
+                System.out.println("Please enter a valid contact number.");
+                System.out.print("Contact No.(01#-########) : ");
+                scanner.next();
+            }
+            String contactNo = scanner.next();
+            scanner.nextLine();
+            System.out.print("     NRIC(######-##-####) : ");
+            while (!scanner.hasNext("[0-9]{6}-[0-9]{2}-[0-9]{4}")) {
+                System.out.println("Please enter a valid NRIC.");
+                System.out.print("     NRIC(######-##-####) : ");
+                scanner.next();
+            }
+            String NRIC = scanner.next();
+            scanner.nextLine();
+            System.out.print("            Email Address : ");
+            while (!scanner.hasNext("([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})")) {
+                System.out.println("Please enter a valid email address.");
+                System.out.print("            Email Address : ");
+                scanner.next();
+            }
+            String email = scanner.next();
+            scanner.nextLine();
+            System.out.print("                  Address : ");
+            String address = scanner.nextLine();
+            System.out.print("                    State : ");
+            String state = scanner.nextLine();
+            System.out.print("                     City : ");
+            String city = scanner.nextLine();
+            System.out.print("        Postcode(5-digit) : ");
+            while (!scanner.hasNext("[0-9]{5}")) {
+                System.out.println("Please enter 5-digit postcode.");
+                System.out.print("        Postcode(5-digit) : ");
+                scanner.next();
+            }
+            int postcode = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("         Basic Salary(RM) : ");
+            while (!scanner.hasNextDouble()) {
+                System.out.println("Please enter numeric value.");
+                System.out.print("         Basic Salary(RM) : ");
+                scanner.next();
+            }
+            double basicSalary = scanner.nextDouble();
+            scanner.nextLine();
+            System.out.print("Confirm to add a new delivery man? (Y=Yes): ");
+            char confirmation = scanner.next().charAt(0);
+            scanner.nextLine();
+            if (Character.toUpperCase(confirmation) == 'Y') {
+                Address fullAddress = new Address(address, state, city, postcode);
+                DeliveryMan newDeliveryMan = new DeliveryMan(NRIC, email, basicSalary, fullAddress, username, password, name, gender, contactNo);
+                deliveryManList.add(newDeliveryMan);
+                File.storeList(deliveryManList, DELIVERYMANFILE);
+                System.out.println("Added Successfully!!!");
+            } else {
+                System.out.println("Operation Cancelled!!!");
+            }
+            System.out.print("Do you want to add another delivery man? (Y=Yes): ");
+            addOther = scanner.next().charAt(0);
+            scanner.nextLine();
+        } while (Character.toUpperCase(addOther) == 'Y');
+        System.out.println("You will be returned back to operation list in 3 seconds...");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
 
-    private static void updateDeliveryManDetails() {
+    private static void updateDeliveryManContactDetails() {
+        Scanner scanner = new Scanner(System.in);
+        ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
+        DeliveryMan.setNextID(1000 + deliveryManList.getNumberOfEntries());
+        int count = deliveryManList.getNumberOfEntries();
+        int selection[] = new int[2];
+        boolean loop[] = new boolean[3];
+        do {
+            loop[0] = false;
+            System.out.println("Update Delivery Man Contact Details");
+            System.out.println("===================================");
+            System.out.println(String.format("%-3s %-4s %-10s %-20s %-6s %-12s %-14s %-20s %-12s %-80s %-10s %-14s", "NO.", "ID", "USERNAME", "NAME", "GENDER", "CONTACT_NO", "NRIC", "EMAIL", "BASIC_SALARY", "ADDRESS", "STATUS", "WORKING_STATUS"));
+            for (int i = 1; i <= deliveryManList.getNumberOfEntries(); i++) {
+                System.out.printf("%-3s %s\n", i + ".", deliveryManList.getEntry(i));
+            }
+            if (count != 0) {
+                System.out.print("Please select a delivery man you want to update (0 to cancel): ");
+                if (!scanner.hasNextInt()) {
+                    System.out.println("Please enter numeric value only.");
+                    scanner.nextLine();
+                    loop[0] = true;
+                } else {
+                    selection[0] = scanner.nextInt();
+                    scanner.nextLine();
+                    if (selection[0] >= 0 && selection[0] <= count) {
+                        if (selection[0] != 0) {
+                            do {
+                                loop[1] = false;
+                                System.out.println("Delivery Man Contact Details");
+                                System.out.println("============================");
+                                System.out.println("1. Contact Number");
+                                System.out.println("2. Address");
+                                System.out.println("0. Reselect Delivery Man");
+                                System.out.print("Please select a contact detail you want to update: ");
+                                while (!scanner.hasNext("[012]{1}")) {
+                                    System.out.println("Please select option [0-2] only.");
+                                    scanner.nextLine();
+                                    loop[1] = true;
+                                }
+                                selection[1] = scanner.nextInt();
+                                scanner.nextLine();
+                                if (selection[1] == 1) {//Update Contact Number
+                                    do {
+                                        loop[2] = false;
+                                        String oldContactNo = deliveryManList.getEntry(selection[0]).getContactNo();
+                                        System.out.println("Update Contact Number");
+                                        System.out.println("=====================");
+                                        System.out.println("Old Contact No. : " + oldContactNo);
+                                        System.out.println("---------------------");
+                                        System.out.print("New Contact No.(01#-########): ");
+                                        String newContactNo = scanner.nextLine();
+                                        if (Validation.ValidateContactNumber(newContactNo)) {
+                                            deliveryManList.getEntry(selection[0]).setContactNo(newContactNo);
+                                            File.storeList(deliveryManList, DELIVERYMANFILE);
+                                            System.out.println("Updated Successfully!!!");
+                                            System.out.print("Do you want to update other details? (Y=Yes): ");
+                                            char updateOtherDetails = scanner.next().charAt(0);
+                                            scanner.nextLine();
+                                            if (Character.toUpperCase(updateOtherDetails) == 'Y') {
+                                                loop[1] = true;
+                                            }
+                                        } else {
+                                            System.out.println("Please enter a valid contact number.");
+                                            loop[2] = true;
+                                        }
+                                    } while (loop[2] == true);
 
+                                } else if (selection[1] == 2) {//Update Address
+                                    do {
+                                        loop[2] = false;
+                                        Address oldFullAddress = deliveryManList.getEntry(selection[0]).getAddress();
+                                        String oldAddress = oldFullAddress.getAddress();
+                                        String oldState = oldFullAddress.getState();
+                                        String oldCity = oldFullAddress.getCity();
+                                        int oldPostcode = oldFullAddress.getPostcode();
+                                        System.out.println("Update Address");
+                                        System.out.println("=====================");
+                                        System.out.println("Old Address : " + oldAddress);
+                                        System.out.println("Old State   : " + oldState);
+                                        System.out.println("Old City    : " + oldCity);
+                                        System.out.println("old Postcode: " + oldPostcode);
+                                        System.out.println("---------------------");
+                                        System.out.print("New Address : ");
+                                        String newAddress = scanner.nextLine();
+                                        System.out.print("New State   : ");
+                                        String newState = scanner.nextLine();
+                                        System.out.print("New City    : ");
+                                        String newCity = scanner.nextLine();
+                                        System.out.print("New Postcode: ");
+                                        while (!scanner.hasNext("[0-9]{5}")) {
+                                            System.out.println("Please enter 5-digit postcode.");
+                                            System.out.print("New Postcode: ");
+                                            scanner.next();
+                                        }
+                                        int newPostcode = scanner.nextInt();
+                                        scanner.nextLine();
+                                        Address newFullAddress = new Address(newAddress,newState,newCity,newPostcode);
+                                        deliveryManList.getEntry(selection[0]).setAddress(newFullAddress);
+                                        File.storeList(deliveryManList, DELIVERYMANFILE);
+                                        System.out.println("Updated Successfully!!!");
+                                        System.out.print("Do you want to update other details? (Y=Yes): ");
+                                        char updateOtherDetails = scanner.next().charAt(0);
+                                        scanner.nextLine();
+                                        if (Character.toUpperCase(updateOtherDetails) == 'Y') {
+                                            loop[1] = true;
+                                        }
+
+                                    } while (loop[2] == true);
+                                } else {//Reselect Delivery Man
+                                    loop[0] = true;
+                                }
+                            } while (loop[1] == true);
+
+                        }
+                    } else {
+                        System.out.println("Please select option [0-" + count + "] only.");
+                        loop[0] = true;
+                    }
+                }
+            } else {
+                System.out.println("No delivery man found in database.");
+            }
+        } while (loop[0] == true);
+        System.out.println("You will be returned back to operation list in 3 seconds...");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private static void updateDeliveryManStatus() {

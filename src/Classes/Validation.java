@@ -53,4 +53,18 @@ public class Validation {
             return false;
         }
     }
+    
+    public static <T> boolean CheckDuplicateUsername(String username, ListInterface<T> list){
+        boolean isDuplicate = false;
+        ListInterface<User> userList = (ListInterface<User>)list;
+        String tempUsername;
+        for (int i = 1; i <= userList.getNumberOfEntries(); i++) {
+            tempUsername = userList.getEntry(i).getUsername();
+            if (tempUsername.equalsIgnoreCase(username)) {
+                isDuplicate = true;
+                break;
+            }
+        }
+        return isDuplicate;
+    }
 }
