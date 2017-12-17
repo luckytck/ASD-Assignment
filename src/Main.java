@@ -1,6 +1,9 @@
 
 import ADTs.LinkedList;
 import ADTs.ListInterface;
+import ADTs.QueueInterface;
+import Classes.File;
+import Classes.Order;
 import Classes.User;
 import Classes.Validation;
 import java.io.FileInputStream;
@@ -10,9 +13,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
-
+    public static final String PENDINGDELIVERYFILE = "pendingDelivery.dat";
     public static final String ORDERFILE = "order.dat";
     public static final String CUSTOMERFILE = "customer.dat";
     public static final String AFFILIATEFILE = "affiliate.dat";
@@ -105,10 +111,10 @@ public class Main {
                                                     if (selection[2] == 1) {
                                                         //TODO: Place Ad-hoc Order
                                                         placeAdHocOrder(username);
-                                                    } else if (selection[2] == 2){
+                                                    } else if (selection[2] == 2) {
                                                         //TODO: Make Schedule Order
                                                         makeScheduleOrder(username);
-                                                    } else if (selection[2] == 3){
+                                                    } else if (selection[2] == 3) {
                                                         //TODO: Track Order
                                                         trackOrder(username);
                                                     } else {//Logout
@@ -116,7 +122,7 @@ public class Main {
                                                     }
                                                 }
                                             } while (loop[3] == true);
-                                        } else if (selection[1] == 2){//Affiliate
+                                        } else if (selection[1] == 2) {//Affiliate
                                             do {
                                                 loop[3] = false;
                                                 System.out.println("Operation List");
@@ -137,13 +143,13 @@ public class Main {
                                                     if (selection[2] == 1) {
                                                         //TODO: Add New Items
                                                         addNewItems(username);
-                                                    } else if(selection[2] == 2){
+                                                    } else if (selection[2] == 2) {
                                                         //TODO: Update Item Details
                                                         updateItemDetails(username);
-                                                    } else if(selection[2] == 3){
+                                                    } else if (selection[2] == 3) {
                                                         //TODO: Update Item Status
                                                         updateItemStatus(username);
-                                                    } else if(selection[2] == 4){
+                                                    } else if (selection[2] == 4) {
                                                         //TODO: Remove Items
                                                         removeItems(username);
                                                     } else {//Logout
@@ -151,7 +157,7 @@ public class Main {
                                                     }
                                                 }
                                             } while (loop[3] == true);
-                                        } else if (selection[1] == 3){//Delivery Man
+                                        } else if (selection[1] == 3) {//Delivery Man
                                             do {
                                                 loop[3] = false;
                                                 System.out.println("Operation List");
@@ -172,21 +178,21 @@ public class Main {
                                                     if (selection[2] == 1) {
                                                         //TODO: Clock In
                                                         clockIn(username);
-                                                    } else if (selection[2] == 2){
+                                                    } else if (selection[2] == 2) {
                                                         //TODO: Clock Out
                                                         clockOut(username);
-                                                    } else if (selection[2] == 3){
+                                                    } else if (selection[2] == 3) {
                                                         //TODO: Retrieve Customer Details
                                                         retrieveCustomerDetails();
-                                                    } else if (selection[2] == 4){
+                                                    } else if (selection[2] == 4) {
                                                         //TODO: Update Working Status
                                                         updateWorkingStatus(username);
                                                     } else {//Logout
                                                         loop[0] = true;
-                                                    }            
+                                                    }
                                                 }
                                             } while (loop[3] == true);
-                                        } else if (selection[1] == 4){//Operational Staff
+                                        } else if (selection[1] == 4) {//Operational Staff
                                             do {
                                                 loop[3] = false;
                                                 System.out.println("Operation List");
@@ -194,6 +200,7 @@ public class Main {
                                                 System.out.println("1. Retrieve Pending Delivery");
                                                 System.out.println("2. Retrieve Scheduled Orders");
                                                 System.out.println("0. Logout");
+                                                System.out.print("Selection: ");
                                                 if (!scanner.hasNext("[012]{1}")) {
                                                     System.out.println("Please selection option [0-2] only.");
                                                     scanner.nextLine();
@@ -204,7 +211,8 @@ public class Main {
                                                     if (selection[2] == 1) {
                                                         //TODO: Retrieve Pending Delivery
                                                         retrievePendingDelivery();
-                                                    } else if (selection[2] == 2){
+                                                        loop[3] = true;
+                                                    } else if (selection[2] == 2) {
                                                         //TODO: Retrieve Scheduled Orders
                                                         retrieveScheduledOrders();
                                                     } else {//Logout
@@ -212,7 +220,7 @@ public class Main {
                                                     }
                                                 }
                                             } while (loop[3] == true);
-                                        } else if (selection[1] == 5){//HR Executive
+                                        } else if (selection[1] == 5) {//HR Executive
                                             do {
                                                 loop[3] = false;
                                                 System.out.println("Operation List");
@@ -222,6 +230,7 @@ public class Main {
                                                 System.out.println("3. Update Delivery Man Status");
                                                 System.out.println("4. Generate Daily Report");
                                                 System.out.println("0. Logout");
+                                                System.out.print("Selection: ");
                                                 if (!scanner.hasNext("[01234]{1}")) {
                                                     System.out.println("Please select option [0-4] only.");
                                                     scanner.nextLine();
@@ -232,13 +241,13 @@ public class Main {
                                                     if (selection[2] == 1) {
                                                         //TODO: Add New Delivery Man
                                                         addNewDeliveryMan();
-                                                    } else if (selection[2] == 2){
+                                                    } else if (selection[2] == 2) {
                                                         //TODO: Update Delivery Man Details
                                                         updateDeliveryManDetails();
-                                                    } else if (selection[2] == 3){
+                                                    } else if (selection[2] == 3) {
                                                         //TODO: Update Delivery Man Status
                                                         updateDeliveryManStatus();
-                                                    } else if (selection[2] == 4){
+                                                    } else if (selection[2] == 4) {
                                                         //TODO: Generate Daily Report
                                                         generateDailyReport();
                                                     } else {//Logout
@@ -291,74 +300,108 @@ public class Main {
             }
         } while (loop[0] == true);
     }
-    
-    public static void placeAdHocOrder(String username){
-        
+
+    public static void placeAdHocOrder(String username) {
+
     }
-    public static void makeScheduleOrder(String username){
-        
+
+    public static void makeScheduleOrder(String username) {
+
     }
-    public static void trackOrder(String username){
-        
+
+    public static void trackOrder(String username) {
+
     }
 
     private static void addNewItems(String username) {
-        
+
     }
 
     private static void updateItemDetails(String username) {
-        
+
     }
 
     private static void updateItemStatus(String username) {
-        
+
     }
 
     private static void removeItems(String username) {
-        
+
     }
 
     private static void clockIn(String username) {
-        
+
     }
 
     private static void clockOut(String username) {
-        
+
     }
 
     private static void retrieveCustomerDetails() {
-        
+
     }
 
     private static void updateWorkingStatus(String username) {
-        
+
     }
 
     private static void retrievePendingDelivery() {
-        
+        Scanner scanner = new Scanner(System.in);
+        QueueInterface<Order> orderQueue = File.retrieveQueue(PENDINGDELIVERYFILE);
+        System.out.println("RETRIEVE PENDING DELIVERY");
+        System.out.println("=========================");
+        System.out.print("Retrieve next pending delivery? (Y=Yes): ");
+        char getNext = scanner.next().charAt(0);
+        while (Character.toUpperCase(getNext) == 'Y') {
+            if (!orderQueue.isEmpty()) {
+                Order order = orderQueue.dequeue();
+                System.out.println("ORDER DETAILS");
+                System.out.println("=============");
+                System.out.println("Order No            : " + order.getOrderNo());
+                System.out.println("Customer Name       : " + order.getCustomer().getName());
+                System.out.println("Customer Contact No.: " + order.getCustomer().getContactNo());
+                System.out.println("Affiliate Name      : " + order.getAffiliate().getRestaurantName());
+                System.out.println("Order Date          : " + order.printOrderDate());
+                System.out.println("Order Time          : " + order.printOrderTime());
+                System.out.println("Order Status        : " + order.getStatus());
+                System.out.println("continue....assign pending delivery to delivery man");
+                System.out.println("---------------------------------------------------------------------");
+                System.out.print("Retrieve next pending delivery? (Y=Yes): ");
+                getNext = scanner.next().charAt(0);
+            } else {
+                System.out.println("Well done!! All pending deliveries have been assigned.");
+                break;
+            }
+        }
+        System.out.println("You will be returned back to operation list in 3 seconds...");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private static void retrieveScheduledOrders() {
-        
+
     }
 
     private static void addNewDeliveryMan() {
-        
+
     }
 
     private static void updateDeliveryManDetails() {
-        
+
     }
 
     private static void updateDeliveryManStatus() {
-        
+
     }
 
     private static void generateDailyReport() {
-        
+
     }
 
     private static void registerAsAffiliate() {
-        
+
     }
 }
