@@ -64,6 +64,22 @@ public class User implements Serializable{
         this.contactNo = contactNo;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public static int getNextID() {
+        return nextID;
+    }
+
+    public static void setNextID(int nextID) {
+        User.nextID = nextID;
+    }
+    
     @Override
     public String toString() {
         return String.format("%-4d %-10s %-20s %-6s %-12s", id,username,name,gender,contactNo);
