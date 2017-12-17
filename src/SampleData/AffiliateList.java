@@ -52,7 +52,7 @@ public class AffiliateList {
         Address address2 = new Address("90, Jalan Peel, Maluri,", "Kuala Lumpur", "Wilayah Persekutuan", 55100);
         
         //Create Affiliates
-        Affiliate affiliate1 = new Affiliate("Tealive", "962113-K", "000808083456", "03-62113891", address1, "chatime", "1234", "Bryan Loo", 'M', "012-3456789");
+        Affiliate affiliate1 = new Affiliate("Tealive", "962113-K", "000808083456", "03-62113891", address1, "tealive", "1234", "Bryan Loo", 'M', "012-3456789");
         Affiliate affiliate2 = new Affiliate("OldTown White Coffee", "830776-U", "000801587200", "03-12566852", address2, "oldtown", "1234", "Goh Ching Mun", 'M', "011-45621445");
         
         //Create MenuItems for Tealive

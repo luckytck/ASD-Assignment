@@ -59,9 +59,9 @@ public class CustomerList {
         GregorianCalendar date3 = new GregorianCalendar(1997, 0, 6);// 06/01/1997     
         
         //Create Customers
-        Customer customer1 = new Customer("luckytck97@gmail.com", date1, address1, "customer1", "123456", "Tan Cheong Kiat", 'M', "011-37997626");
-        Customer customer2 = new Customer("hanhan@gmail.com", date2, address2, "customer2", "123456", "Tan Qi Han", 'M', "012-3456789");
-        Customer customer3 = new Customer("liyi@gmail.com", date3, address3, "customer3", "123456", "Wong Li Yi", 'F', "011-12345678");
+        Customer customer1 = new Customer("luckytck97@gmail.com", date1, address1, "customer1", "1234", "Tan Cheong Kiat", 'M', "011-37997626");
+        Customer customer2 = new Customer("hanhan@gmail.com", date2, address2, "customer2", "1234", "Tan Qi Han", 'M', "012-3456789");
+        Customer customer3 = new Customer("liyi@gmail.com", date3, address3, "customer3", "1234", "Wong Li Yi", 'F', "011-12345678");
         
         //Print Customers' Details
         System.out.println(String.format("%-4s %-10s %-20s %-6s %-12s %-20s %-10s %-80s", "ID", "USERNAME", "NAME", "GENDER", "CONTACT_NO", "EMAIL", "BIRTH_DATE", "ADDRESS"));
