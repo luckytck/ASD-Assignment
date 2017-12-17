@@ -1,7 +1,7 @@
 package SampleData;
 
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import Classes.Address;
 import Classes.Customer;
@@ -20,10 +20,10 @@ public class CustomerList {
     public static final String CUSTOMERFILE = "customer.dat";
     
     private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (CircularDoublyLinkedList) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -70,7 +70,7 @@ public class CustomerList {
         System.out.println(customer3);
         
         //Create Customer List
-        ListInterface<Customer> customerList = new LinkedList<>();
+        ListInterface<Customer> customerList = new CircularDoublyLinkedList<>();
         customerList.add(customer1);
         customerList.add(customer2);
         customerList.add(customer3);

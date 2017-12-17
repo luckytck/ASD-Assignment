@@ -1,7 +1,7 @@
 
 package Classes;
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -134,7 +134,7 @@ public class Delivery implements Serializable{
         OrderItem orderItem2 = new OrderItem(item2, 1, "Less Sugar");
         
         //Add OrderItems into itemList
-        ListInterface<OrderItem> itemList = new LinkedList<>();
+        ListInterface<OrderItem> itemList = new CircularDoublyLinkedList<>();
         itemList.add(orderItem1);
         itemList.add(orderItem2);
         

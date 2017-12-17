@@ -1,7 +1,7 @@
 
 package SampleData;
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import Classes.Address;
 import Classes.OperationalStaff;
@@ -16,10 +16,10 @@ public class OperationalStaffList {
     public static final String OPERATIONALSTAFFFILE = "operationalStaff.dat";
     
     private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (CircularDoublyLinkedList) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -58,7 +58,7 @@ public class OperationalStaffList {
         System.out.println(staff2);
         
         //Create Staff List
-        ListInterface<OperationalStaff> operationalStaffList = new LinkedList<>();
+        ListInterface<OperationalStaff> operationalStaffList = new CircularDoublyLinkedList<>();
         operationalStaffList.add(staff1);
         operationalStaffList.add(staff2);
         

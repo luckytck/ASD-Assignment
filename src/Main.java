@@ -1,7 +1,8 @@
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
+import Classes.DeliveryMan;
 import Classes.File;
 import Classes.Order;
 import Classes.User;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
+
     public static final String PENDINGDELIVERYFILE = "pendingDelivery.dat";
     public static final String ORDERFILE = "order.dat";
     public static final String CUSTOMERFILE = "customer.dat";
@@ -386,7 +388,22 @@ public class Main {
     }
 
     private static void addNewDeliveryMan() {
-
+        Scanner scanner = new Scanner(System.in);
+        ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
+        DeliveryMan.setNextID(1000 + deliveryManList.getNumberOfEntries());
+        boolean loop;
+        do {
+            loop = false;
+            System.out.println("Add New Delivery Man");
+            System.out.println("====================");
+            System.out.println("Please enter following details:");
+            System.out.print("Username    : ");
+            System.out.print("Password    : ");
+            System.out.print("Name        : ");
+            System.out.print("Gender (M/F): ");
+            System.out.println("Contact No:");
+        } while (loop);
+        
     }
 
     private static void updateDeliveryManDetails() {

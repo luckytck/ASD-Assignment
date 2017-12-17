@@ -1,5 +1,5 @@
-import ADTs.LinkedList;
-import ADTs.LinkedQueue;
+import ADTs.CircularDoublyLinkedList;
+import ADTs.CircularDoublyLinkedQueue;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
 import Classes.Customer;
@@ -16,10 +16,10 @@ public class TrackFoodOrder {
     public static final String ORDERFILE = "order.dat";
     
         private static <T> QueueInterface<T> initializeQueue(String fileName) { //Return a Queue from .dat file
-        QueueInterface<T> list = new LinkedQueue<>();
+        QueueInterface<T> list = new CircularDoublyLinkedQueue<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedQueue) (oiStream.readObject());
+            list = (CircularDoublyLinkedQueue) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -32,10 +32,10 @@ public class TrackFoodOrder {
     }
     
     private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (CircularDoublyLinkedList) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");

@@ -1,7 +1,7 @@
 package DeliveryMan;
 
-import ADTs.LinkedList;
-import ADTs.LinkedQueue;
+import ADTs.CircularDoublyLinkedList;
+import ADTs.CircularDoublyLinkedQueue;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
 import Classes.File;

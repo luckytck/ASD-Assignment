@@ -1,7 +1,7 @@
 
 package SampleData;
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import Classes.Address;
 import Classes.DeliveryMan;
@@ -16,10 +16,10 @@ public class DeliveryManList {
     public static final String DELIVERYMANFILE = "deliveryMan.dat";
     
     private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (CircularDoublyLinkedList) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -58,7 +58,7 @@ public class DeliveryManList {
         System.out.println(deliveryMan2);
         
         //Create Delivery Man List
-        ListInterface<DeliveryMan> deliveryManList = new LinkedList<>();
+        ListInterface<DeliveryMan> deliveryManList = new CircularDoublyLinkedList<>();
         deliveryManList.add(deliveryMan1);
         deliveryManList.add(deliveryMan2);
         

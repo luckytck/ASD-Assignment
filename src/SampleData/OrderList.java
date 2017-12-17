@@ -1,8 +1,8 @@
 package SampleData;
 
 
-import ADTs.LinkedList;
-import ADTs.LinkedQueue;
+import ADTs.CircularDoublyLinkedList;
+import ADTs.CircularDoublyLinkedQueue;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
 import Classes.Address;
@@ -28,10 +28,10 @@ public class OrderList {
     public static final String CUSTOMERFILE = "customer.dat";
     
     private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (CircularDoublyLinkedList) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -56,10 +56,10 @@ public class OrderList {
     }
     
     private static <T> QueueInterface<T> initializeQueue(String fileName) { //Return a Queue from .dat file
-        QueueInterface<T> list = new LinkedQueue<>();
+        QueueInterface<T> list = new CircularDoublyLinkedQueue<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedQueue) (oiStream.readObject());
+            list = (CircularDoublyLinkedQueue) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -91,7 +91,7 @@ public class OrderList {
         ListInterface<Customer> customerList = initializeList(CUSTOMERFILE);
         
         //Create Order Item Lists
-        ListInterface<OrderItem> itemList1 = new LinkedList<>();
+        ListInterface<OrderItem> itemList1 = new CircularDoublyLinkedList<>();
         OrderItem item1 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(1), 2, "Less Sugar");
         OrderItem item2 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(2), 1, "Less Ice");
         OrderItem item3 = new OrderItem(affiliateList.getEntry(1).getFood().getEntry(1), 2, "");
@@ -99,7 +99,7 @@ public class OrderList {
         itemList1.add(item2);
         itemList1.add(item3);
         
-        ListInterface<OrderItem> itemList2 = new LinkedList<>();
+        ListInterface<OrderItem> itemList2 = new CircularDoublyLinkedList<>();
         OrderItem item4 = new OrderItem(affiliateList.getEntry(2).getBeverage().getEntry(1), 2, "Hot");
         OrderItem item5 = new OrderItem(affiliateList.getEntry(2).getFood().getEntry(1), 1, "");
         OrderItem item6 = new OrderItem(affiliateList.getEntry(2).getFood().getEntry(2), 1, "");
@@ -107,7 +107,7 @@ public class OrderList {
         itemList2.add(item5);
         itemList2.add(item6);
         
-        ListInterface<OrderItem> itemList3 = new LinkedList<>();
+        ListInterface<OrderItem> itemList3 = new CircularDoublyLinkedList<>();
         OrderItem item7 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(1), 1, "");
         OrderItem item8 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(2), 1, "Half Ice");
         OrderItem item9 = new OrderItem(affiliateList.getEntry(1).getBeverage().getEntry(3), 1, "Half Sugar");
@@ -123,11 +123,11 @@ public class OrderList {
         Order order3 = new Order(itemList3, customerList.getEntry(3), affiliateList.getEntry(1), new GregorianCalendar(2017, 11, 6, 13, 0, 0));
         
         //Create Order List
-        ListInterface<Order> orderList = new LinkedList<>();
+        ListInterface<Order> orderList = new CircularDoublyLinkedList<>();
         orderList.add(order1);
         orderList.add(order2);
         orderList.add(order3);
-        QueueInterface<Order> orderQueue = new LinkedQueue<>();
+        QueueInterface<Order> orderQueue = new CircularDoublyLinkedQueue<>();
         orderQueue.enqueue(order1);
         orderQueue.enqueue(order2);
         orderQueue.enqueue(order3);

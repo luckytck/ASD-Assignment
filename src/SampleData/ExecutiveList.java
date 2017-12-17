@@ -1,7 +1,7 @@
 
 package SampleData;
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import Classes.Address;
 import Classes.Executive;
@@ -16,10 +16,10 @@ public class ExecutiveList {
     public static final String EXECUTIVEFILE = "executive.dat";
     
     private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (CircularDoublyLinkedList) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -57,7 +57,7 @@ public class ExecutiveList {
         System.out.println(executive2);
         
         //Create Executive List
-        ListInterface<Executive> executiveList = new LinkedList<>();
+        ListInterface<Executive> executiveList = new CircularDoublyLinkedList<>();
         executiveList.add(executive1);
         executiveList.add(executive2);
         

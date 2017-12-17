@@ -1,7 +1,7 @@
 
 package Classes;
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -123,8 +123,8 @@ public class Affiliate extends User implements Serializable{
             System.out.println("830776-U = " + "False");
         }
         //Example to store food to the affiliate class
-        ListInterface<MenuItem> food1 = new LinkedList<>();
-         ListInterface<MenuItem> beverage1 = new LinkedList<>();
+        ListInterface<MenuItem> food1 = new CircularDoublyLinkedList<>();
+         ListInterface<MenuItem> beverage1 = new CircularDoublyLinkedList<>();
         MenuItem item1 = new MenuItem("Mee Goreng", "", 4.00, 0);
         MenuItem item2 = new MenuItem("Nasi Goreng", "", 5.00, 10);
         MenuItem item3 = new MenuItem("Lobster burger", "Special Promotion", 50.00, 10);
@@ -145,7 +145,7 @@ public class Affiliate extends User implements Serializable{
             System.out.println(food2.getEntry(i).toString());
         }
         
-        ListInterface<Affiliate> A=new LinkedList<>();
+        ListInterface<Affiliate> A=new CircularDoublyLinkedList<>();
         A.add(affiliate3);
         A.add(affiliate2);
          try {

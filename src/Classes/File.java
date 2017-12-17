@@ -1,8 +1,8 @@
 
 package Classes;
 
-import ADTs.LinkedList;
-import ADTs.LinkedQueue;
+import ADTs.CircularDoublyLinkedList;
+import ADTs.CircularDoublyLinkedQueue;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
 import java.io.FileInputStream;
@@ -40,10 +40,10 @@ public class File {
    * or the file does not contains a list
    */    
     public static <T> ListInterface<T> retrieveList(String fileName){
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (ListInterface<T>) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -81,10 +81,10 @@ public class File {
    * or the file does not contains a queue
    */
     public static <T> QueueInterface<T> retrieveQueue(String fileName){
-        QueueInterface<T> queue = new LinkedQueue<>();
+        QueueInterface<T> queue = new CircularDoublyLinkedQueue<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            queue = (LinkedQueue) (oiStream.readObject());
+            queue = (QueueInterface<T>) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");

@@ -6,12 +6,12 @@ import java.io.Serializable;
  * LinkedList.java A class that implements the ADT list by using a circular
  * doubly chain of nodes, with the node implemented as an inner class.
  */
-public class LinkedList<T> implements ListInterface<T>, Serializable {
+public class CircularDoublyLinkedList<T> implements ListInterface<T>, Serializable {
 
     private Node firstNode;
     private int numberOfEntries;
 
-    public LinkedList() {
+    public CircularDoublyLinkedList() {
         clear();
     }
 
@@ -167,7 +167,7 @@ public class LinkedList<T> implements ListInterface<T>, Serializable {
     }
 
     public static void main(String[] args) {
-        ListInterface<Integer> list = new LinkedList<>();
+        ListInterface<Integer> list = new CircularDoublyLinkedList<>();
         System.out.println("Add 1: " + list.add(1));
         System.out.println("Add 3: " + list.add(3));
         System.out.println("Add 2 at position 2: " + list.add(2, 2));

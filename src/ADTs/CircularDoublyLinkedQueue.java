@@ -6,12 +6,12 @@ import java.io.Serializable;
  * LinkedQueue.java A class that implements the ADT queue by using a circular
  * doubly chain of nodes, with the node implemented as an inner class.
  */
-public class LinkedQueue<T> implements QueueInterface<T>, Serializable {
+public class CircularDoublyLinkedQueue<T> implements QueueInterface<T>, Serializable {
 
     private Node firstNode;
     private int numberOfEntries;
 
-    public LinkedQueue() {
+    public CircularDoublyLinkedQueue() {
         clear();
     }
     
@@ -95,7 +95,7 @@ public class LinkedQueue<T> implements QueueInterface<T>, Serializable {
     }
     
     public static void main(String[] args) {
-        QueueInterface<Integer> queue = new LinkedQueue<>();
+        QueueInterface<Integer> queue = new CircularDoublyLinkedQueue<>();
         queue.enqueue(1);
         System.out.println(queue.dequeue());
         queue.enqueue(2);

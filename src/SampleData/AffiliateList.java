@@ -1,7 +1,7 @@
 package SampleData;
 
 
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import Classes.Address;
 import Classes.Affiliate;
@@ -19,10 +19,10 @@ public class AffiliateList {
     public static final String AFFILIATEFILE = "affiliate.dat";
     
     private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new LinkedList<>();
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (LinkedList) (oiStream.readObject());
+            list = (CircularDoublyLinkedList) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
@@ -59,7 +59,7 @@ public class AffiliateList {
         MenuItem menuItem1 = new MenuItem("Original Pearl Milk Tea", "Regular Size", 6.50, 0);
         MenuItem menuItem2 = new MenuItem("Hazelnut Milk Tea", "Regular Size", 6.50, 0);
         MenuItem menuItem3 = new MenuItem("Superior Coco", "Regular Size", 6.50, 0); 
-        ListInterface<MenuItem> beverage1 = new LinkedList<>();
+        ListInterface<MenuItem> beverage1 = new CircularDoublyLinkedList<>();
         beverage1.add(menuItem1);
         beverage1.add(menuItem2);
         beverage1.add(menuItem3);
@@ -69,7 +69,7 @@ public class AffiliateList {
         MenuItem menuItem5 = new MenuItem("Beefo Cheese Pie", "", 4.9, 0);
         MenuItem menuItem6 = new MenuItem("Cheeky Chicky Pops", "", 7.9, 0);
         MenuItem menuItem7 = new MenuItem("Hot BBQ Pops", "", 7.9, 0);
-        ListInterface<MenuItem> food1 = new LinkedList<>();
+        ListInterface<MenuItem> food1 = new CircularDoublyLinkedList<>();
         food1.add(menuItem4);
         food1.add(menuItem5);
         food1.add(menuItem6);
@@ -81,7 +81,7 @@ public class AffiliateList {
         MenuItem menuItem9 = new MenuItem("Rendang Chicken Rice", "", 12.50, 0);
         MenuItem menuItem10 = new MenuItem("Curry Mee", "", 8.50, 0);
         MenuItem menuItem11 = new MenuItem("Asam Laksa", "", 8.50, 0);
-        ListInterface<MenuItem> food2 = new LinkedList<>();
+        ListInterface<MenuItem> food2 = new CircularDoublyLinkedList<>();
         food2.add(menuItem8);
         food2.add(menuItem9);
         food2.add(menuItem10);
@@ -90,13 +90,13 @@ public class AffiliateList {
         
         MenuItem menuItem12 = new MenuItem("Enriched Chocolate", "Regular Size", 5.00, 0);
         MenuItem menuItem13 = new MenuItem("Orange Juice", "Regular Size", 5.00, 0);
-        ListInterface<MenuItem> beverage2 = new LinkedList<>();
+        ListInterface<MenuItem> beverage2 = new CircularDoublyLinkedList<>();
         beverage2.add(menuItem12);
         beverage2.add(menuItem13);
         affiliate2.setBeverage(beverage2);
         
         //Create Affiliate List
-        ListInterface<Affiliate> affiliateList = new LinkedList<>();
+        ListInterface<Affiliate> affiliateList = new CircularDoublyLinkedList<>();
         affiliateList.add(affiliate1);
         affiliateList.add(affiliate2);
         

@@ -1,4 +1,4 @@
-import ADTs.LinkedList;
+import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
 import Classes.Affiliate;
 import Classes.MenuItem;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class ManageItem {
 
     public static ListInterface<Affiliate> getAffiliateList() {
-        ListInterface<Affiliate> affiliate = new LinkedList<>();
+        ListInterface<Affiliate> affiliate = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("Affiliate.dat"));
             affiliate = (ListInterface) (oiStream.readObject());
