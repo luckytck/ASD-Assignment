@@ -1,5 +1,6 @@
 import ADTs.CircularDoublyLinkedList;
 import ADTs.ListInterface;
+import ADTs.LinearSinglyLinkedList;
 import Classes.Affiliate;
 import Classes.MenuItem;
 import java.io.FileInputStream;
@@ -14,6 +15,23 @@ import java.util.Scanner;
 
 public class ManageItem {
 
+    public static ListInterface<Affiliate> getAL(){
+     ListInterface<Affiliate> affiliate = new LinearSinglyLinkedList<>();
+     try {
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream("Affiliate.dat"));
+            affiliate = (ListInterface) (oiStream.readObject());
+            oiStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot read from file");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found");
+        }
+
+        return affiliate;
+     
+    }
     public static ListInterface<Affiliate> getAffiliateList() {
         ListInterface<Affiliate> affiliate = new CircularDoublyLinkedList<>();
         try {
@@ -49,7 +67,8 @@ public class ManageItem {
     }
 
     public static boolean printItem(int index, String menu) {
-        ListInterface<Affiliate> affiliateList = getAffiliateList();
+       // ListInterface<Affiliate> affiliateList = getAffiliateList();
+       ListInterface<Affiliate> affiliateList = getAL();
         boolean empty = true;
         if (menu.equals("food")) {
             if (affiliateList.getEntry(index).getFood().isEmpty()) {
