@@ -1,10 +1,14 @@
 
 import ADTs.CircularDoublyLinkedList;
+import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
 import Classes.Address;
+import Classes.Affiliate;
 import Classes.DeliveryMan;
 import Classes.File;
+import Classes.File;
+import static Classes.File.storeAffiliateList;
 import Classes.Order;
 import Classes.User;
 import Classes.Validation;
@@ -291,6 +295,7 @@ public class Main {
                             scanner.nextLine();
                             if (selection[1] == 1) {
                                 //TODO: Register As Affiliate
+
                                 registerAsAffiliate();
                             } else {//Return to previous page
                                 loop[0] = true;
@@ -584,7 +589,7 @@ public class Main {
                                         }
                                         int newPostcode = scanner.nextInt();
                                         scanner.nextLine();
-                                        Address newFullAddress = new Address(newAddress,newState,newCity,newPostcode);
+                                        Address newFullAddress = new Address(newAddress, newState, newCity, newPostcode);
                                         deliveryManList.getEntry(selection[0]).setAddress(newFullAddress);
                                         File.storeList(deliveryManList, DELIVERYMANFILE);
                                         System.out.println("Updated Successfully!!!");
@@ -628,6 +633,105 @@ public class Main {
     }
 
     private static void registerAsAffiliate() {
+        Scanner scanner = new Scanner(System.in);
+        ListInterface<Affiliate> affiliateList = new LinearSinglyLinkedList<>();
+        affiliateList = File.retrieveAffiliateList(AFFILIATEFILE);
+
+        String username, password, name, contactNo, restaurantName, businessRegNo, GSTRegNo, restaurantContactNo, address, state, city;
+        char gender;
+        int postcode = 0;
+        System.out.println("Register as Affiliate");
+        System.out.println("===========================================================================================");
+
+        System.out.println("Please enter your :");
+
+        do {
+            System.out.print("Username    :");
+            username = scanner.nextLine();
+            if (Validation.CheckDuplicateUsername(username, affiliateList)) {
+                System.out.println("The username already exist.");
+            }
+        } while (Validation.CheckDuplicateUsername(username, affiliateList));
+
+        System.out.print("Passowrd    :");
+        password = scanner.nextLine();
+
+        System.out.print("Name        :");
+        name = scanner.nextLine();
+        do {
+            System.out.print("Gender (M=Male or F=Female):");
+            gender = scanner.next().charAt(0);
+            gender = Character.toUpperCase(gender);
+            if (gender != 'M' && gender != 'F') {
+                System.out.println("Please enter M or F.");
+            }
+        } while (gender != 'M' && gender != 'F');
+        scanner.nextLine();
+        do {
+
+            System.out.print("Contact No. (01#-########) :");
+            contactNo = scanner.nextLine();
+
+            if (!Validation.ValidateContactNumber(contactNo)) {
+                System.out.println("Please enter a valid contact No.");
+            }
+        } while (!Validation.ValidateContactNumber(contactNo));
+        System.out.println("");
+        System.out.println("Please fill up restaurant's detail :");
+        System.out.print("Resaturant Name :");
+        restaurantName = scanner.nextLine();
+
+        System.out.print("Business Registration No. :");
+        businessRegNo = scanner.nextLine();
+
+        System.out.print("GST Registration No. :");
+        GSTRegNo = scanner.nextLine();
+        do {
+            System.out.print("Restaurant Contact No.(01#-########) :");
+            restaurantContactNo = scanner.nextLine();
+            if (!Validation.ValidateContactNumber(restaurantContactNo)) {
+                System.out.println("Please enter a valid contact No.");
+            }
+        } while (!Validation.ValidateContactNumber(restaurantContactNo));
+
+        System.out.println("");
+        System.out.println("Restaurant Location :");
+        System.out.print("Address :");
+        address = scanner.nextLine();
+
+        System.out.print("State :");
+        state = scanner.nextLine();
+
+        System.out.print("City :");
+        city = scanner.nextLine();
+        boolean isNotInteger = false;
+        do {
+            System.out.print("Postcode :");
+            try {
+                postcode = scanner.nextInt();
+
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter integer.");
+                isNotInteger = true;
+            }
+        } while (isNotInteger);
+        char ans;
+
+        System.out.print("Are you confirm to register?(Yes = Y) : ");
+        ans = scanner.next().charAt(0);
+        if (Character.toUpperCase(ans) == 'Y') {
+            Address affiliateAddress = new Address(address, state, city, postcode);
+            Affiliate newAffiliate = new Affiliate(restaurantName, businessRegNo, GSTRegNo, restaurantContactNo, affiliateAddress, username, password, name, gender, contactNo);
+            affiliateList.add(newAffiliate);
+            if (storeAffiliateList(affiliateList,AFFILIATEFILE)) {
+                System.out.println("\nYou had register successful.");
+            } else {
+                System.out.println("\nFailed to register ,please try again.");
+            }
+
+        } else {
+            System.out.println("\nYou had cancel to register.");
+        }
 
     }
 }

@@ -3,6 +3,7 @@ package Classes;
 
 import ADTs.CircularDoublyLinkedList;
 import ADTs.CircularDoublyLinkedQueue;
+import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
 import java.io.FileInputStream;
@@ -31,6 +32,35 @@ public class File {
             System.out.println("Cannot save to file");
         }
     }
+     public static boolean storeAffiliateList(ListInterface list,String fileName) {
+        boolean isStore = false;
+        try {
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
+            ooStream.writeObject(list);
+            ooStream.close();
+            isStore = true;
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot save to file");
+        }
+        return isStore;
+    }
+     public static <T> ListInterface<T> retrieveList(String fileName){
+        ListInterface<T> list = new CircularDoublyLinkedList<>();
+        try {
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
+            list = (ListInterface<T>) (oiStream.readObject());
+            oiStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot read from file");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found");
+        }
+        return list;
+    }
     
      /**
    * Task: Retrieve a list from a specified file name within the project directory.
@@ -39,11 +69,11 @@ public class File {
    * @return a reference to the indicated list or null, if either file does not exist
    * or the file does not contains a list
    */    
-    public static <T> ListInterface<T> retrieveList(String fileName){
-        ListInterface<T> list = new CircularDoublyLinkedList<>();
+    public static ListInterface retrieveAffiliateList(String fileName){
+        ListInterface<Affiliate> list = new LinearSinglyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (ListInterface<T>) (oiStream.readObject());
+            list = (ListInterface) (oiStream.readObject());
             oiStream.close();
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
