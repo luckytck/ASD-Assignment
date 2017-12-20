@@ -6,6 +6,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validation {
+     public static boolean ValidateItem(String name, double price, double discountrate) {
+        if (!name.isEmpty() && price > 0 && discountrate >= 0) {
+            return true;
+        }
+
+        return false;
+    }
     
     public static boolean ValidateAccount(String username, String password, String fileName) {
         boolean isValid = false;

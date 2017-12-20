@@ -1,4 +1,3 @@
-
 package Classes;
 
 import ADTs.CircularDoublyLinkedList;
@@ -14,14 +13,69 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class File {
-    
+
     /**
-   * Task: Store a new list to a specified file name within the project directory.
-   *
-   * @param list an ListInterface being saved into the specified file name
-   * @param fileName an String of the file name
-   */    
-    public static <T> void storeList(ListInterface<T> list, String fileName){
+     * Task: Store a new list to a specified file name within the project
+     * directory.
+     *
+     * @param list an ListInterface being saved into the specified file name
+     * @param fileName an String of the file name
+     */
+    public static int getAffiliateIndex(String username) {
+        ListInterface<Affiliate> list = new LinearSinglyLinkedList<>();
+        list = File.retrieveAffiliateList("affiliate.dat");
+        int index = -1;
+
+        for (int i = 1; i <= list.getNumberOfEntries(); ++i) {
+            if (list.getEntry(i).getUsername().equals(username)) {
+                index = i;
+            }
+
+        }
+        return index;
+
+    }
+
+   
+    public static void printMenuItem(int index, int menuCode) {
+        ListInterface<Affiliate> itemlist = retrieveAffiliateList("affiliate.dat");
+        
+       if(menuCode==1){
+           if(itemlist.getEntry(index).getFood().isEmpty()==true){
+               System.out.println("No item in the list.");
+           }else{
+                String Title, Price, Discount, Status;
+                Title = "TiTle";
+                Price = "Price";
+                Discount = "Discount(%)";
+                Status = "Status";
+                String outputStr = String.format("%15s %13s %15s %13s \n", Title, Price, Discount, Status);
+                for (int i = 1; i <= itemlist.getEntry(index).getFood().getNumberOfEntries(); ++i) {
+                    outputStr += (i) + ". " + itemlist.getEntry(i) + "\n";
+                }
+                System.out.println(outputStr);
+           }
+        } 
+       else {
+            if (itemlist.getEntry(index).getBeverage().isEmpty()) {
+                System.out.println("No item in the list.");
+            } else {
+                String Title, Price, Discount, Status;
+                Title = "TiTle";
+                Price = "Price";
+                Discount = "Discount(%)";
+                Status = "Status";
+                String outputStr = String.format("%15s %13s %15s %13s \n", Title, Price, Discount, Status);
+                for (int i = 1; i <= itemlist.getEntry(index).getBeverage().getNumberOfEntries(); ++i) {
+                    outputStr += (i) + ". " + itemlist.getEntry(i) + "\n";
+                }
+                System.out.println(outputStr);
+            }
+        }
+
+    }
+
+    public static <T> void storeList(ListInterface<T> list, String fileName) {
         try {
             ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
             ooStream.writeObject(list);
@@ -32,7 +86,8 @@ public class File {
             System.out.println("Cannot save to file");
         }
     }
-     public static boolean storeAffiliateList(ListInterface list,String fileName) {
+
+    public static boolean storeAffiliateList(ListInterface list, String fileName) {
         boolean isStore = false;
         try {
             ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
@@ -46,7 +101,8 @@ public class File {
         }
         return isStore;
     }
-     public static <T> ListInterface<T> retrieveList(String fileName){
+
+    public static <T> ListInterface<T> retrieveList(String fileName) {
         ListInterface<T> list = new CircularDoublyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
@@ -61,15 +117,16 @@ public class File {
         }
         return list;
     }
-    
-     /**
-   * Task: Retrieve a list from a specified file name within the project directory.
-   *
-   * @param fileName an String of the file name where the list stored at
-   * @return a reference to the indicated list or null, if either file does not exist
-   * or the file does not contains a list
-   */    
-    public static ListInterface retrieveAffiliateList(String fileName){
+
+    /**
+     * Task: Retrieve a list from a specified file name within the project
+     * directory.
+     *
+     * @param fileName an String of the file name where the list stored at
+     * @return a reference to the indicated list or null, if either file does
+     * not exist or the file does not contains a list
+     */
+    public static ListInterface retrieveAffiliateList(String fileName) {
         ListInterface<Affiliate> list = new LinearSinglyLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
@@ -84,14 +141,15 @@ public class File {
         }
         return list;
     }
-    
+
     /**
-   * Task: Store a new queue to a specified file name within the project directory.
-   *
-   * @param queue an QueueInterface being saved into the specified file name
-   * @param fileName an String of the file name
-   */  
-    public static <T> void storeQueue(QueueInterface<T> queue, String fileName){
+     * Task: Store a new queue to a specified file name within the project
+     * directory.
+     *
+     * @param queue an QueueInterface being saved into the specified file name
+     * @param fileName an String of the file name
+     */
+    public static <T> void storeQueue(QueueInterface<T> queue, String fileName) {
         try {
             ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
             ooStream.writeObject(queue);
@@ -102,15 +160,16 @@ public class File {
             System.out.println("Cannot save to file");
         }
     }
-    
+
     /**
-   * Task: Retrieve a queue from a specified file name within the project directory.
-   *
-   * @param fileName an String of the file name where the list stored at
-   * @return a reference to the indicated queue or null, if either file does not exist
-   * or the file does not contains a queue
-   */
-    public static <T> QueueInterface<T> retrieveQueue(String fileName){
+     * Task: Retrieve a queue from a specified file name within the project
+     * directory.
+     *
+     * @param fileName an String of the file name where the list stored at
+     * @return a reference to the indicated queue or null, if either file does
+     * not exist or the file does not contains a queue
+     */
+    public static <T> QueueInterface<T> retrieveQueue(String fileName) {
         QueueInterface<T> queue = new CircularDoublyLinkedQueue<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));

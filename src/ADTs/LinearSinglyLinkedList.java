@@ -1,8 +1,10 @@
 
 package ADTs;
 
+import java.io.Serializable;
 
-public class LinearSinglyLinkedList<T> implements ListInterface<T> {
+
+public class LinearSinglyLinkedList<T> implements ListInterface<T>,Serializable {
 
     public class Node{
         private T data;
@@ -19,7 +21,7 @@ public class LinearSinglyLinkedList<T> implements ListInterface<T> {
              
     }
     private Node firstNode;
-    private int numberOfEntries;
+    private int numberOfEntries=0;
 
     public LinearSinglyLinkedList() {
         this.firstNode = null;
@@ -151,9 +153,10 @@ public class LinearSinglyLinkedList<T> implements ListInterface<T> {
 
     @Override
     public boolean isEmpty() {
-        boolean result;
-        result=numberOfEntries==0;
-        return result;
+        if(numberOfEntries==0)
+            return true;
+        else
+            return false;
     }
 
     @Override

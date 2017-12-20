@@ -6,12 +6,16 @@ import ADTs.QueueInterface;
 import Classes.Address;
 import Classes.Affiliate;
 import Classes.DeliveryMan;
+import Classes.MenuItem;
 import Classes.File;
 import Classes.File;
+import static Classes.File.getAffiliateIndex;
+import static Classes.File.printMenuItem;
 import static Classes.File.storeAffiliateList;
 import Classes.Order;
 import Classes.User;
 import Classes.Validation;
+import static Classes.Validation.ValidateItem;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -324,7 +328,103 @@ public class Main {
     }
 
     private static void addNewItems(String username) {
+         Scanner scanner=new Scanner(System.in);
+        int index=getAffiliateIndex(username);
+       
+        ListInterface<Affiliate> affiliateList=File.retrieveList(AFFILIATEFILE);
+        System.out.println("Which type of menu you want to add? :");
+        System.out.println("1.Food");
+        System.out.println("2.Beverage");
+        System.out.print("Enter the number of your choice :");
+        int choice = scanner.nextInt();
+         switch (choice) {
+            case 1: {
 
+                printMenuItem(index,choice);
+                System.out.print("Do you want to add new item?(Yes=Y)");
+                char answer2 = scanner.next().charAt(0);
+                scanner.nextLine();
+
+                if (Character.toUpperCase(answer2) == 'Y') {
+                    String Name;
+                    double price = -1;
+                    double discountrate = -1;
+                    do {
+                        System.out.print("Item's Name:");
+                        Name = scanner.nextLine();
+
+                        System.out.print("Price:");
+                        price = scanner.nextDouble();
+                        scanner.nextLine();
+                        System.out.print("Discount(%):");
+                        discountrate = scanner.nextDouble();
+                        scanner.nextLine();
+                        if (!ValidateItem(Name, price, discountrate)) {
+                            System.out.println("Please enter again.");
+                            System.out.println("\n");
+                        }
+                    } while (!ValidateItem(Name, price, discountrate));
+                    if (ValidateItem(Name, price, discountrate)) {
+                        MenuItem item=new MenuItem();
+                        item.setName(Name);
+                        item.setPrice(price);
+                        item.setDiscountRate(discountrate);
+                        affiliateList.getEntry(index).getFood().add(item);
+                        File.storeAffiliateList(affiliateList,AFFILIATEFILE);
+                        System.out.println("Your item has been added successful.");
+                        printMenuItem(index,choice);
+                    }
+                } else {
+                    System.out.println("Thanks for using.");
+                }
+                break;
+            }
+            case 2: {
+
+                printMenuItem(index,choice);
+                System.out.print("Do you want to add new item?(Yes=Y)");
+                char answer2 = scanner.next().charAt(0);
+                scanner.nextLine();
+
+                if (Character.toUpperCase(answer2) == 'Y') {
+                    String Name;
+                    double price = -1;
+                    double discountrate = -1;
+                    do {
+                        System.out.print("Item's Name:");
+                        Name = scanner.nextLine();
+
+                        System.out.print("Price:");
+                        price = scanner.nextDouble();
+                        scanner.nextLine();
+                        System.out.print("Discount(%):");
+                        discountrate = scanner.nextDouble();
+                        scanner.nextLine();
+                        if (!ValidateItem(Name, price, discountrate)) {
+                            System.out.println("Please enter again.");
+                            System.out.println("\n");
+                        }
+                    } while (!ValidateItem(Name, price, discountrate));
+                    if (ValidateItem(Name, price, discountrate)) {
+                        MenuItem item=new MenuItem();
+                        item.setName(Name);
+                        item.setPrice(price);
+                        item.setDiscountRate(discountrate);
+                        affiliateList.getEntry(index).getBeverage().add(item);
+                        File.storeAffiliateList(affiliateList,AFFILIATEFILE);
+                        System.out.println("Your item has been added successful.");
+                        printMenuItem(index,choice);
+
+                    }
+                } else {
+                    System.out.println("Thanks for using.");
+                }
+
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     private static void updateItemDetails(String username) {
