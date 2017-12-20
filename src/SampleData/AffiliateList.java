@@ -2,9 +2,11 @@ package SampleData;
 
 
 import ADTs.CircularDoublyLinkedList;
+import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import Classes.Address;
 import Classes.Affiliate;
+import Classes.File;
 import Classes.MenuItem;
 import Classes.User;
 import java.io.FileInputStream;
@@ -17,34 +19,6 @@ import java.io.ObjectOutputStream;
 
 public class AffiliateList {
     public static final String AFFILIATEFILE = "affiliate.dat";
-    
-    private static <T> ListInterface<T> initializeList(String fileName) { //Return a List from .dat file
-        ListInterface<T> list = new CircularDoublyLinkedList<>();
-        try {
-            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (CircularDoublyLinkedList) (oiStream.readObject());
-            oiStream.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found");
-        } catch (IOException ex) {
-            System.out.println("Cannot read from file");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Class not found");
-        }
-        return list;
-    }
-
-    private static <T> void storeList(ListInterface<T> list, String fileName) { //Store a List into .dat file
-        try {
-            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
-            ooStream.writeObject(list);
-            ooStream.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found");
-        } catch (IOException ex) {
-            System.out.println("Cannot save to file");
-        }
-    }
     
     public static void main(String[] args) {
         //Create Addresses
@@ -59,7 +33,7 @@ public class AffiliateList {
         MenuItem menuItem1 = new MenuItem("Original Pearl Milk Tea", "Regular Size", 6.50, 0);
         MenuItem menuItem2 = new MenuItem("Hazelnut Milk Tea", "Regular Size", 6.50, 0);
         MenuItem menuItem3 = new MenuItem("Superior Coco", "Regular Size", 6.50, 0); 
-        ListInterface<MenuItem> beverage1 = new CircularDoublyLinkedList<>();
+        ListInterface<MenuItem> beverage1 = new LinearSinglyLinkedList<>();
         beverage1.add(menuItem1);
         beverage1.add(menuItem2);
         beverage1.add(menuItem3);
@@ -69,7 +43,7 @@ public class AffiliateList {
         MenuItem menuItem5 = new MenuItem("Beefo Cheese Pie", "", 4.9, 0);
         MenuItem menuItem6 = new MenuItem("Cheeky Chicky Pops", "", 7.9, 0);
         MenuItem menuItem7 = new MenuItem("Hot BBQ Pops", "", 7.9, 0);
-        ListInterface<MenuItem> food1 = new CircularDoublyLinkedList<>();
+        ListInterface<MenuItem> food1 = new LinearSinglyLinkedList<>();
         food1.add(menuItem4);
         food1.add(menuItem5);
         food1.add(menuItem6);
@@ -81,7 +55,7 @@ public class AffiliateList {
         MenuItem menuItem9 = new MenuItem("Rendang Chicken Rice", "", 12.50, 0);
         MenuItem menuItem10 = new MenuItem("Curry Mee", "", 8.50, 0);
         MenuItem menuItem11 = new MenuItem("Asam Laksa", "", 8.50, 0);
-        ListInterface<MenuItem> food2 = new CircularDoublyLinkedList<>();
+        ListInterface<MenuItem> food2 = new LinearSinglyLinkedList<>();
         food2.add(menuItem8);
         food2.add(menuItem9);
         food2.add(menuItem10);
@@ -90,13 +64,13 @@ public class AffiliateList {
         
         MenuItem menuItem12 = new MenuItem("Enriched Chocolate", "Regular Size", 5.00, 0);
         MenuItem menuItem13 = new MenuItem("Orange Juice", "Regular Size", 5.00, 0);
-        ListInterface<MenuItem> beverage2 = new CircularDoublyLinkedList<>();
+        ListInterface<MenuItem> beverage2 = new LinearSinglyLinkedList<>();
         beverage2.add(menuItem12);
         beverage2.add(menuItem13);
         affiliate2.setBeverage(beverage2);
         
         //Create Affiliate List
-        ListInterface<Affiliate> affiliateList = new CircularDoublyLinkedList<>();
+        ListInterface<Affiliate> affiliateList = new LinearSinglyLinkedList<>();
         affiliateList.add(affiliate1);
         affiliateList.add(affiliate2);
         
@@ -121,7 +95,7 @@ public class AffiliateList {
         }
         
         //Store affiliateList to affiliate.dat
-        storeList(affiliateList, AFFILIATEFILE);
+        File.storeList(affiliateList, AFFILIATEFILE);
     }
     
 }

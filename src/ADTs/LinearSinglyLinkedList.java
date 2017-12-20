@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class LinearSinglyLinkedList<T> implements ListInterface<T>,Serializable {
 
-    public class Node{
+    public class Node implements Serializable{
         private T data;
         private Node next;
 
