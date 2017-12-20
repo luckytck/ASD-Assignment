@@ -21,9 +21,9 @@ public class File {
      * @param list an ListInterface being saved into the specified file name
      * @param fileName an String of the file name
      */
-    public static int getAffiliateIndex(String username) {
+     public static int getAffiliateIndex(String username) {
         ListInterface<Affiliate> list = new LinearSinglyLinkedList<>();
-        list = File.retrieveAffiliateList("affiliate.dat");
+        list = File.retrieveList("affiliate.dat");
         int index = -1;
 
         for (int i = 1; i <= list.getNumberOfEntries(); ++i) {
@@ -37,8 +37,8 @@ public class File {
     }
 
    
-    public static void printMenuItem(int index, int menuCode) {
-        ListInterface<Affiliate> itemlist = retrieveAffiliateList("affiliate.dat");
+   public static void printMenuItem(int index, int menuCode) {
+        ListInterface<Affiliate> itemlist = retrieveList("affiliate.dat");
         
        if(menuCode==1){
            if(itemlist.getEntry(index).getFood().isEmpty()==true){
@@ -51,7 +51,7 @@ public class File {
                 Status = "Status";
                 String outputStr = String.format("%15s %13s %15s %13s \n", Title, Price, Discount, Status);
                 for (int i = 1; i <= itemlist.getEntry(index).getFood().getNumberOfEntries(); ++i) {
-                    outputStr += (i) + ". " + itemlist.getEntry(i) + "\n";
+                    outputStr += (i) + ". " + itemlist.getEntry(index).getFood().getEntry(i) + "\n";
                 }
                 System.out.println(outputStr);
            }
@@ -67,7 +67,7 @@ public class File {
                 Status = "Status";
                 String outputStr = String.format("%15s %13s %15s %13s \n", Title, Price, Discount, Status);
                 for (int i = 1; i <= itemlist.getEntry(index).getBeverage().getNumberOfEntries(); ++i) {
-                    outputStr += (i) + ". " + itemlist.getEntry(i) + "\n";
+                    outputStr += (i) + ". " + itemlist.getEntry(index).getBeverage().getEntry(i) + "\n";
                 }
                 System.out.println(outputStr);
             }
@@ -87,20 +87,7 @@ public class File {
         }
     }
 
-    public static boolean storeAffiliateList(ListInterface list, String fileName) {
-        boolean isStore = false;
-        try {
-            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
-            ooStream.writeObject(list);
-            ooStream.close();
-            isStore = true;
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found");
-        } catch (IOException ex) {
-            System.out.println("Cannot save to file");
-        }
-        return isStore;
-    }
+   
 
     public static <T> ListInterface<T> retrieveList(String fileName) {
         ListInterface<T> list = new CircularDoublyLinkedList<>();
@@ -126,21 +113,7 @@ public class File {
      * @return a reference to the indicated list or null, if either file does
      * not exist or the file does not contains a list
      */
-    public static ListInterface retrieveAffiliateList(String fileName) {
-        ListInterface<Affiliate> list = new LinearSinglyLinkedList<>();
-        try {
-            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-            list = (ListInterface) (oiStream.readObject());
-            oiStream.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found");
-        } catch (IOException ex) {
-            System.out.println("Cannot read from file");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Class not found");
-        }
-        return list;
-    }
+  
 
     /**
      * Task: Store a new queue to a specified file name within the project

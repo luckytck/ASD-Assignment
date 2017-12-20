@@ -9,9 +9,7 @@ import Classes.DeliveryMan;
 import Classes.MenuItem;
 import Classes.File;
 import Classes.File;
-import static Classes.File.getAffiliateIndex;
-import static Classes.File.printMenuItem;
-import static Classes.File.storeAffiliateList;
+
 import Classes.Order;
 import Classes.User;
 import Classes.Validation;
@@ -329,10 +327,11 @@ public class Main {
     }
 
     private static void addNewItems(String username) {
-        Scanner scanner = new Scanner(System.in);
-        int index = getAffiliateIndex(username);
+        Scanner scanner=new Scanner(System.in);
+        int index=File.getAffiliateIndex(username);
+       
+        ListInterface<Affiliate> affiliateList=File.retrieveList(AFFILIATEFILE);
 
-        ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
         System.out.println("Which type of menu you want to add? :");
         System.out.println("1.Food");
         System.out.println("2.Beverage");
@@ -341,7 +340,8 @@ public class Main {
         switch (choice) {
             case 1: {
 
-                printMenuItem(index, choice);
+                File.printMenuItem(index,choice);
+
                 System.out.print("Do you want to add new item?(Yes=Y)");
                 char answer2 = scanner.next().charAt(0);
                 scanner.nextLine();
@@ -370,10 +370,19 @@ public class Main {
                         item.setName(Name);
                         item.setPrice(price);
                         item.setDiscountRate(discountrate);
+                        item.setStatus("Available");
+                      //  item.setDescription("");
                         affiliateList.getEntry(index).getFood().add(item);
-                        File.storeAffiliateList(affiliateList, AFFILIATEFILE);
+                        File.storeList(affiliateList,AFFILIATEFILE);
+
+                        
+
                         System.out.println("Your item has been added successful.");
-                        printMenuItem(index, choice);
+
+                       File.printMenuItem(index,choice);
+
+                        
+
                     }
                 } else {
                     System.out.println("Thanks for using.");
@@ -382,7 +391,9 @@ public class Main {
             }
             case 2: {
 
-                printMenuItem(index, choice);
+                File.printMenuItem(index,choice);
+               
+
                 System.out.print("Do you want to add new item?(Yes=Y)");
                 char answer2 = scanner.next().charAt(0);
                 scanner.nextLine();
@@ -411,10 +422,19 @@ public class Main {
                         item.setName(Name);
                         item.setPrice(price);
                         item.setDiscountRate(discountrate);
+                        item.setStatus("Available");
+                     //   item.setDescription("");
                         affiliateList.getEntry(index).getBeverage().add(item);
-                        File.storeAffiliateList(affiliateList, AFFILIATEFILE);
+
+                        File.storeList(affiliateList,AFFILIATEFILE);
+
+                        
+
                         System.out.println("Your item has been added successful.");
-                        printMenuItem(index, choice);
+
+                       File.printMenuItem(index,choice);
+
+                      
 
                     }
                 } else {
@@ -835,9 +855,9 @@ public class Main {
     }
 
     private static void registerAsAffiliate() {
-        Scanner scanner = new Scanner(System.in);
+     Scanner scanner = new Scanner(System.in);
         ListInterface<Affiliate> affiliateList = new LinearSinglyLinkedList<>();
-        affiliateList = File.retrieveAffiliateList(AFFILIATEFILE);
+        affiliateList = File.retrieveList(AFFILIATEFILE);
 
         String username, password, name, contactNo, restaurantName, businessRegNo, GSTRegNo, restaurantContactNo, address, state, city;
         char gender;
@@ -925,12 +945,11 @@ public class Main {
             Address affiliateAddress = new Address(address, state, city, postcode);
             Affiliate newAffiliate = new Affiliate(restaurantName, businessRegNo, GSTRegNo, restaurantContactNo, affiliateAddress, username, password, name, gender, contactNo);
             affiliateList.add(newAffiliate);
-            if (storeAffiliateList(affiliateList, AFFILIATEFILE)) {
-                System.out.println("\nYou had register successful.");
-            } else {
-                System.out.println("\nFailed to register ,please try again.");
-            }
 
+
+
+
+            File.storeList(affiliateList,AFFILIATEFILE);
         } else {
             System.out.println("\nYou had cancel to register.");
         }

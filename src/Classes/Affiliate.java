@@ -2,6 +2,7 @@
 package Classes;
 
 import ADTs.CircularDoublyLinkedList;
+import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,8 +29,8 @@ public class Affiliate extends User implements Serializable{
         this.GSTRegNo = GSTRegNo;
         this.restaurantContactNo = restaurantContactNo;
         this.address = address;
-        this.food = null;
-        this.beverage = null;
+        this.food = new LinearSinglyLinkedList<>();
+        this.beverage = new LinearSinglyLinkedList<>();
     }
     
 
