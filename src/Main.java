@@ -683,6 +683,77 @@ public class Main {
 
     private static void updateWorkingStatus(String username) {
 
+        ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
+        String strDm;
+        Scanner scanner = new Scanner(System.in);
+        if (!deliveryManList.isEmpty()) {
+            String checkUsername;
+            for (int i = 1; i <= deliveryManList.getNumberOfEntries(); i++) {
+                checkUsername = deliveryManList.getEntry(i).getUsername();
+
+                if (checkUsername.matches(username)) {
+
+                    System.out.println("Update Delivery Man Working Status");
+                    System.out.println("=======================");
+                    strDm = "Name: " + deliveryManList.getEntry(i).getName() + "\n" + "Contact No: " + deliveryManList.getEntry(i).getContactNo()
+                            + "\n" + "Working Status: " + deliveryManList.getEntry(i).getWorkingStatus();
+                    System.out.println(strDm);
+                    System.out.println("=======================");
+                    System.out.println("1. Available");
+                    System.out.println("2. Break");
+                    System.out.println("3. Delivering");
+                    System.out.print("Enter selection (-1 to exit): ");
+
+                    try {
+                        int selection = scanner.nextInt();
+                        scanner.nextLine();
+                        if ((selection < 1 || selection > 4) && selection != -1) {
+                            System.out.println("\nInvalid Option!!! Please choose an option from the list~");
+                        } else if (selection == 1) {
+                            if (deliveryManList.getEntry(i).getWorkingStatus().matches("Available")) {
+                                System.out.println("You already in this status.");
+                            } else {
+                                deliveryManList.getEntry(i).setWorkingStatus("Available");
+                                File.storeList(deliveryManList, "deliveryMan.dat");
+                                System.out.println("Working status has been updated to Available");
+                            }
+                        } else if (selection == 2) {
+                            if (deliveryManList.getEntry(i).getWorkingStatus().matches("Break")) {
+                                System.out.println("You already in this status.");
+                            } else {
+                                deliveryManList.getEntry(i).setWorkingStatus("Break");
+                                File.storeList(deliveryManList, "deliveryMan.dat");
+                                System.out.println("Working status has been updated to Break");
+                            }
+                        } else if (selection == 3) {
+                            if (deliveryManList.getEntry(i).getWorkingStatus().matches("Delivering")) {
+                                System.out.println("You already in this status.");
+                            } else {
+                                deliveryManList.getEntry(i).setWorkingStatus("Delivering");
+                                File.storeList(deliveryManList, "deliveryMan.dat");
+                                System.out.println("Working status has been updated to Delivering");
+                            }
+                        } else if (selection == 4) {
+                            if (deliveryManList.getEntry(i).getWorkingStatus().matches("Offline")) {
+                                System.out.println("You already in this status.");
+                            } else {
+                                deliveryManList.getEntry(i).setWorkingStatus("Offline");
+                                File.storeList(deliveryManList, "deliveryMan.dat");
+                                System.out.println("Working status has been updated to Offline");
+                            }
+                        } else if (selection == -1) {
+                            System.exit(0);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid Option!!! Please enter numeric value only~");
+                        scanner.nextLine();
+
+                    }
+
+                }
+
+            }
+        }
     }
 
     private static void retrievePendingDelivery() {
