@@ -14,7 +14,6 @@ import Classes.File;
 import Classes.Order;
 import Classes.User;
 import Classes.Validation;
-import static Classes.Validation.ValidateItem;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -328,125 +327,134 @@ public class Main {
     }
 
     private static void addNewItems(String username) {
-        Scanner scanner=new Scanner(System.in);
-        int index=File.getAffiliateIndex(username);
-       
-        ListInterface<Affiliate> affiliateList=File.retrieveList(AFFILIATEFILE);
+        Scanner scanner = new Scanner(System.in);
+        int index = File.getAffiliateIndex(username, AFFILIATEFILE);
 
-        System.out.println("Which type of menu you want to add? :");
-        System.out.println("1.Food");
-        System.out.println("2.Beverage");
-        System.out.print("Enter the number of your choice :");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1: {
+        ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
+        int choice;
+        do {
+            System.out.println("Which type of menu you want to add? :");
+            System.out.println("1.Food");
+            System.out.println("2.Beverage");
+            System.out.print("Enter the number of your choice :");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1: {
 
-                File.printMenuItem(index,choice);
+                    File.printMenuItem(index, choice);
 
-                System.out.print("Do you want to add new item?(Yes=Y)");
-                char answer2 = scanner.next().charAt(0);
-                scanner.nextLine();
+                    System.out.print("Do you want to add new item?(Yes=Y)");
+                    char answer2 = scanner.next().charAt(0);
+                    scanner.nextLine();
 
-                if (Character.toUpperCase(answer2) == 'Y') {
-                    String Name;
-                    double price = -1;
-                    double discountrate = -1;
-                    do {
-                        System.out.print("Item's Name:");
-                        Name = scanner.nextLine();
+                    if (Character.toUpperCase(answer2) == 'Y') {
+                        String Name, description;
+                        double price = -1;
+                        double discountrate = -1;
 
-                        System.out.print("Price:");
-                        price = scanner.nextDouble();
-                        scanner.nextLine();
-                        System.out.print("Discount(%):");
-                        discountrate = scanner.nextDouble();
-                        scanner.nextLine();
-                        if (!ValidateItem(Name, price, discountrate)) {
-                            System.out.println("Please enter again.");
-                            System.out.println("\n");
+                        do {
+                            System.out.print("Item's Name:");
+                            Name = scanner.nextLine();
+
+                            System.out.print("Description :");
+                            description = scanner.nextLine();
+                            System.out.print("Price:");
+                            price = scanner.nextDouble();
+                            scanner.nextLine();
+                            System.out.print("Discount(%):");
+                            discountrate = scanner.nextDouble();
+                            scanner.nextLine();
+                            if (!Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                                System.out.println("Invalid input, please enter again.");
+                                System.out.println("\n");
+                            }
+                        } while (!Classes.Validation.ValidateItem(Name, price, discountrate));
+
+                        if (Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                            if (!Classes.Validation.isDuplicateItem(Name, index, choice)) {
+                                MenuItem item = new MenuItem();
+                                item.setName(Name);
+                                item.setPrice(price);
+                                item.setDiscountRate(discountrate);
+                                item.setStatus("Available");
+                                item.setDescription(description);
+                                affiliateList.getEntry(index).getFood().add(item);
+                                File.storeList(affiliateList, AFFILIATEFILE);
+
+                                System.out.println("Your item has been added successful.");
+
+                                File.printMenuItem(index, choice);
+                            } else {
+                                System.out.println("\nFailed to add, this item already exist.");
+                            }
+
                         }
-                    } while (!ValidateItem(Name, price, discountrate));
-                    if (ValidateItem(Name, price, discountrate)) {
-                        MenuItem item = new MenuItem();
-                        item.setName(Name);
-                        item.setPrice(price);
-                        item.setDiscountRate(discountrate);
-                        item.setStatus("Available");
-                      //  item.setDescription("");
-                        affiliateList.getEntry(index).getFood().add(item);
-                        File.storeList(affiliateList,AFFILIATEFILE);
-
-                        
-
-                        System.out.println("Your item has been added successful.");
-
-                       File.printMenuItem(index,choice);
-
-                        
-
+                    } else {
+                        System.out.println("Thanks for using.");
                     }
-                } else {
-                    System.out.println("Thanks for using.");
+                    break;
                 }
-                break;
-            }
-            case 2: {
+                case 2: {
 
-                File.printMenuItem(index,choice);
-               
+                    File.printMenuItem(index, choice);
 
-                System.out.print("Do you want to add new item?(Yes=Y)");
-                char answer2 = scanner.next().charAt(0);
-                scanner.nextLine();
+                    System.out.print("Do you want to add new item?(Yes=Y)");
+                    char answer2 = scanner.next().charAt(0);
+                    scanner.nextLine();
 
-                if (Character.toUpperCase(answer2) == 'Y') {
-                    String Name;
-                    double price = -1;
-                    double discountrate = -1;
-                    do {
-                        System.out.print("Item's Name:");
-                        Name = scanner.nextLine();
+                    if (Character.toUpperCase(answer2) == 'Y') {
+                        String Name, description;
+                        double price = -1;
+                        double discountrate = -1;
+                        do {
+                            System.out.print("Item's Name:");
+                            Name = scanner.nextLine();
 
-                        System.out.print("Price:");
-                        price = scanner.nextDouble();
-                        scanner.nextLine();
-                        System.out.print("Discount(%):");
-                        discountrate = scanner.nextDouble();
-                        scanner.nextLine();
-                        if (!ValidateItem(Name, price, discountrate)) {
-                            System.out.println("Please enter again.");
-                            System.out.println("\n");
+                            System.out.print("Description :");
+                            description = scanner.nextLine();
+                            System.out.print("Price:");
+                            price = scanner.nextDouble();
+                            scanner.nextLine();
+                            System.out.print("Discount(%):");
+                            discountrate = scanner.nextDouble();
+                            scanner.nextLine();
+                            if (!Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                                System.out.println("Invalid input, please enter again.");
+                                System.out.println("\n");
+                            }
+                        } while (!Classes.Validation.ValidateItem(Name, price, discountrate));
+                        if (Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                            if (!Classes.Validation.isDuplicateItem(Name, index, choice)) {
+                                MenuItem item = new MenuItem();
+                                item.setName(Name);
+                                item.setPrice(price);
+                                item.setDiscountRate(discountrate);
+                                item.setStatus("Available");
+                                item.setDescription(description);
+                                affiliateList.getEntry(index).getBeverage().add(item);
+
+                                File.storeList(affiliateList, AFFILIATEFILE);
+
+                                System.out.println("Your item has been added successful.");
+
+                                File.printMenuItem(index, choice);
+                            } else {
+                                System.out.println("\nFailed to add, this item already exist.");
+                            }
+
                         }
-                    } while (!ValidateItem(Name, price, discountrate));
-                    if (ValidateItem(Name, price, discountrate)) {
-                        MenuItem item = new MenuItem();
-                        item.setName(Name);
-                        item.setPrice(price);
-                        item.setDiscountRate(discountrate);
-                        item.setStatus("Available");
-                     //   item.setDescription("");
-                        affiliateList.getEntry(index).getBeverage().add(item);
-
-                        File.storeList(affiliateList,AFFILIATEFILE);
-
-                        
-
-                        System.out.println("Your item has been added successful.");
-
-                       File.printMenuItem(index,choice);
-
-                      
-
+                    } else {
+                        System.out.println("Thanks for using.");
                     }
-                } else {
-                    System.out.println("Thanks for using.");
-                }
 
-                break;
+                    break;
+                }
+                default: {
+                    System.out.println("Invalid Input.");
+                    break;
+                }
             }
-            default:
-                break;
-        }
+        } while (choice != 1 && choice != 2);
     }
 
     private static void updateItemDetails(String username) {
@@ -454,11 +462,169 @@ public class Main {
     }
 
     private static void updateItemStatus(String username) {
+        Scanner scanner = new Scanner(System.in);
+        String up = "Available";
+        String down = "Unavailable";
+        int index = File.getAffiliateIndex(username, AFFILIATEFILE);
+        ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
+        int choice;
+        do {
+            System.out.println("Which type of menu you want to add? :");
+            System.out.println("1.Food");
+            System.out.println("2.Beverage");
+            System.out.print("Enter the number of your choice :");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1: {
+                    int choice2;
+                    File.printMenuItem(index, choice);
+                    if (affiliateList.getEntry(index).getFood().isEmpty() == false) {
+                        do {
+                            System.out.print("Enter the index of item that you want to change status:");
+                            choice2 = scanner.nextInt();
+                            scanner.nextLine();
+                            if (choice2 > 0 && choice2 <= affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
+                                if (affiliateList.getEntry(index).getFood().getEntry(choice2).getStatus().equalsIgnoreCase(up)) {
+                                    affiliateList.getEntry(index).getFood().getEntry(choice2).setStatus(down);
+                                } else {
+                                    affiliateList.getEntry(index).getFood().getEntry(choice2).setStatus(up);
+                                }
+
+                            } else {
+                                System.out.println("Invalid Input! Please enter a valid input.");
+                            }
+
+                        } while (choice2 < 1 || choice2 > affiliateList.getEntry(index).getFood().getNumberOfEntries());
+                        File.storeList(affiliateList, AFFILIATEFILE);
+                        File.printMenuItem(index, choice);
+                        System.out.println("\nStatus of the particular item has been changed.");
+                    } else {
+                        System.out.println("\nPlease add in some items.");
+                    }
+
+                    break;
+                }
+                case 2: {
+                    int choice2;
+                    File.printMenuItem(index, choice);
+                    if (affiliateList.getEntry(index).getBeverage().isEmpty() == false) {
+                        do {
+                            System.out.print("Enter the index of item that you want to change status:");
+                            choice2 = scanner.nextInt();
+                            scanner.nextLine();
+                            if (choice2 > 0 && choice2 <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
+                                if (affiliateList.getEntry(index).getBeverage().getEntry(choice2).getStatus().equalsIgnoreCase(up)) {
+                                    affiliateList.getEntry(index).getBeverage().getEntry(choice2).setStatus(down);
+                                } else {
+                                    affiliateList.getEntry(index).getBeverage().getEntry(choice2).setStatus(up);
+                                }
+
+                            } else {
+                                System.out.println("Invalid Input! Please enter a valid input.");
+                            }
+
+                        } while (choice2 < 1 || choice2 > affiliateList.getEntry(index).getBeverage().getNumberOfEntries());
+                        File.storeList(affiliateList, AFFILIATEFILE);
+                        File.printMenuItem(index, choice);
+                        System.out.println("\nStatus of the particular item has been changed.");
+                        break;
+                    } else {
+                        System.out.println("\nPlease add in some items.");
+                    }
+                }
+                default: {
+                    break;
+                }
+
+            }
+            if (choice != 1 && choice != 2) {
+                System.out.println("Invalid Input.");
+            }
+        } while (choice != 1 && choice != 2);
 
     }
 
     private static void removeItems(String username) {
+        ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
+        int index = File.getAffiliateIndex(username, AFFILIATEFILE);
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.println("Which type of menu you want to add? :");
+            System.out.println("1.Food");
+            System.out.println("2.Beverage");
+            System.out.print("Enter the number of your choice :");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1: {
+                    int choice2;
+                    boolean deleted = false;
+                    File.printMenuItem(index, choice);
+                    if (affiliateList.getEntry(index).getFood().isEmpty() == false) {
+                        do {
+                            System.out.print("Enter the index of item that you want to delete :");
+                            choice2 = scanner.nextInt();
+                            scanner.nextLine();
+                            if (choice2 <= affiliateList.getEntry(index).getFood().getNumberOfEntries() && choice2 > 0) {
 
+                                deleted = true;
+
+                            } else {
+                                System.out.println("Invalid Input! Please enter a valid input.");
+                            }
+                        } while (choice2 > affiliateList.getEntry(index).getFood().getNumberOfEntries() || choice2 < 1);
+
+                        if (deleted) {
+                            affiliateList.getEntry(index).getFood().remove(choice2);
+                            File.storeList(affiliateList, AFFILIATEFILE);
+                            File.printMenuItem(index, choice);
+                            System.out.println("\nThe particular item has been deleted.");
+
+                        }
+                    } else {
+                        System.out.println("\nPlease add in some items.");
+                    }
+                    break;
+                }
+                case 2: {
+                    int choice2;
+                    boolean deleted = false;
+                    File.printMenuItem(index, choice);
+                    if (affiliateList.getEntry(index).getBeverage().isEmpty() == false) {
+                        do {
+                            System.out.print("Enter the index of item that you want to delete :");
+                            choice2 = scanner.nextInt();
+                            scanner.nextLine();
+                            if (choice2 <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries() && choice2 > 0) {
+
+                                deleted = true;
+
+                            } else {
+                                System.out.println("Invalid Input! Please enter a valid input.");
+                            }
+                        } while (affiliateList.getEntry(index).getBeverage().getNumberOfEntries() < choice2 || choice2 < 1);
+
+                        if (deleted) {
+                            affiliateList.getEntry(index).getBeverage().remove(choice2);
+                            File.storeList(affiliateList, AFFILIATEFILE);
+                            File.printMenuItem(index, choice);
+                            System.out.println("\nThe particular item has been deleted.");
+                        }
+                    } else {
+                        System.out.println("\nPlease add in some items.");
+                    }
+                    break;
+                }
+                default: {
+
+                    break;
+                }
+
+            }
+            if (choice != 1 && choice != 2) {
+                System.out.println("Invalid Input.");
+            }
+        } while (choice != 1 && choice != 2);
     }
 
     private static void clockIn(String username) {
@@ -898,7 +1064,7 @@ public class Main {
     }
 
     private static void registerAsAffiliate() {
-     Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         ListInterface<Affiliate> affiliateList = new LinearSinglyLinkedList<>();
         affiliateList = File.retrieveList(AFFILIATEFILE);
 
@@ -989,10 +1155,7 @@ public class Main {
             Affiliate newAffiliate = new Affiliate(restaurantName, businessRegNo, GSTRegNo, restaurantContactNo, affiliateAddress, username, password, name, gender, contactNo);
             affiliateList.add(newAffiliate);
 
-
-
-
-            File.storeList(affiliateList,AFFILIATEFILE);
+            File.storeList(affiliateList, AFFILIATEFILE);
         } else {
             System.out.println("\nYou had cancel to register.");
         }

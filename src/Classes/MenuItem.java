@@ -46,11 +46,11 @@ public class MenuItem implements Serializable{
     }
 
     public double getDiscountRate() {
-        return discountRate/100;
+        return discountRate;
     }
 
     public void setDiscountRate(double discountRate) {
-        this.discountRate = discountRate;
+        this.discountRate = discountRate/100;
     }
 
     public String getStatus() {

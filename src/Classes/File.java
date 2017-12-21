@@ -21,9 +21,9 @@ public class File {
      * @param list an ListInterface being saved into the specified file name
      * @param fileName an String of the file name
      */
-     public static int getAffiliateIndex(String username) {
-        ListInterface<Affiliate> list = new LinearSinglyLinkedList<>();
-        list = File.retrieveList("affiliate.dat");
+     public static int getAffiliateIndex(String username,String fileName) {
+        ListInterface<User> list= retrieveList(fileName);
+        
         int index = -1;
 
         for (int i = 1; i <= list.getNumberOfEntries(); ++i) {
@@ -41,15 +41,18 @@ public class File {
         ListInterface<Affiliate> itemlist = retrieveList("affiliate.dat");
         
        if(menuCode==1){
+           System.out.println("Food");
+           System.out.println("=====================================");
            if(itemlist.getEntry(index).getFood().isEmpty()==true){
                System.out.println("No item in the list.");
            }else{
-                String Title, Price, Discount, Status;
+                String Title, Price, Discount, Status,Description;
                 Title = "TiTle";
+                Description="Description";
                 Price = "Price";
                 Discount = "Discount(%)";
                 Status = "Status";
-                String outputStr = String.format("%15s %13s %15s %13s \n", Title, Price, Discount, Status);
+                String outputStr = String.format("%-30s %-30s %14s %12s %-15s \n", Title,Description, Price, Discount, Status);
                 for (int i = 1; i <= itemlist.getEntry(index).getFood().getNumberOfEntries(); ++i) {
                     outputStr += (i) + ". " + itemlist.getEntry(index).getFood().getEntry(i) + "\n";
                 }
@@ -57,15 +60,18 @@ public class File {
            }
         } 
        else {
+           System.out.println("Beverage");
+           System.out.println("=====================================");
             if (itemlist.getEntry(index).getBeverage().isEmpty()) {
                 System.out.println("No item in the list.");
             } else {
-                String Title, Price, Discount, Status;
+                String Title, Price, Discount, Status,Description;
                 Title = "TiTle";
+                Description="Description";
                 Price = "Price";
                 Discount = "Discount(%)";
                 Status = "Status";
-                String outputStr = String.format("%15s %13s %15s %13s \n", Title, Price, Discount, Status);
+                String outputStr = String.format("%-30s %-30s %14s %12s %-15s \n", Title,Description, Price, Discount, Status);
                 for (int i = 1; i <= itemlist.getEntry(index).getBeverage().getNumberOfEntries(); ++i) {
                     outputStr += (i) + ". " + itemlist.getEntry(index).getBeverage().getEntry(i) + "\n";
                 }
