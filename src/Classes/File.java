@@ -2,8 +2,6 @@ package Classes;
 
 import ADTs.CircularDoublyLinkedList;
 import ADTs.CircularDoublyLinkedQueue;
-import ADTs.DoublyLinkedList;
-import ADTs.DoublyListInterface;
 import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
@@ -197,33 +195,4 @@ public class File {
         }
         return queue;
     }
-    
-    // SC ADT (Not yet completed)
-//    public static <T> void storeOrder(DoublyListInterface<T> list,String fileName) {
-//        try {
-//            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
-//            ooStream.writeObject(list);
-//            ooStream.close();
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("File not found");
-//        } catch (IOException ex) {
-//            System.out.println("Failed to add order");
-//        }
-//    }
-//    
-//    public static <T> DoublyListInterface<T> retrieveOrder(String fileName){
-//        DoublyListInterface<T> list = new DoublyLinkedList<>();
-//        try {
-//            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
-//            list = (DoublyListInterface<T>) (oiStream.readObject());
-//            oiStream.close();
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("Order file not found");
-//        } catch (IOException ex) {
-//            System.out.println("Cannot read order from file");
-//        } catch (ClassNotFoundException ex) {
-//            System.out.println("Class not found");
-//        }
-//        return list;
-//    }
 }
