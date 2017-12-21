@@ -7,12 +7,38 @@ import java.util.regex.Pattern;
 
 public class Validation {
      public static boolean ValidateItem(String name, double price, double discountrate) {
-        if (!name.isEmpty() && price > 0 && discountrate >= 0) {
+        double Price,DiscountRate;
+         try {
+                Price=price;
+                DiscountRate=discountrate;
+                 if (!name.isEmpty() && Price > 0 && DiscountRate >= 0 && DiscountRate<=100) {
             return true;
         }
+            } catch (NumberFormatException e) {
+                System.out.println("Price & discount rate must be numeric.");
+            }
+        
 
         return false;
     }
+     public static boolean isDuplicateItem(String item,int index,int menuCode){
+         ListInterface<Affiliate> list=File.retrieveList("affiliate.dat");
+         if(menuCode==1){
+         for(int i=1;i<=list.getEntry(index).getFood().getNumberOfEntries();++i){
+             if(list.getEntry(index).getFood().getEntry(i).getName().replace(" ","").equalsIgnoreCase(item.replace(" ","")))
+                 return true;
+         }    
+         }else{
+              for(int i=1;i<=list.getEntry(index).getBeverage().getNumberOfEntries();++i){
+             if(list.getEntry(index).getBeverage().getEntry(i).getName().replace(" ","").equalsIgnoreCase(item.replace(" ","")))
+                 return true;
+         }  
+         }
+         return false;
+         
+         
+     }
+     
     
     public static boolean ValidateAccount(String username, String password, String fileName) {
         boolean isValid = false;
