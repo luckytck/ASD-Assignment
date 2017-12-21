@@ -2,6 +2,8 @@ package Classes;
 
 import ADTs.CircularDoublyLinkedList;
 import ADTs.CircularDoublyLinkedQueue;
+import ADTs.DoublyLinkedList;
+import ADTs.DoublyListInterface;
 import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
@@ -57,7 +59,7 @@ public class File {
            }
         } 
        else {
-            if (itemlist.getEntry(index).getBeverage().isEmpty()) {
+            if (itemlist.getEntry(index).getBeverage().isEmpty()==true) {
                 System.out.println("No item in the list.");
             } else {
                 String Title, Price, Discount, Status;
@@ -73,6 +75,38 @@ public class File {
             }
         }
 
+    }
+   
+    public static void printWholeMenu(int index) {
+        ListInterface<Affiliate> menuList = retrieveList("affiliate.dat");
+        
+        if (menuList.getEntry(index).getFood().isEmpty() == true) {
+            System.out.println("No food in the list.");
+        } 
+        else {
+            System.out.println("Available Food Menu");
+            System.out.println("===================");
+            System.out.println("No.\tFood Name\t\tUnit Price(RM)");
+            for (int a = 1; a <= menuList.getEntry(index).getFood().getNumberOfEntries(); a++) {
+                System.out.println(a + "\t" + menuList.getEntry(index).getFood().getEntry(a).getName() +
+                        "\t\t" + String.format("%.2f",menuList.getEntry(index).getFood().getEntry(a).getPrice()));
+            }
+        }
+        
+        System.out.println("\n\n");
+        
+        if (menuList.getEntry(index).getBeverage().isEmpty() == true) {
+            System.out.println("No beverage in the list.");
+        } 
+        else {
+            System.out.println("Available Beverage Menu");
+            System.out.println("========================");
+            System.out.println("No.\tBeverage Name\t\tUnit Price(RM)");
+            for (int a = 1; a <= menuList.getEntry(index).getFood().getNumberOfEntries(); ++a) {
+                System.out.println(a + "\t" + menuList.getEntry(index).getBeverage().getEntry(a).getName() +
+                        "\t\t" + String.format("%.2f",menuList.getEntry(index).getBeverage().getEntry(a).getPrice()));
+            }
+        }
     }
 
     public static <T> void storeList(ListInterface<T> list, String fileName) {
@@ -157,4 +191,33 @@ public class File {
         }
         return queue;
     }
+    
+    // SC ADT (Not yet completed)
+//    public static <T> void storeOrder(DoublyListInterface<T> list,String fileName) {
+//        try {
+//            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
+//            ooStream.writeObject(list);
+//            ooStream.close();
+//        } catch (FileNotFoundException ex) {
+//            System.out.println("File not found");
+//        } catch (IOException ex) {
+//            System.out.println("Failed to add order");
+//        }
+//    }
+//    
+//    public static <T> DoublyListInterface<T> retrieveOrder(String fileName){
+//        DoublyListInterface<T> list = new DoublyLinkedList<>();
+//        try {
+//            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
+//            list = (DoublyListInterface<T>) (oiStream.readObject());
+//            oiStream.close();
+//        } catch (FileNotFoundException ex) {
+//            System.out.println("Order file not found");
+//        } catch (IOException ex) {
+//            System.out.println("Cannot read order from file");
+//        } catch (ClassNotFoundException ex) {
+//            System.out.println("Class not found");
+//        }
+//        return list;
+//    }
 }
