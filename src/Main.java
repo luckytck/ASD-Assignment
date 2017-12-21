@@ -316,7 +316,24 @@ public class Main {
     }
 
     public static void placeAdHocOrder(String username) {
+        int choice, index;
+        String aff;
+        
+        ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
 
+        System.out.println("No.\t Restaurants");
+        System.out.println("======================");
+        for (int i = 1; i <= affiliateList.getNumberOfEntries(); i++) {
+            System.out.println(i + "\t" + affiliateList.getEntry(i).getRestaurantName());
+        }
+
+        System.out.print("Please select a restaurant:");
+        Scanner readRestaurant = new Scanner(System.in);
+        choice = readRestaurant.nextInt();
+        
+        aff = affiliateList.getEntry(choice).getUsername();
+        index = File.getAffiliateIndex(aff);
+        File.printWholeMenu(index);
     }
 
     public static void makeScheduleOrder(String username) {
