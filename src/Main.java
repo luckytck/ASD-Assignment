@@ -346,9 +346,16 @@ public class Main {
             System.out.println(i + "\t" + affiliateList.getEntry(i).getRestaurantName());
         }
 
-        System.out.print("Please select a restaurant> ");
-        choice = scanner.nextInt();
-        scanner.nextLine();
+        do {
+            System.out.print("Please select a restaurant> ");
+            if (!scanner.hasNext("[1-" + (int) affiliateList.getNumberOfEntries() + "]{1}")) {
+                System.out.println("Please enter valid restaurant");
+            } else {
+                choice = scanner.nextInt();
+            }
+            scanner.nextLine();
+
+        } while (choice < 1 || choice > affiliateList.getNumberOfEntries());
 
         //Get affiliate's details
         aff = affiliateList.getEntry(choice).getUsername();
@@ -357,22 +364,44 @@ public class Main {
         affiliate = (Affiliate) affiliateList.getEntry(index);
         File.printWholeMenu(index);
 
-        System.out.print("Want to order food/beverage? (1=Food, 2=Beverage, 0=Exit)> ");
-        menu = scanner.nextInt();
-        scanner.nextLine();
+        do {
+            System.out.print("Want to order food/beverage? (1=Food, 2=Beverage, 0=Exit)> ");
+
+            menu = scanner.nextInt();
+            scanner.nextLine();
+            if (menu < 0 || menu > 2) {
+                System.out.println("Please enter number between 0 to 2 only");
+            }
+        } while (menu < 0 || menu > 2);
 
         ListInterface<OrderItem> orderMenu = new LinearSinglyLinkedList<>();
         OrderItem order = new OrderItem(); //temperory store the menu which choose by customer
 
         if (menu == 1) {
             do {
-                System.out.print("Please enter your food number> ");
-                food = scanner.nextInt();
-                scanner.nextLine();
+                do {
+                    System.out.print("Please enter your food number> ");
+                    if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getFood().getNumberOfEntries() + "]{1}")) {
+                        System.out.println("Please enter valid food number only");
+                    } else {
+                        food = scanner.nextInt();
 
-                System.out.print("Quantity> ");
-                foodQty = scanner.nextInt();
-                scanner.nextLine();
+                        if (affiliateList.getEntry(index).getFood().getEntry(food).getStatus().equals("Unavailable")) {
+                            System.out.println("This food item unavailable, please choose again.");
+                        }
+                    }
+                    scanner.nextLine();
+                } while (food < 1 || food > affiliateList.getEntry(index).getFood().getNumberOfEntries()
+                        || affiliateList.getEntry(index).getFood().getEntry(food).getStatus().equals("Unavailable"));
+
+                do {
+                    System.out.print("Quantity> ");
+                    foodQty = scanner.nextInt();
+                    scanner.nextLine();
+                    if (foodQty < 1) {
+                        System.out.println("Food quantity cannot less than 1");
+                    }
+                } while (foodQty < 1);
 
                 System.out.print("Any special remark? Please state down> ");
                 foodRemark = scanner.nextLine();
@@ -390,19 +419,36 @@ public class Main {
 
             } while (Character.toUpperCase(more) == 'Y');
 
-            System.out.print("Continue to order beverage?(Y=Yes)");
+            System.out.print("Continue to order beverage?(Y=Yes, N=No)");
             loop = scanner.next().charAt(0);
             scanner.nextLine();
 
             if (Character.toUpperCase(loop) == 'Y') {
                 do {
-                    System.out.print("Please enter your beverage number> ");
-                    beverage = scanner.nextInt();
-                    scanner.nextLine();
+                    do {
+                        System.out.print("Please enter your beverage number> ");
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getBeverage().getNumberOfEntries() + "]{1}")) {
+                            System.out.println("Please enter valid beverage number only");
+                        } else {
+                            beverage = scanner.nextInt();
 
-                    System.out.print("Quantity> ");
-                    beverageQty = scanner.nextInt();
-                    scanner.nextLine();
+                            if (affiliateList.getEntry(index).getBeverage().getEntry(beverage).getStatus().equals("Unavailable")) {
+                                System.out.println("This beverage item unavailable, please choose again.");
+                            }
+                        }
+                        scanner.nextLine();
+
+                    } while (beverage < 1 || beverage > affiliateList.getEntry(index).getBeverage().getNumberOfEntries()
+                            || affiliateList.getEntry(index).getBeverage().getEntry(beverage).getStatus().equals("Unavailable"));
+
+                    do {
+                        System.out.print("Quantity> ");
+                        beverageQty = scanner.nextInt();
+                        scanner.nextLine();
+                        if (beverageQty < 1) {
+                            System.out.println("Beverage quantity cannot less than 1");
+                        }
+                    } while (beverageQty < 1);
 
                     System.out.print("Any special remark? Please state down> ");
                     bvgRemark = scanner.nextLine();
@@ -422,13 +468,30 @@ public class Main {
         } else if (menu == 2) {
 
             do {
-                System.out.print("Please enter your beverage number> ");
-                beverage = scanner.nextInt();
-                scanner.nextLine();
+                do {
+                    System.out.print("Please enter your beverage number> ");
+                    if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getBeverage().getNumberOfEntries() + "]{1}")) {
+                        System.out.println("Please enter valid beverage number only");
+                    } else {
+                        beverage = scanner.nextInt();
 
-                System.out.print("Quantity> ");
-                beverageQty = scanner.nextInt();
-                scanner.nextLine();
+                        if (affiliateList.getEntry(index).getBeverage().getEntry(beverage).getStatus().equals("Unavailable")) {
+                            System.out.println("This beverage item unavailable, please choose again.");
+                        }
+                    }
+                    scanner.nextLine();
+
+                } while (beverage < 1 || beverage > affiliateList.getEntry(index).getBeverage().getNumberOfEntries()
+                        || affiliateList.getEntry(index).getBeverage().getEntry(beverage).getStatus().equals("Unavailable"));
+
+                do {
+                    System.out.print("Quantity> ");
+                    beverageQty = scanner.nextInt();
+                    scanner.nextLine();
+                    if (beverageQty < 1) {
+                        System.out.println("Beverage quantity cannot less than 1");
+                    }
+                } while (beverageQty < 1);
 
                 System.out.print("Any special remark? Please state down> ");
                 bvgRemark = scanner.nextLine();
@@ -446,19 +509,35 @@ public class Main {
 
             } while (Character.toUpperCase(more) == 'Y');
 
-            System.out.print("Continue to order food?(Y=Yes)");
+            System.out.print("Continue to order food?(Y=Yes, N=No)");
             loop = scanner.next().charAt(0);
             scanner.nextLine();
 
             if (Character.toUpperCase(loop) == 'Y') {
                 do {
-                    System.out.print("Please enter your food number> ");
-                    food = scanner.nextInt();
-                    scanner.nextLine();
+                    do {
+                        System.out.print("Please enter your food number> ");
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getFood().getNumberOfEntries() + "]{1}")) {
+                            System.out.println("Please enter valid food number only");
+                        } else {
+                            food = scanner.nextInt();
+                            if (affiliateList.getEntry(index).getFood().getEntry(food).getStatus().equals("Unavailable")) {
+                                System.out.println("This food item unavailable, please choose again.");
+                            }
+                        }
+                        scanner.nextLine();
 
-                    System.out.print("Quantity> ");
-                    foodQty = scanner.nextInt();
-                    scanner.nextLine();
+                    } while (food < 1 || food > affiliateList.getEntry(index).getFood().getNumberOfEntries()
+                            || affiliateList.getEntry(index).getFood().getEntry(food).getStatus().equals("Unavailable"));
+
+                    do {
+                        System.out.print("Quantity> ");
+                        foodQty = scanner.nextInt();
+                        scanner.nextLine();
+                        if (foodQty < 1) {
+                            System.out.println("Food quantity cannot less than 1");
+                        }
+                    } while (foodQty < 1);
 
                     System.out.print("Any special remark? Please state down> ");
                     foodRemark = scanner.nextLine();
