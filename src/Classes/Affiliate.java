@@ -16,6 +16,7 @@ public class Affiliate extends User implements Serializable{
     private String GSTRegNo; //Format - 12-digit number e.g 000130928640
     private String restaurantContactNo; //Format - 03-########
     private Address address;
+      private String sortBy="Newest";
     private ListInterface<MenuItem> food;
     private ListInterface<MenuItem> beverage;
 
@@ -31,8 +32,14 @@ public class Affiliate extends User implements Serializable{
         this.address = address;
         this.food = new LinearSinglyLinkedList<>();
         this.beverage = new LinearSinglyLinkedList<>();
+        this.sortBy="Newest";
     }
-    
+      public String getSortBy(){
+        return sortBy;
+    }
+    public void setSortBy(String sortBy){
+        this.sortBy=sortBy;
+    }
 
     public String getRestaurantName() {
         return restaurantName;
