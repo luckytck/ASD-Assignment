@@ -23,9 +23,9 @@ public class File {
      * @param list an ListInterface being saved into the specified file name
      * @param fileName an String of the file name
      */
-     public static int getAffiliateIndex(String username,String fileName) {
-        ListInterface<User> list= retrieveList(fileName);
-        
+    public static int getAffiliateIndex(String username, String fileName) {
+        ListInterface<User> list = retrieveList(fileName);
+
         int index = -1;
 
         for (int i = 1; i <= list.getNumberOfEntries(); ++i) {
@@ -37,46 +37,97 @@ public class File {
         return index;
 
     }
-      public static ListInterface<MenuItem> sortMenu(int index) {
+
+    public static ListInterface getSortedMenuItem(int index, int menuCode) {
         ListInterface<Affiliate> list = retrieveList("affiliate.dat");
         ListInterface<MenuItem> tempMenu = new LinearSinglyLinkedList<>();
-        if (list.getEntry(index).getSortBy().equalsIgnoreCase("newest")) {
-            StackInterface<MenuItem> menulist = new LinearDoublyLinkedStack<>();
-            for (int i = 1; i <= list.getEntry(index).getFood().getNumberOfEntries(); ++i) {
-                menulist.push(list.getEntry(index).getFood().getEntry(i));
-            }
-
-            while (menulist.pop() != null) {
-                tempMenu.add(menulist.pop());
-            }
-
-        } else {
-            QueueInterface<MenuItem> menulist = new CircularDoublyLinkedQueue<>();
-            int indexAddtoQueue = -1;
-            while (list.getEntry(index).getFood().isEmpty() == false) {
-                double bigest = -1;
+        if (menuCode == 1) {
+            if (list.getEntry(index).getSortBy().equals("Newest")) {
+                StackInterface<MenuItem> menulist = new LinearDoublyLinkedStack<>();
                 for (int i = 1; i <= list.getEntry(index).getFood().getNumberOfEntries(); ++i) {
-                    if ((list.getEntry(index).getFood().getEntry(i).getDiscountRate() * 100) > bigest) {
-                        indexAddtoQueue = i;
-                    }
+                    menulist.push(list.getEntry(index).getFood().getEntry(i));
                 }
-                menulist.enqueue(list.getEntry(index).getFood().getEntry(indexAddtoQueue));
-                list.getEntry(index).getFood().remove(indexAddtoQueue);
-            }
+                int num = 1;
+                while (num <= list.getEntry(index).getFood().getNumberOfEntries()) {
+                    tempMenu.add(menulist.pop());
+                    ++num;
+                }
+                
+            } else if (list.getEntry(index).getSortBy().equals("Promotion")) {
+                ListInterface<MenuItem> menulist = new LinearSinglyLinkedList<>();
+                while (!list.getEntry(index).getFood().isEmpty()) {
+                    int indexAddtoList = -1;
+                    double bigest = -1;
+                    for (int a = 1; a <= list.getEntry(index).getFood().getNumberOfEntries(); ++a) {
 
-            while (menulist.isEmpty() == false) {
-                tempMenu.add(menulist.dequeue());
+                        if (list.getEntry(index).getFood().getEntry(a).getDiscountRate() > bigest) {
+                            bigest = list.getEntry(index).getFood().getEntry(a).getDiscountRate();
+                            indexAddtoList = a;
+                        }
+                    }
+                    menulist.add(list.getEntry(index).getFood().getEntry(indexAddtoList));
+                    list.getEntry(index).getFood().remove(indexAddtoList);
+                }
+                tempMenu = menulist;
+                
             }
+             return tempMenu;
+        } else {
+            if (list.getEntry(index).getSortBy().equals("Newest")) {
+                StackInterface<MenuItem> menulist = new LinearDoublyLinkedStack<>();
+                for (int i = 1; i <= list.getEntry(index).getBeverage().getNumberOfEntries(); ++i) {
+                    menulist.push(list.getEntry(index).getBeverage().getEntry(i));
+                }
+                int num = 1;
+                while (num <= list.getEntry(index).getBeverage().getNumberOfEntries()) {
+                    tempMenu.add(menulist.pop());
+                    ++num;
+                }
+                
+            } else if (list.getEntry(index).getSortBy().equals("Promotion")) {
+                ListInterface<MenuItem> menulist = new LinearSinglyLinkedList<>();
+                while (!list.getEntry(index).getBeverage().isEmpty()) {
+                    int indexAddtoList = -1;
+                    double bigest = -1;
+                    for (int a = 1; a <= list.getEntry(index).getBeverage().getNumberOfEntries(); ++a) {
 
+                        if (list.getEntry(index).getBeverage().getEntry(a).getDiscountRate() > bigest) {
+                            bigest = list.getEntry(index).getBeverage().getEntry(a).getDiscountRate();
+                            indexAddtoList = a;
+                        }
+                    }
+                    menulist.add(list.getEntry(index).getBeverage().getEntry(indexAddtoList));
+                    list.getEntry(index).getBeverage().remove(indexAddtoList);
+                }
+                tempMenu = menulist;
+                 
+            }
+            return tempMenu;
         }
-
-        return tempMenu;
-
+    
+    }
+    public static int getDatMenuItemIndex(int index,int menuCode,int choice){
+        ListInterface<Affiliate> list = retrieveList("affiliate.dat");
+        ListInterface<MenuItem> tempMenu=getSortedMenuItem(index,menuCode);
+        int datIndex=-1;
+        if (menuCode == 1) {
+            for (int i = 1; i <=list.getEntry(index).getFood().getNumberOfEntries(); ++i) {
+                if (list.getEntry(index).getFood().getEntry(i).getName().equals(tempMenu.getEntry(choice).getName())) {
+                    datIndex= i;
+                }
+            }
+        } else {
+            for (int i = 1; i <= list.getEntry(index).getBeverage().getNumberOfEntries(); ++i) {
+                if (list.getEntry(index).getBeverage().getEntry(i).getName().equals(tempMenu.getEntry(choice).getName())) {
+                    datIndex= i;
+                }
+            }
+        }
+        return datIndex;
     }
 
-   
-   public static void printMenuItem(int index, int menuCode) {
-       ListInterface<Affiliate> list = retrieveList("affiliate.dat");
+    public static void printMenuItem(int index, int menuCode) {
+        ListInterface<Affiliate> list = retrieveList("affiliate.dat");
 
         if (menuCode == 1) {
             System.out.println("Food           sort by " + list.getEntry(index).getSortBy());
@@ -97,30 +148,30 @@ public class File {
                         menulist.push(list.getEntry(index).getFood().getEntry(i));
                     }
                     int num = 1;
-                    while (num<=list.getEntry(index).getFood().getNumberOfEntries()) {
+                    while (num <= list.getEntry(index).getFood().getNumberOfEntries()) {
                         outputStr += num + ". " + menulist.pop() + "\n";
                         ++num;
                     }
                     System.out.println(outputStr);
                 } else if (list.getEntry(index).getSortBy().equals("Promotion")) {
-                    ListInterface<MenuItem> menulist =new LinearSinglyLinkedList<>();
-                                   
+                    ListInterface<MenuItem> menulist = new LinearSinglyLinkedList<>();
+
                     while (!list.getEntry(index).getFood().isEmpty()) {
-                           int indexAddtoList = -1;
+                        int indexAddtoList = -1;
                         double bigest = -1;
                         for (int a = 1; a <= list.getEntry(index).getFood().getNumberOfEntries(); ++a) {
 
                             if (list.getEntry(index).getFood().getEntry(a).getDiscountRate() > bigest) {
-                                bigest=list.getEntry(index).getFood().getEntry(a).getDiscountRate();
+                                bigest = list.getEntry(index).getFood().getEntry(a).getDiscountRate();
                                 indexAddtoList = a;
                             }
                         }
                         menulist.add(list.getEntry(index).getFood().getEntry(indexAddtoList));
                         list.getEntry(index).getFood().remove(indexAddtoList);
                     }
-                   
-                    for(int i=1;i<=menulist.getNumberOfEntries();++i){
-                        outputStr += i + ". " + menulist.getEntry(i)+ "\n";
+
+                    for (int i = 1; i <= menulist.getNumberOfEntries(); ++i) {
+                        outputStr += i + ". " + menulist.getEntry(i) + "\n";
                     }
                     System.out.println(outputStr);
                 }
@@ -138,76 +189,74 @@ public class File {
                 Discount = "Discount(%)";
                 Status = "Status";
                 String outputStr = String.format("%-30s %-30s %14s %12s %-15s \n", Title, Description, Price, Discount, Status);
-               if (list.getEntry(index).getBeverage().isEmpty() == true) {
-                System.out.println("No item in the list.");
-            } else {
-                if (list.getEntry(index).getSortBy().equals("Newest")) {
-                    StackInterface<MenuItem> menulist = new LinearDoublyLinkedStack<>();
-                    for (int i = 1; i <= list.getEntry(index).getBeverage().getNumberOfEntries(); ++i) {
-                        menulist.push(list.getEntry(index).getBeverage().getEntry(i));
-                    }
-                    int num = 1;
-                    while (num<=list.getEntry(index).getBeverage().getNumberOfEntries()) {
-                        outputStr += num + ". " + menulist.pop() + "\n";
-                        ++num;
-                    }
-                    System.out.println(outputStr);
-                } else if (list.getEntry(index).getSortBy().equals("Promotion")) {
-                    ListInterface<MenuItem> menulist =new LinearSinglyLinkedList<>();
-                                   
-                    while (!list.getEntry(index).getBeverage().isEmpty()) {
-                           int indexAddtoList = -1;
-                        double bigest = -1;
-                        for (int a = 1; a <= list.getEntry(index).getBeverage().getNumberOfEntries(); ++a) {
-
-                            if (list.getEntry(index).getBeverage().getEntry(a).getDiscountRate() > bigest) {
-                                bigest=list.getEntry(index).getBeverage().getEntry(a).getDiscountRate();
-                                indexAddtoList = a;
-                            }
+                if (list.getEntry(index).getBeverage().isEmpty() == true) {
+                    System.out.println("No item in the list.");
+                } else {
+                    if (list.getEntry(index).getSortBy().equals("Newest")) {
+                        StackInterface<MenuItem> menulist = new LinearDoublyLinkedStack<>();
+                        for (int i = 1; i <= list.getEntry(index).getBeverage().getNumberOfEntries(); ++i) {
+                            menulist.push(list.getEntry(index).getBeverage().getEntry(i));
                         }
-                        menulist.add(list.getEntry(index).getBeverage().getEntry(indexAddtoList));
-                        list.getEntry(index).getBeverage().remove(indexAddtoList);
+                        int num = 1;
+                        while (num <= list.getEntry(index).getBeverage().getNumberOfEntries()) {
+                            outputStr += num + ". " + menulist.pop() + "\n";
+                            ++num;
+                        }
+                        System.out.println(outputStr);
+                    } else if (list.getEntry(index).getSortBy().equals("Promotion")) {
+                        ListInterface<MenuItem> menulist = new LinearSinglyLinkedList<>();
+
+                        while (!list.getEntry(index).getBeverage().isEmpty()) {
+                            int indexAddtoList = -1;
+                            double bigest = -1;
+                            for (int a = 1; a <= list.getEntry(index).getBeverage().getNumberOfEntries(); ++a) {
+
+                                if (list.getEntry(index).getBeverage().getEntry(a).getDiscountRate() > bigest) {
+                                    bigest = list.getEntry(index).getBeverage().getEntry(a).getDiscountRate();
+                                    indexAddtoList = a;
+                                }
+                            }
+                            menulist.add(list.getEntry(index).getBeverage().getEntry(indexAddtoList));
+                            list.getEntry(index).getBeverage().remove(indexAddtoList);
+                        }
+
+                        for (int i = 1; i <= menulist.getNumberOfEntries(); ++i) {
+                            outputStr += i + ". " + menulist.getEntry(i) + "\n";
+                        }
+                        System.out.println(outputStr);
                     }
-                   
-                    for(int i=1;i<=menulist.getNumberOfEntries();++i){
-                        outputStr += i + ". " + menulist.getEntry(i)+ "\n";
-                    }
-                    System.out.println(outputStr);
                 }
-            }
             }
         }
 
     }
-   
+
     public static void printWholeMenu(int index) {
         ListInterface<Affiliate> menuList = retrieveList("affiliate.dat");
-        
+
         if (menuList.getEntry(index).getFood().isEmpty() == true) {
             System.out.println("No food in the list.");
-        } 
-        else {
+        } else {
             System.out.println("\nAvailable Food Menu");
             System.out.println("===================");
             System.out.println("No.\tFood Name\t\tUnit Price(RM)");
             for (int a = 1; a <= menuList.getEntry(index).getFood().getNumberOfEntries(); a++) {
-                System.out.println(a + "\t" + menuList.getEntry(index).getFood().getEntry(a).getName() +
-                        "\t\t" + String.format("%.2f",menuList.getEntry(index).getFood().getEntry(a).getPrice()));
+                System.out.println(a + "\t" + menuList.getEntry(index).getFood().getEntry(a).getName()
+                        + "\t\t" + String.format("%.2f", menuList.getEntry(index).getFood().getEntry(a).getPrice()));
             }
         }
-        
+
         System.out.println("\n");
-        
+
         if (menuList.getEntry(index).getBeverage().isEmpty() == true) {
             System.out.println("No beverage in the list.");
-        } 
-        else {
+        } else {
             System.out.println("Available Beverage Menu");
             System.out.println("========================");
             System.out.println("No.\tBeverage Name\t\tUnit Price(RM)");
             for (int a = 1; a <= menuList.getEntry(index).getFood().getNumberOfEntries(); ++a) {
-                System.out.println(a + "\t" + menuList.getEntry(index).getBeverage().getEntry(a).getName() +
-                        "\t\t" + String.format("%.2f",menuList.getEntry(index).getBeverage().getEntry(a).getPrice()));
+                System.out.println(a + "\t" + menuList.getEntry(index).getBeverage().getEntry(a).getName()
+                        + "\t\t" + String.format("%.2f", menuList.getEntry(index).getBeverage().getEntry(a).getPrice()));
             }
         }
     }
@@ -223,8 +272,6 @@ public class File {
             System.out.println("Cannot save to file");
         }
     }
-
-   
 
     public static <T> ListInterface<T> retrieveList(String fileName) {
         ListInterface<T> list = new CircularDoublyLinkedList<>();
@@ -250,8 +297,6 @@ public class File {
      * @return a reference to the indicated list or null, if either file does
      * not exist or the file does not contains a list
      */
-  
-
     /**
      * Task: Store a new queue to a specified file name within the project
      * directory.
