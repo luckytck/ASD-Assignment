@@ -12,6 +12,7 @@ import Classes.File;
 import Classes.File;
 
 import Classes.Order;
+import Classes.OrderItem;
 import Classes.User;
 import Classes.Validation;
 import java.io.FileInputStream;
@@ -20,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -314,25 +316,208 @@ public class Main {
         } while (loop[0] == true);
     }
 
-    public static void placeAdHocOrder(String username) {
-        int choice, index;
-        String aff;
+        public static void placeAdHocOrder(String username) {
+
+        //Get customer's details
+        ListInterface<Customer> customerList = File.retrieveList(CUSTOMERFILE);
+        Customer customer = new Customer();
+        for (int i = 1; i <= customerList.getNumberOfEntries(); i++) {
+
+            if(customerList.getEntry(i).getUsername().equals(username)){
+                int custIndex = i;
+                customer = (Customer)customerList.getEntry(custIndex);
+            }
+        }
 
         ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
-
+        String aff;
+        
+        //Get user choice of food & beverage
+        int choice = 0, menu = 0, food = 0, foodQty = 0, beverage = 0, beverageQty = 0, index;
+        String foodRemark,bvgRemark;
+        double totalPrice = 0;
+        char more, loop = 0, confirm;
+        GregorianCalendar orderDate = new GregorianCalendar();
+        Scanner scanner = new Scanner(System.in);
+        
         System.out.println("No.\t Restaurants");
         System.out.println("======================");
         for (int i = 1; i <= affiliateList.getNumberOfEntries(); i++) {
             System.out.println(i + "\t" + affiliateList.getEntry(i).getRestaurantName());
         }
 
-        System.out.print("Please select a restaurant:");
-        Scanner readRestaurant = new Scanner(System.in);
-        choice = readRestaurant.nextInt();
-
+        System.out.print("Please select a restaurant> ");
+        choice = scanner.nextInt();
+        scanner.nextLine();
+        
+        //Get affiliate's details
         aff = affiliateList.getEntry(choice).getUsername();
-        index = File.getAffiliateIndex(aff, AFFILIATEFILE);
+        index = File.getAffiliateIndex(aff,AFFILIATEFILE);
+        Affiliate affiliate = new Affiliate();
+        affiliate = (Affiliate)affiliateList.getEntry(index);
         File.printWholeMenu(index);
+        
+        System.out.print("Want to order food/beverage? (1=Food, 2=Beverage, 0=Exit)> ");
+        menu = scanner.nextInt();
+        scanner.nextLine();
+
+        ListInterface<OrderItem> orderMenu = new LinearSinglyLinkedList<>();
+        OrderItem order = new OrderItem(); //temperory store the menu which choose by customer
+        
+        if (menu == 1) {
+            do {
+                System.out.print("Please enter your food number> ");
+                food = scanner.nextInt();
+                scanner.nextLine();
+
+                System.out.print("Quantity> ");
+                foodQty = scanner.nextInt();
+                scanner.nextLine();
+                
+                System.out.print("Any special remark? Please state down> ");
+                foodRemark = scanner.nextLine();
+                
+                int datIndex = File.getDatMenuItemIndex(index, menu, food);
+                order.setMenuItem(affiliateList.getEntry(index).getFood().getEntry(datIndex));
+                order.setQuantity(foodQty);
+                order.setRemark(foodRemark);
+                orderMenu.add(order);
+                order = new OrderItem();
+
+                System.out.print("Choose other food? (Y=Yes, N=No)> ");
+                more = scanner.next().charAt(0);
+                scanner.nextLine();
+
+            } while (Character.toUpperCase(more) == 'Y');
+
+            System.out.print("Continue to order beverage?(Y=Yes)");
+            loop = scanner.next().charAt(0);
+            scanner.nextLine();
+
+            if (Character.toUpperCase(loop) == 'Y') {
+                do {
+                    System.out.print("Please enter your beverage number> ");
+                    beverage = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    System.out.print("Quantity> ");
+                    beverageQty = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    System.out.print("Any special remark? Please state down> ");
+                    bvgRemark = scanner.nextLine();
+                    
+                    int datIndex = File.getDatMenuItemIndex(index, menu, beverage);
+                    order.setMenuItem(affiliateList.getEntry(index).getBeverage().getEntry(datIndex));
+                    order.setQuantity(beverageQty);
+                    order.setRemark(bvgRemark);
+                    orderMenu.add(order);
+                    order = new OrderItem();
+
+                    System.out.print("Choose other beverage? (Y=Yes, N=No)> ");
+                    more = scanner.next().charAt(0);
+                    scanner.nextLine();
+                } while (Character.toUpperCase(more) == 'Y');
+            }
+        } else if (menu == 2) {
+
+            do {
+                System.out.print("Please enter your beverage number> ");
+                beverage = scanner.nextInt();
+                scanner.nextLine();
+                
+                System.out.print("Quantity> ");
+                beverageQty = scanner.nextInt();
+                scanner.nextLine();
+                
+                System.out.print("Any special remark? Please state down> ");
+                bvgRemark = scanner.nextLine();
+                
+                int datIndex = File.getDatMenuItemIndex(index, menu, beverage);
+                order.setMenuItem(affiliateList.getEntry(index).getBeverage().getEntry(datIndex));
+                order.setQuantity(beverageQty);
+                order.setRemark(bvgRemark);
+                orderMenu.add(order);
+                order = new OrderItem();
+
+                System.out.print("Choose other beverage? (Y=Yes, N=No)> ");
+                more = scanner.next().charAt(0);
+                scanner.nextLine();
+
+            } while (Character.toUpperCase(more) == 'Y');
+
+            System.out.print("Continue to order food?(Y=Yes)");
+            loop = scanner.next().charAt(0);
+            scanner.nextLine();
+
+            if (Character.toUpperCase(loop) == 'Y') {
+                do {
+                    System.out.print("Please enter your food number> ");
+                    food = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    System.out.print("Quantity> ");
+                    foodQty = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    System.out.print("Any special remark? Please state down> ");
+                    foodRemark = scanner.nextLine();
+                    
+                    int datIndex = File.getDatMenuItemIndex(index, menu, food);
+                    order.setMenuItem(affiliateList.getEntry(index).getFood().getEntry(datIndex));
+                    order.setQuantity(foodQty);
+                    order.setRemark(foodRemark);
+                    orderMenu.add(order);
+                    order = new OrderItem();
+                    
+                    System.out.print("Choose other food? (Y=Yes, N=No)> ");
+                    more = scanner.next().charAt(0);
+                    scanner.nextLine();
+
+                } while (Character.toUpperCase(more) == 'Y');
+            }
+        }
+        
+        else if(menu == 0){
+            System.out.println("Thanks for using this function. See you again~");
+            System.exit(0);
+        }
+        
+        System.out.println("CONFIRM YOUR ORDER:");
+        System.out.println("===================");
+        System.out.println("No.\tItem\t\t\tUnit Price\tDiscount Price\t\tQuantity\tSub Total");
+        for(int i = 1; i <= orderMenu.getNumberOfEntries(); ++i){
+            System.out.println(i + "\t" + orderMenu.getEntry(i).getMenuItem().getName() + 
+                    "\t\t" + String.format("%.2f", orderMenu.getEntry(i).getMenuItem().getPrice()) +
+                    "\t\t" + String.format("%.2f", orderMenu.getEntry(i).calPriceAfterDiscount()) +
+                    "\t\t\t" + orderMenu.getEntry(i).getQuantity() +
+                    "\t\t" + String.format("%.2f", orderMenu.getEntry(i).calSubTotal()));
+            totalPrice += orderMenu.getEntry(i).calSubTotal();
+        }
+        System.out.println("\n");
+        System.out.println("Total Price: RM" + String.format("%.2f",totalPrice));
+        System.out.print("Confirm order? (Y=Yes, N=No)> ");
+        confirm = scanner.next().charAt(0);
+        scanner.nextLine();
+       
+        if (Character.toUpperCase(confirm) == 'Y') {
+            ListInterface<Order> orderList = File.retrieveList(ORDERFILE);
+            Order.setNextOrderNo(1000 + orderList.getNumberOfEntries());
+
+            QueueInterface<Order> orderQueue = File.retrieveQueue(PENDINGDELIVERYFILE);
+
+            Order confirmOrder = new Order(orderMenu, customer, affiliate, orderDate);
+            orderList.add(confirmOrder);
+            File.storeList(orderList, ORDERFILE);
+
+            orderQueue.enqueue(confirmOrder);
+            File.storeQueue(orderQueue, PENDINGDELIVERYFILE);
+            
+            System.out.println("Your order stored successfully. Thank you!");
+        } 
+        else {
+            System.out.println("Thanks for using this function");
+        }  
     }
 
     public static void makeScheduleOrder(String username) {
