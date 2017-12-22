@@ -316,30 +316,30 @@ public class Main {
         } while (loop[0] == true);
     }
 
-        public static void placeAdHocOrder(String username) {
+    public static void placeAdHocOrder(String username) {
 
         //Get customer's details
         ListInterface<Customer> customerList = File.retrieveList(CUSTOMERFILE);
         Customer customer = new Customer();
         for (int i = 1; i <= customerList.getNumberOfEntries(); i++) {
 
-            if(customerList.getEntry(i).getUsername().equals(username)){
+            if (customerList.getEntry(i).getUsername().equals(username)) {
                 int custIndex = i;
-                customer = (Customer)customerList.getEntry(custIndex);
+                customer = (Customer) customerList.getEntry(custIndex);
             }
         }
 
         ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
         String aff;
-        
+
         //Get user choice of food & beverage
         int choice = 0, menu = 0, food = 0, foodQty = 0, beverage = 0, beverageQty = 0, index;
-        String foodRemark,bvgRemark;
+        String foodRemark, bvgRemark;
         double totalPrice = 0;
         char more, loop = 0, confirm;
         GregorianCalendar orderDate = new GregorianCalendar();
         Scanner scanner = new Scanner(System.in);
-        
+
         System.out.println("No.\t Restaurants");
         System.out.println("======================");
         for (int i = 1; i <= affiliateList.getNumberOfEntries(); i++) {
@@ -349,21 +349,21 @@ public class Main {
         System.out.print("Please select a restaurant> ");
         choice = scanner.nextInt();
         scanner.nextLine();
-        
+
         //Get affiliate's details
         aff = affiliateList.getEntry(choice).getUsername();
-        index = File.getAffiliateIndex(aff,AFFILIATEFILE);
+        index = File.getAffiliateIndex(aff, AFFILIATEFILE);
         Affiliate affiliate = new Affiliate();
-        affiliate = (Affiliate)affiliateList.getEntry(index);
+        affiliate = (Affiliate) affiliateList.getEntry(index);
         File.printWholeMenu(index);
-        
+
         System.out.print("Want to order food/beverage? (1=Food, 2=Beverage, 0=Exit)> ");
         menu = scanner.nextInt();
         scanner.nextLine();
 
         ListInterface<OrderItem> orderMenu = new LinearSinglyLinkedList<>();
         OrderItem order = new OrderItem(); //temperory store the menu which choose by customer
-        
+
         if (menu == 1) {
             do {
                 System.out.print("Please enter your food number> ");
@@ -373,10 +373,10 @@ public class Main {
                 System.out.print("Quantity> ");
                 foodQty = scanner.nextInt();
                 scanner.nextLine();
-                
+
                 System.out.print("Any special remark? Please state down> ");
                 foodRemark = scanner.nextLine();
-                
+
                 int datIndex = File.getDatMenuItemIndex(index, menu, food);
                 order.setMenuItem(affiliateList.getEntry(index).getFood().getEntry(datIndex));
                 order.setQuantity(foodQty);
@@ -399,14 +399,14 @@ public class Main {
                     System.out.print("Please enter your beverage number> ");
                     beverage = scanner.nextInt();
                     scanner.nextLine();
-                    
+
                     System.out.print("Quantity> ");
                     beverageQty = scanner.nextInt();
                     scanner.nextLine();
-                    
+
                     System.out.print("Any special remark? Please state down> ");
                     bvgRemark = scanner.nextLine();
-                    
+
                     int datIndex = File.getDatMenuItemIndex(index, menu, beverage);
                     order.setMenuItem(affiliateList.getEntry(index).getBeverage().getEntry(datIndex));
                     order.setQuantity(beverageQty);
@@ -425,14 +425,14 @@ public class Main {
                 System.out.print("Please enter your beverage number> ");
                 beverage = scanner.nextInt();
                 scanner.nextLine();
-                
+
                 System.out.print("Quantity> ");
                 beverageQty = scanner.nextInt();
                 scanner.nextLine();
-                
+
                 System.out.print("Any special remark? Please state down> ");
                 bvgRemark = scanner.nextLine();
-                
+
                 int datIndex = File.getDatMenuItemIndex(index, menu, beverage);
                 order.setMenuItem(affiliateList.getEntry(index).getBeverage().getEntry(datIndex));
                 order.setQuantity(beverageQty);
@@ -455,51 +455,49 @@ public class Main {
                     System.out.print("Please enter your food number> ");
                     food = scanner.nextInt();
                     scanner.nextLine();
-                    
+
                     System.out.print("Quantity> ");
                     foodQty = scanner.nextInt();
                     scanner.nextLine();
-                    
+
                     System.out.print("Any special remark? Please state down> ");
                     foodRemark = scanner.nextLine();
-                    
+
                     int datIndex = File.getDatMenuItemIndex(index, menu, food);
                     order.setMenuItem(affiliateList.getEntry(index).getFood().getEntry(datIndex));
                     order.setQuantity(foodQty);
                     order.setRemark(foodRemark);
                     orderMenu.add(order);
                     order = new OrderItem();
-                    
+
                     System.out.print("Choose other food? (Y=Yes, N=No)> ");
                     more = scanner.next().charAt(0);
                     scanner.nextLine();
 
                 } while (Character.toUpperCase(more) == 'Y');
             }
-        }
-        
-        else if(menu == 0){
+        } else if (menu == 0) {
             System.out.println("Thanks for using this function. See you again~");
             System.exit(0);
         }
-        
+
         System.out.println("CONFIRM YOUR ORDER:");
         System.out.println("===================");
         System.out.println("No.\tItem\t\t\tUnit Price\tDiscount Price\t\tQuantity\tSub Total");
-        for(int i = 1; i <= orderMenu.getNumberOfEntries(); ++i){
-            System.out.println(i + "\t" + orderMenu.getEntry(i).getMenuItem().getName() + 
-                    "\t\t" + String.format("%.2f", orderMenu.getEntry(i).getMenuItem().getPrice()) +
-                    "\t\t" + String.format("%.2f", orderMenu.getEntry(i).calPriceAfterDiscount()) +
-                    "\t\t\t" + orderMenu.getEntry(i).getQuantity() +
-                    "\t\t" + String.format("%.2f", orderMenu.getEntry(i).calSubTotal()));
+        for (int i = 1; i <= orderMenu.getNumberOfEntries(); ++i) {
+            System.out.println(i + "\t" + orderMenu.getEntry(i).getMenuItem().getName()
+                    + "\t\t" + String.format("%.2f", orderMenu.getEntry(i).getMenuItem().getPrice())
+                    + "\t\t" + String.format("%.2f", orderMenu.getEntry(i).calPriceAfterDiscount())
+                    + "\t\t\t" + orderMenu.getEntry(i).getQuantity()
+                    + "\t\t" + String.format("%.2f", orderMenu.getEntry(i).calSubTotal()));
             totalPrice += orderMenu.getEntry(i).calSubTotal();
         }
         System.out.println("\n");
-        System.out.println("Total Price: RM" + String.format("%.2f",totalPrice));
+        System.out.println("Total Price: RM" + String.format("%.2f", totalPrice));
         System.out.print("Confirm order? (Y=Yes, N=No)> ");
         confirm = scanner.next().charAt(0);
         scanner.nextLine();
-       
+
         if (Character.toUpperCase(confirm) == 'Y') {
             ListInterface<Order> orderList = File.retrieveList(ORDERFILE);
             Order.setNextOrderNo(1000 + orderList.getNumberOfEntries());
@@ -512,12 +510,11 @@ public class Main {
 
             orderQueue.enqueue(confirmOrder);
             File.storeQueue(orderQueue, PENDINGDELIVERYFILE);
-            
+
             System.out.println("Your order stored successfully. Thank you!");
-        } 
-        else {
+        } else {
             System.out.println("Thanks for using this function");
-        }  
+        }
     }
 
     public static void makeScheduleOrder(String username) {
@@ -533,129 +530,135 @@ public class Main {
         int index = File.getAffiliateIndex(username, AFFILIATEFILE);
 
         ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
-        int choice;
+        int choice = -1;
         do {
             System.out.println("Which type of menu you want to add? :");
             System.out.println("1.Food");
             System.out.println("2.Beverage");
             System.out.print("Enter the number of your choice :");
-            choice = scanner.nextInt();
-            switch (choice) {
-                case 1: {
+            if (!scanner.hasNext("[12]{1}")) {
+                System.out.println("\nPlease enter integer.");
+            } else {
+                choice = scanner.nextInt();
 
-                    File.printMenuItem(index, choice);
+                switch (choice) {
+                    case 1: {
 
-                    System.out.print("Do you want to add new item?(Yes=Y)");
-                    char answer2 = scanner.next().charAt(0);
-                    scanner.nextLine();
+                        File.printMenuItem(index, choice);
 
-                    if (Character.toUpperCase(answer2) == 'Y') {
-                        String Name, description;
-                        double price = -1;
-                        double discountrate = -1;
+                        System.out.print("Do you want to add new item?(Yes=Y)");
+                        char answer2 = scanner.next().charAt(0);
+                        scanner.nextLine();
 
-                        do {
-                            System.out.print("Item's Name:");
-                            Name = scanner.nextLine();
+                        if (Character.toUpperCase(answer2) == 'Y') {
+                            String Name, description;
+                            double price = -1;
+                            double discountrate = -1;
 
-                            System.out.print("Description :");
-                            description = scanner.nextLine();
-                            System.out.print("Price:");
-                            price = scanner.nextDouble();
-                            scanner.nextLine();
-                            System.out.print("Discount(%):");
-                            discountrate = scanner.nextDouble();
-                            scanner.nextLine();
-                            if (!Classes.Validation.ValidateItem(Name, price, discountrate)) {
-                                System.out.println("Invalid input, please enter again.");
-                                System.out.println("\n");
+                            do {
+                                System.out.print("Item's Name:");
+                                Name = scanner.nextLine();
+
+                                System.out.print("Description :");
+                                description = scanner.nextLine();
+                                System.out.print("Price:");
+                                price = scanner.nextDouble();
+                                scanner.nextLine();
+                                System.out.print("Discount(%):");
+                                discountrate = scanner.nextDouble();
+                                scanner.nextLine();
+                                if (!Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                                    System.out.println("Invalid input, please enter again.");
+                                    System.out.println("\n");
+                                }
+                            } while (!Classes.Validation.ValidateItem(Name, price, discountrate));
+
+                            if (Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                                if (!Classes.Validation.isDuplicateItem(Name, index, choice)) {
+                                    MenuItem item = new MenuItem();
+                                    item.setName(Name);
+                                    item.setPrice(price);
+                                    item.setDiscountRate(discountrate);
+                                    item.setStatus("Available");
+                                    item.setDescription(description);
+                                    affiliateList.getEntry(index).getFood().add(item);
+                                    File.storeList(affiliateList, AFFILIATEFILE);
+
+                                    System.out.println("Your item has been added successful.");
+
+                                    File.printMenuItem(index, choice);
+                                } else {
+                                    System.out.println("\nFailed to add, this item already exist.");
+                                }
+
                             }
-                        } while (!Classes.Validation.ValidateItem(Name, price, discountrate));
-
-                        if (Classes.Validation.ValidateItem(Name, price, discountrate)) {
-                            if (!Classes.Validation.isDuplicateItem(Name, index, choice)) {
-                                MenuItem item = new MenuItem();
-                                item.setName(Name);
-                                item.setPrice(price);
-                                item.setDiscountRate(discountrate);
-                                item.setStatus("Available");
-                                item.setDescription(description);
-                                affiliateList.getEntry(index).getFood().add(item);
-                                File.storeList(affiliateList, AFFILIATEFILE);
-
-                                System.out.println("Your item has been added successful.");
-
-                                File.printMenuItem(index, choice);
-                            } else {
-                                System.out.println("\nFailed to add, this item already exist.");
-                            }
-
+                        } else {
+                            System.out.println("Thanks for using.");
                         }
-                    } else {
-                        System.out.println("Thanks for using.");
+                        break;
                     }
-                    break;
-                }
-                case 2: {
+                    case 2: {
 
-                    File.printMenuItem(index, choice);
+                        File.printMenuItem(index, choice);
 
-                    System.out.print("Do you want to add new item?(Yes=Y)");
-                    char answer2 = scanner.next().charAt(0);
-                    scanner.nextLine();
+                        System.out.print("Do you want to add new item?(Yes=Y)");
+                        char answer2 = scanner.next().charAt(0);
+                        scanner.nextLine();
 
-                    if (Character.toUpperCase(answer2) == 'Y') {
-                        String Name, description;
-                        double price = -1;
-                        double discountrate = -1;
-                        do {
-                            System.out.print("Item's Name:");
-                            Name = scanner.nextLine();
+                        if (Character.toUpperCase(answer2) == 'Y') {
+                            String Name, description;
+                            double price = -1;
+                            double discountrate = -1;
+                            do {
+                                System.out.print("Item's Name:");
+                                Name = scanner.nextLine();
 
-                            System.out.print("Description :");
-                            description = scanner.nextLine();
-                            System.out.print("Price:");
-                            price = scanner.nextDouble();
-                            scanner.nextLine();
-                            System.out.print("Discount(%):");
-                            discountrate = scanner.nextDouble();
-                            scanner.nextLine();
-                            if (!Classes.Validation.ValidateItem(Name, price, discountrate)) {
-                                System.out.println("Invalid input, please enter again.");
-                                System.out.println("\n");
+                                System.out.print("Description :");
+                                description = scanner.nextLine();
+                                System.out.print("Price:");
+                                price = scanner.nextDouble();
+                                scanner.nextLine();
+                                System.out.print("Discount(%):");
+                                discountrate = scanner.nextDouble();
+                                scanner.nextLine();
+                                if (!Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                                    System.out.println("Invalid input, please enter again.");
+                                    System.out.println("\n");
+                                }
+                            } while (!Classes.Validation.ValidateItem(Name, price, discountrate));
+                            if (Classes.Validation.ValidateItem(Name, price, discountrate)) {
+                                if (!Classes.Validation.isDuplicateItem(Name, index, choice)) {
+                                    MenuItem item = new MenuItem();
+                                    item.setName(Name);
+                                    item.setPrice(price);
+                                    item.setDiscountRate(discountrate);
+                                    item.setStatus("Available");
+                                    item.setDescription(description);
+                                    affiliateList.getEntry(index).getBeverage().add(item);
+
+                                    File.storeList(affiliateList, AFFILIATEFILE);
+
+                                    System.out.println("Your item has been added successful.");
+
+                                    File.printMenuItem(index, choice);
+                                } else {
+                                    System.out.println("\nFailed to add, this item already exist.");
+                                }
+
                             }
-                        } while (!Classes.Validation.ValidateItem(Name, price, discountrate));
-                        if (Classes.Validation.ValidateItem(Name, price, discountrate)) {
-                            if (!Classes.Validation.isDuplicateItem(Name, index, choice)) {
-                                MenuItem item = new MenuItem();
-                                item.setName(Name);
-                                item.setPrice(price);
-                                item.setDiscountRate(discountrate);
-                                item.setStatus("Available");
-                                item.setDescription(description);
-                                affiliateList.getEntry(index).getBeverage().add(item);
-
-                                File.storeList(affiliateList, AFFILIATEFILE);
-
-                                System.out.println("Your item has been added successful.");
-
-                                File.printMenuItem(index, choice);
-                            } else {
-                                System.out.println("\nFailed to add, this item already exist.");
-                            }
-
+                        } else {
+                            System.out.println("Thanks for using.");
                         }
-                    } else {
-                        System.out.println("Thanks for using.");
-                    }
 
-                    break;
-                }
-                default: {
-                    System.out.println("Invalid Input.");
-                    break;
+                        break;
+                    }
+                    default: {
+                        System.out.println("Invalid Input.");
+                        break;
+                    }
                 }
             }
+            scanner.nextLine();
         } while (choice != 1 && choice != 2);
     }
 
@@ -672,15 +675,12 @@ public class Main {
             System.out.println("3.Update item discount rate");
             System.out.println("4.Set the menu display order");
             System.out.print("Enter the number of your choice:");
-            try {
-                choice[0] = scanner.nextInt();
-                scanner.nextLine();
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a nummeric.");
-            }
-            if (choice[0] != 1 && choice[0] != 2 && choice[0] != 3 && choice[0] != 4) {
+            if (!scanner.hasNext("[1-4]{1}")) {
                 System.out.println("\nPlease enter the number that within the range.");
+            } else {
+                choice[0] = scanner.nextInt();
             }
+            scanner.nextLine();
         } while (choice[0] != 1 && choice[0] != 2 && choice[0] != 3 && choice[0] != 4);
 
         if (choice[0] == 4) {
@@ -690,15 +690,13 @@ public class Main {
                 System.out.println("1.Newest");
                 System.out.println("2.Promotion");
                 System.out.print("Enter your selection (by default is newest):");
-                try {
-                    choice[2] = scanner.nextInt();
-                    scanner.nextLine();
-                } catch (NumberFormatException e) {
-                    System.out.println("Please enter a nummeric.");
-                }
-                if (choice[2] != 1 && choice[2] != 2) {
+
+                if (!scanner.hasNext("[1-2]{1}")) {
                     System.out.println("\nPlease enter the number that within the range.");
+                } else {
+                    choice[2] = scanner.nextInt();
                 }
+                scanner.nextLine();
             } while (choice[2] != 1 && choice[2] != 2);
             if (choice[2] > 0 && choice[2] < 3) {
                 String sortby;
@@ -720,15 +718,13 @@ public class Main {
                 System.out.println("1.Food");
                 System.out.println("2.Beverage");
                 System.out.print("Enter the number of your choice :");
-                try {
-                    choice[1] = scanner.nextInt();
-                    scanner.nextLine();
-                } catch (NumberFormatException e) {
-                    System.out.println("Please enter a nummeric.");
-                }
-                if (choice[1] != 1 && choice[1] != 2) {
+
+                if (!scanner.hasNext("[1-2]{1}")) {
                     System.out.println("\nPlease enter the number that within the range.");
+                } else {
+                    choice[1] = scanner.nextInt();
                 }
+                scanner.nextLine();
             } while (choice[1] != 1 && choice[1] != 2);
             boolean foodEmpty = false;
             boolean beverageEmpty = false;
@@ -745,15 +741,12 @@ public class Main {
 
                     do {
                         System.out.print("Choose an item to update the price :");
-                        try {
-                            choice[2] = scanner.nextInt();
-                            scanner.nextLine();
-                        } catch (NumberFormatException e) {
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getFood().getNumberOfEntries() + "]{1}")) {
                             System.out.println("please enter a valid input.");
+                        } else {
+                            choice[2] = scanner.nextInt();
                         }
-                        if (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
-                            System.out.println("Invalid Input! Please enter a valid input.");
-                        }
+                        scanner.nextLine();
                     } while (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getFood().getNumberOfEntries());
                     if (choice[2] > 0 && choice[2] <= affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
                         double price = -1;
@@ -785,15 +778,12 @@ public class Main {
                     File.printMenuItem(index, choice[1]);
                     do {
                         System.out.print("Choose an item to update the price :");
-                        try {
-                            choice[2] = scanner.nextInt();
-                            scanner.nextLine();
-                        } catch (NumberFormatException e) {
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getBeverage().getNumberOfEntries() + "]{1}")) {
                             System.out.println("please enter a valid input.");
+                        } else {
+                            choice[2] = scanner.nextInt();
                         }
-                        if (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
-                            System.out.println("Invalid Input! Please enter a valid input.");
-                        }
+                        scanner.nextLine();
                     } while (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getBeverage().getNumberOfEntries());
                     if (choice[2] > 0 && choice[2] <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
                         double price = -1;
@@ -825,15 +815,12 @@ public class Main {
                     File.printMenuItem(index, choice[1]);
                     do {
                         System.out.print("Choose an item to update the description :");
-                        try {
-                            choice[2] = scanner.nextInt();
-                            scanner.nextLine();
-                        } catch (NumberFormatException e) {
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getFood().getNumberOfEntries() + "]{1}")) {
                             System.out.println("please enter a valid input.");
+                        } else {
+                            choice[2] = scanner.nextInt();
                         }
-                        if (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
-                            System.out.println("Invalid Input! Please enter a valid input.");
-                        }
+                        scanner.nextLine();
                     } while (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getFood().getNumberOfEntries());
                     if (choice[2] > 0 && choice[2] <= affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
                         String description;
@@ -854,15 +841,12 @@ public class Main {
                     File.printMenuItem(index, choice[1]);
                     do {
                         System.out.print("Choose an item to update the description :");
-                        try {
-                            choice[2] = scanner.nextInt();
-                            scanner.nextLine();
-                        } catch (NumberFormatException e) {
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getBeverage().getNumberOfEntries() + "]{1}")) {
                             System.out.println("please enter a valid input.");
+                        } else {
+                            choice[2] = scanner.nextInt();
                         }
-                        if (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
-                            System.out.println("Invalid Input! Please enter a valid input.");
-                        }
+                        scanner.nextLine();
                     } while (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getBeverage().getNumberOfEntries());
                     if (choice[2] > 0 && choice[2] <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
                         String description;
@@ -883,15 +867,12 @@ public class Main {
                     File.printMenuItem(index, choice[1]);
                     do {
                         System.out.print("Choose an item to update the discount rate :");
-                        try {
-                            choice[2] = scanner.nextInt();
-                            scanner.nextLine();
-                        } catch (NumberFormatException e) {
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getFood().getNumberOfEntries() + "]{1}")) {
                             System.out.println("please enter a valid input.");
+                        } else {
+                            choice[2] = scanner.nextInt();
                         }
-                        if (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
-                            System.out.println("Invalid Input! Please enter a valid input.");
-                        }
+                        scanner.nextLine();
                     } while (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getFood().getNumberOfEntries());
                     if (choice[2] > 0 && choice[2] <= affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
                         double discount = -1;
@@ -922,15 +903,12 @@ public class Main {
                     File.printMenuItem(index, choice[1]);
                     do {
                         System.out.print("Choose an item to update the discount rate :");
-                        try {
-                            choice[2] = scanner.nextInt();
-                            scanner.nextLine();
-                        } catch (NumberFormatException e) {
+                        if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getBeverage().getNumberOfEntries() + "]{1}")) {
                             System.out.println("please enter a valid input.");
+                        } else {
+                            choice[2] = scanner.nextInt();
                         }
-                        if (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
-                            System.out.println("Invalid Input! Please enter a valid input.");
-                        }
+                        scanner.nextLine();
                     } while (choice[2] < 1 || choice[2] > affiliateList.getEntry(index).getBeverage().getNumberOfEntries());
                     if (choice[2] > 0 && choice[2] <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
                         double discount = -1;
@@ -966,81 +944,84 @@ public class Main {
         String down = "Unavailable";
         int index = File.getAffiliateIndex(username, AFFILIATEFILE);
         ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
-        int choice;
+        int choice = -1;
         do {
             System.out.println("Which type of menu item you want to change status? :");
             System.out.println("1.Food");
             System.out.println("2.Beverage");
             System.out.print("Enter the number of your choice :");
-            choice = scanner.nextInt();
-            switch (choice) {
-                case 1: {
-                    int choice2;
-                    File.printMenuItem(index, choice);
-                    if (affiliateList.getEntry(index).getFood().isEmpty() == false) {
-                        do {
-                            System.out.print("Enter the index of item that you want to change status:");
-                            choice2 = scanner.nextInt();
-                            scanner.nextLine();
-                            if (choice2 > 0 && choice2 <= affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
-                                int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
-                                if (affiliateList.getEntry(index).getFood().getEntry(datIndex).getStatus().equalsIgnoreCase(up)) {
-                                    affiliateList.getEntry(index).getFood().getEntry(datIndex).setStatus(down);
-                                } else {
-                                    affiliateList.getEntry(index).getFood().getEntry(datIndex).setStatus(up);
-                                }
-
-                            } else {
-                                System.out.println("Invalid Input! Please enter a valid input.");
-                            }
-
-                        } while (choice2 < 1 || choice2 > affiliateList.getEntry(index).getFood().getNumberOfEntries());
-                        File.storeList(affiliateList, AFFILIATEFILE);
-                        File.printMenuItem(index, choice);
-                        System.out.println("\nStatus of the particular item has been changed.");
-                    } else {
-                        System.out.println("\nPlease add in some items.");
-                    }
-
-                    break;
-                }
-                case 2: {
-                    int choice2;
-                    File.printMenuItem(index, choice);
-                    if (affiliateList.getEntry(index).getBeverage().isEmpty() == false) {
-                        do {
-                            System.out.print("Enter the index of item that you want to change status:");
-                            choice2 = scanner.nextInt();
-                            scanner.nextLine();
-                            if (choice2 > 0 && choice2 <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
-                                int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
-                                if (affiliateList.getEntry(index).getBeverage().getEntry(datIndex).getStatus().equalsIgnoreCase(up)) {
-                                    affiliateList.getEntry(index).getBeverage().getEntry(datIndex).setStatus(down);
-                                } else {
-                                    affiliateList.getEntry(index).getBeverage().getEntry(datIndex).setStatus(up);
-                                }
-
-                            } else {
-                                System.out.println("Invalid Input! Please enter a valid input.");
-                            }
-
-                        } while (choice2 < 1 || choice2 > affiliateList.getEntry(index).getBeverage().getNumberOfEntries());
-                        File.storeList(affiliateList, AFFILIATEFILE);
-                        File.printMenuItem(index, choice);
-                        System.out.println("\nStatus of the particular item has been changed.");
-                        break;
-                    } else {
-                        System.out.println("\nPlease add in some items.");
-                    }
-                }
-                default: {
-                    break;
-                }
-
-            }
-            if (choice != 1 && choice != 2) {
+            if (!scanner.hasNext("[1-2]{1}")) {
                 System.out.println("Invalid Input.");
+            } else {
+                choice = scanner.nextInt();
+                switch (choice) {
+                    case 1: {
+                        int choice2 = -1;
+                        File.printMenuItem(index, choice);
+                        if (affiliateList.getEntry(index).getFood().isEmpty() == false) {
+                            do {
+                                System.out.print("Enter the index of item that you want to change status:");
+                                if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getFood().getNumberOfEntries() + "]{1}")) {
+                                    System.out.println("Invalid Input! Please enter a valid input.");
+                                } else {
+                                    choice2 = scanner.nextInt();
+                                }
+                                if (choice2 > 0 && choice2 <= affiliateList.getEntry(index).getFood().getNumberOfEntries()) {
+                                    int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
+                                    if (affiliateList.getEntry(index).getFood().getEntry(datIndex).getStatus().equalsIgnoreCase(up)) {
+                                        affiliateList.getEntry(index).getFood().getEntry(datIndex).setStatus(down);
+                                    } else {
+                                        affiliateList.getEntry(index).getFood().getEntry(datIndex).setStatus(up);
+                                    }
+                                }
+                                scanner.nextLine();
+                            } while (choice2 < 1 || choice2 > affiliateList.getEntry(index).getFood().getNumberOfEntries());
+                            File.storeList(affiliateList, AFFILIATEFILE);
+                            File.printMenuItem(index, choice);
+                            System.out.println("\nStatus of the particular item has been changed.");
+                        } else {
+                            System.out.println("\nPlease add in some items.");
+                        }
+
+                        break;
+                    }
+                    case 2: {
+                        int choice2 = -1;
+                        File.printMenuItem(index, choice);
+                        if (affiliateList.getEntry(index).getBeverage().isEmpty() == false) {
+                            do {
+                                System.out.print("Enter the index of item that you want to change status:");
+                                if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getBeverage().getNumberOfEntries() + "]{1}")) {
+                                    System.out.println("Invalid Input! Please enter a valid input.");
+                                } else {
+                                    choice2 = scanner.nextInt();
+                                }
+
+                                if (choice2 > 0 && choice2 <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries()) {
+                                    int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
+                                    if (affiliateList.getEntry(index).getBeverage().getEntry(datIndex).getStatus().equalsIgnoreCase(up)) {
+                                        affiliateList.getEntry(index).getBeverage().getEntry(datIndex).setStatus(down);
+                                    } else {
+                                        affiliateList.getEntry(index).getBeverage().getEntry(datIndex).setStatus(up);
+                                    }
+
+                                }
+                                scanner.nextLine();
+                            } while (choice2 < 1 || choice2 > affiliateList.getEntry(index).getBeverage().getNumberOfEntries());
+                            File.storeList(affiliateList, AFFILIATEFILE);
+                            File.printMenuItem(index, choice);
+                            System.out.println("\nStatus of the particular item has been changed.");
+                            break;
+                        } else {
+                            System.out.println("\nPlease add in some items.");
+                        }
+                    }
+                    default: {
+                        break;
+                    }
+                }
             }
+            scanner.nextLine();
         } while (choice != 1 && choice != 2);
 
     }
@@ -1049,84 +1030,90 @@ public class Main {
         ListInterface<Affiliate> affiliateList = File.retrieveList(AFFILIATEFILE);
         int index = File.getAffiliateIndex(username, AFFILIATEFILE);
         Scanner scanner = new Scanner(System.in);
-        int choice;
+        int choice = -1;
         do {
             System.out.println("Which type of menu item you want to delete? :");
             System.out.println("1.Food");
             System.out.println("2.Beverage");
             System.out.print("Enter the number of your choice :");
-            choice = scanner.nextInt();
-            switch (choice) {
-                case 1: {
-                    int choice2;
-                    boolean deleted = false;
-                    File.printMenuItem(index, choice);
-                    if (affiliateList.getEntry(index).getFood().isEmpty() == false) {
-                        do {
-                            System.out.print("Enter the index of item that you want to delete :");
-                            choice2 = scanner.nextInt();
-                            scanner.nextLine();
-                            if (choice2 <= affiliateList.getEntry(index).getFood().getNumberOfEntries() && choice2 > 0) {
-
-                                deleted = true;
-
-                            } else {
-                                System.out.println("Invalid Input! Please enter a valid input.");
-                            }
-                        } while (choice2 > affiliateList.getEntry(index).getFood().getNumberOfEntries() || choice2 < 1);
-
-                        if (deleted) {
-                            int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
-                            affiliateList.getEntry(index).getFood().remove(datIndex);
-                            File.storeList(affiliateList, AFFILIATEFILE);
-                            File.printMenuItem(index, choice);
-                            System.out.println("\nThe particular item has been deleted.");
-
-                        }
-                    } else {
-                        System.out.println("\nPlease add in some items.");
-                    }
-                    break;
-                }
-                case 2: {
-                    int choice2;
-                    boolean deleted = false;
-                    File.printMenuItem(index, choice);
-                    if (affiliateList.getEntry(index).getBeverage().isEmpty() == false) {
-                        do {
-                            System.out.print("Enter the index of item that you want to delete :");
-                            choice2 = scanner.nextInt();
-                            scanner.nextLine();
-                            if (choice2 <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries() && choice2 > 0) {
-
-                                deleted = true;
-
-                            } else {
-                                System.out.println("Invalid Input! Please enter a valid input.");
-                            }
-                        } while (affiliateList.getEntry(index).getBeverage().getNumberOfEntries() < choice2 || choice2 < 1);
-
-                        if (deleted) {
-                            int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
-                            affiliateList.getEntry(index).getBeverage().remove(datIndex);
-                            File.storeList(affiliateList, AFFILIATEFILE);
-                            File.printMenuItem(index, choice);
-                            System.out.println("\nThe particular item has been deleted.");
-                        }
-                    } else {
-                        System.out.println("\nPlease add in some items.");
-                    }
-                    break;
-                }
-                default: {
-
-                    break;
-                }
-
-            }
-            if (choice != 1 && choice != 2) {
+            if (!scanner.hasNext("[1-2]{1}")) {
                 System.out.println("Invalid Input.");
+            } else {
+                choice = scanner.nextInt();
+                switch (choice) {
+                    case 1: {
+                        int choice2 = -1;
+                        boolean deleted = false;
+                        File.printMenuItem(index, choice);
+                        if (affiliateList.getEntry(index).getFood().isEmpty() == false) {
+                            do {
+                                System.out.print("Enter the index of item that you want to delete :");
+                                if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getFood().getNumberOfEntries() + "]{1}")) {
+                                    System.out.println("Invalid Input! Please enter a valid input.");
+                                } else {
+                                    choice2 = scanner.nextInt();
+                                }
+                                if (choice2 <= affiliateList.getEntry(index).getFood().getNumberOfEntries() && choice2 > 0) {
+
+                                    deleted = true;
+
+                                }
+                                scanner.nextLine();
+                            } while (choice2 > affiliateList.getEntry(index).getFood().getNumberOfEntries() || choice2 < 1);
+
+                            if (deleted) {
+                                int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
+                                affiliateList.getEntry(index).getFood().remove(datIndex);
+                                File.storeList(affiliateList, AFFILIATEFILE);
+                                File.printMenuItem(index, choice);
+                                System.out.println("\nThe particular item has been deleted.");
+
+                            }
+                        } else {
+                            System.out.println("\nPlease add in some items.");
+                        }
+                        break;
+                    }
+                    case 2: {
+                        int choice2 = -1;
+                        boolean deleted = false;
+                        File.printMenuItem(index, choice);
+                        if (affiliateList.getEntry(index).getBeverage().isEmpty() == false) {
+                            do {
+                                System.out.print("Enter the index of item that you want to delete :");
+                                if (!scanner.hasNext("[1-" + affiliateList.getEntry(index).getBeverage().getNumberOfEntries() + "]{1}")) {
+                                    System.out.println("Invalid Input! Please enter a valid input.");
+                                } else {
+                                    choice2 = scanner.nextInt();
+                                }
+                                if (choice2 <= affiliateList.getEntry(index).getBeverage().getNumberOfEntries() && choice2 > 0) {
+
+                                    deleted = true;
+
+                                }
+                                scanner.nextLine();
+                            } while (affiliateList.getEntry(index).getBeverage().getNumberOfEntries() < choice2 || choice2 < 1);
+
+                            if (deleted) {
+                                int datIndex = File.getDatMenuItemIndex(index, choice, choice2);
+                                affiliateList.getEntry(index).getBeverage().remove(datIndex);
+                                File.storeList(affiliateList, AFFILIATEFILE);
+                                File.printMenuItem(index, choice);
+                                System.out.println("\nThe particular item has been deleted.");
+                            }
+                        } else {
+                            System.out.println("\nPlease add in some items.");
+                        }
+                        break;
+                    }
+                    default: {
+
+                        break;
+                    }
+                }
             }
+            scanner.nextLine();
+
         } while (choice != 1 && choice != 2);
     }
 
