@@ -584,7 +584,7 @@ public class Main {
                             }
                             if (price > -1) {                      
                                 for(int i=1;i<=affiliateList.getEntry(index).getFood().getNumberOfEntries();++i){
-                                    if(affiliateList.getEntry(index).getFood().getEntry(i).getName().equalsIgnoreCase(menu.getEntry(choice[2]).getName()))
+                                    if(affiliateList.getEntry(index).getFood().getEntry(i).getName().equals(menu.getEntry(choice[2]).getName()))
                                         affiliateList.getEntry(index).getFood().getEntry(i).setPrice(price);
                                 }
                                 File.storeList(affiliateList, AFFILIATEFILE);
