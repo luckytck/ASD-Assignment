@@ -6,6 +6,7 @@ import ADTs.LinearDoublyLinkedStack;
 import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
+import ADTs.QueueLinkedList;
 import ADTs.StackInterface;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -390,6 +391,34 @@ public class File {
      */
     public static <T> QueueInterface<T> retrieveQueue(String fileName) {
         QueueInterface<T> queue = new CircularDoublyLinkedQueue<>();
+        try {
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
+            queue = (QueueInterface<T>) (oiStream.readObject());
+            oiStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot read from file");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found");
+        }
+        return queue;
+    }
+    
+    public static <T> void storeOrder(QueueInterface<T> queue, String fileName) {
+        try {
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
+            ooStream.writeObject(queue);
+            ooStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot save to file");
+        }
+    }
+    
+    public static <T> QueueInterface<T> retrieveOrder(String fileName) {
+        QueueInterface<T> queue = new QueueLinkedList<>();
         try {
             ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
             queue = (QueueInterface<T>) (oiStream.readObject());

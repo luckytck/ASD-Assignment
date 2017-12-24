@@ -16,6 +16,10 @@ public class QueueLinkedList <T> implements QueueInterface<T>, Serializable{
     private Node firstNode, lastNode;
     private int numberOfEntries;
     
+    public QueueLinkedList() {
+        clear();
+    }
+        
     private class Node implements Serializable {
 
         private T data;
@@ -31,10 +35,6 @@ public class QueueLinkedList <T> implements QueueInterface<T>, Serializable{
         }
     }
 
-    public QueueLinkedList() {
-        clear();
-    }
-    
     @Override
     public void enqueue(T newEntry) {
         Node newNode = new Node(newEntry);
