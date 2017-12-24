@@ -12,7 +12,8 @@ import Classes.DeliveryMan;
 import Classes.MenuItem;
 import Classes.File;
 import Classes.File;
-
+import ADTs.LinearDoublyLinkedList;
+import ADTs.LinearDoublyListInterface;
 import Classes.Order;
 import Classes.OrderItem;
 import Classes.User;
@@ -197,12 +198,14 @@ public class Main {
                                                     } else if (selection[2] == 2) {
                                                         //TODO: Clock Out
                                                         clockOut(username);
+                                                        loop[3] = true;
                                                     } else if (selection[2] == 3) {
                                                         //TODO: Retrieve Customer Details
                                                         retrieveCustomerDetails();
                                                     } else if (selection[2] == 4) {
                                                         //TODO: Update Working Status
                                                         updateWorkingStatus(username);
+                                                        loop[3] = true;
                                                     } else {//Logout
                                                         loop[0] = true;
                                                     }
@@ -371,7 +374,7 @@ public class Main {
 
         ListInterface<OrderItem> orderMenu = new LinearSinglyLinkedList<>();
         OrderItem order = new OrderItem(); //temperory store the menu which choose by customer
-            
+
         do {
             do {
                 System.out.print("Order food/beverage? (1=Food, 2=Beverage, 0=Exit)> ");
@@ -507,7 +510,7 @@ public class Main {
 
             System.out.println("Your order stored successfully.");
             System.out.println("Your meal will be delivered within 1 hour. Thank you!");
-           
+
         } else {
             System.out.println("Thanks for using this function, please come again~");
         }
@@ -518,7 +521,67 @@ public class Main {
     }
 
     public static void trackOrder(String username) {
+        ListInterface<Order> orderList = File.retrieveList(ORDERFILE);
 
+        Scanner scanner = new Scanner(System.in);
+        GregorianCalendar currentDate = new GregorianCalendar();
+        boolean gotRecord = false;
+
+        System.out.println("Track Food Order");
+        System.out.println("===========");
+
+        if (!orderList.isEmpty()) {
+            System.out.println("Order No \t Restaurant \t\t Order Date \t Order Time \t Order Status \t\t Estimated Remaining Time ");
+            for (int i = 1; i <= orderList.getNumberOfEntries(); i++) {
+
+                if (username.equalsIgnoreCase(orderList.getEntry(i).getCustomer().getUsername())) {
+
+                    GregorianCalendar orderDate = orderList.getEntry(i).getOrderDate();
+
+                    if (orderDate.get(Calendar.DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)
+                            && orderDate.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH)
+                            && orderDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR)) {
+
+                        long hour = (currentDate.get(Calendar.HOUR_OF_DAY) - orderDate.get(Calendar.HOUR_OF_DAY)) * 60;
+                        long minutes = currentDate.get(Calendar.MINUTE) - orderDate.get(Calendar.MINUTE);
+                        long seconds = (currentDate.get(Calendar.SECOND) - orderDate.get(Calendar.SECOND)) / 60;
+
+                        long diff = 60 - (hour + minutes + seconds);
+
+                        if (diff > 60) {
+                            System.out.println(orderList.getEntry(i).getOrderNo() + "\t" + orderList.getEntry(i).getAffiliate().getRestaurantName() + "\t\t" + orderList.getEntry(i).printOrderDate()
+                                    + "\t" + orderList.getEntry(i).printOrderTime() + "\t" + orderList.getEntry(i).getStatus() + "\t\t" + " delivered");
+
+                        } else if (diff < 60 && diff > 0) {
+                            System.out.println(orderList.getEntry(i).getOrderNo() + "\t" + orderList.getEntry(i).getAffiliate().getRestaurantName() + "\t" + orderList.getEntry(i).printOrderDate()
+                                    + "\t" + orderList.getEntry(i).printOrderTime() + "\t" + orderList.getEntry(i).getStatus() + "\t" + diff + " minute(s)");
+                            gotRecord = true;
+                        }
+                    }
+
+                }
+            }
+
+            if (gotRecord == false) {
+                System.out.println("You have no food order.");
+                System.out.println("You will be returned back to operation list in 2 seconds...");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+        } else {
+            System.out.println("You have no food order.");
+            System.out.println("You will be returned back to operation list in 2 seconds...");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+        }
     }
 
     private static void addNewItems(String username) {
@@ -1115,7 +1178,7 @@ public class Main {
 
     private static void clockIn(String username) {
         ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
-        ListInterface<Clocking> clockingList = File.retrieveList(CLOCKINGFILE);
+        LinearDoublyListInterface<Clocking> clockingList = File.retrieveFromList(CLOCKINGFILE);
         GregorianCalendar currentDate = new GregorianCalendar();
         Scanner scanner = new Scanner(System.in);
         String checkUsername;
@@ -1157,7 +1220,7 @@ public class Main {
                         File.storeList(deliveryManList, DELIVERYMANFILE);
                         clocking = new Clocking(deliveryManList.getEntry(i), currentDate);
                         clockingList.add(clocking);
-                        File.storeList(clockingList, CLOCKINGFILE);
+                        File.storeToList(clockingList, CLOCKINGFILE);
                     }
                 } else if (selection.matches("n")) {
                     System.out.println("Clock In has been cancelled");
@@ -1168,7 +1231,7 @@ public class Main {
 
     private static void clockOut(String username) {
         ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
-        ListInterface<Clocking> clockingList = File.retrieveList(CLOCKINGFILE);
+        LinearDoublyListInterface<Clocking> clockingList = File.retrieveFromList(CLOCKINGFILE);
         GregorianCalendar currentDate = new GregorianCalendar();
         Scanner scanner = new Scanner(System.in);
         Clocking clocking = new Clocking();
@@ -1203,6 +1266,12 @@ public class Main {
                     }
                     if (isClockIn == false) {
                         System.out.println("You are haven't clock in!!");
+                        System.out.println("You will be returned back to operation list in 2 seconds...");
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            Thread.currentThread().interrupt();
+                        }
                     } else {
                         System.out.println("Clock Out successfully!!");
                         System.out.println("Your Clock Out Time for " + Clocking.printDate(currentDate) + " is " + Clocking.printTime(currentDate));
@@ -1211,7 +1280,7 @@ public class Main {
                         File.storeList(deliveryManList, DELIVERYMANFILE);
                         clocking = new Clocking(deliveryManList.getEntry(i), clocking.getClockInTime(), currentDate);
                         clockingList.add(clocking);
-                        File.storeList(clockingList, CLOCKINGFILE);
+                        File.storeToList(clockingList, CLOCKINGFILE);
                         isClockOut = true;
                     }
                 } else if (selection.matches("n")) {
@@ -1269,7 +1338,7 @@ public class Main {
     }
 
     private static void updateWorkingStatus(String username) {
-        ListInterface<Clocking> clockingList = File.retrieveList(CLOCKINGFILE);
+        LinearDoublyListInterface<Clocking> clockingList = File.retrieveFromList(CLOCKINGFILE);
         ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
         GregorianCalendar currentDate = new GregorianCalendar();
         GregorianCalendar clockInDate = null;
@@ -1307,7 +1376,7 @@ public class Main {
                         System.out.println("=======================");
                         System.out.println("1. Available");
                         System.out.println("2. Break");
-                        System.out.println("3. Delivering");
+                        System.out.println("3. Delivery");
                         System.out.print("Enter selection (-1 to exit): ");
 
                         try {
@@ -1357,6 +1426,12 @@ public class Main {
                         }
                     } else {
                         System.out.println("You are haven't clock in");
+                        System.out.println("You will be returned back to operation list in 2 seconds...");
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
 
                 }
@@ -1370,7 +1445,6 @@ public class Main {
         QueueInterface<Order> orderQueue = File.retrieveQueue(PENDINGDELIVERYFILE);
         ListInterface<DeliveryMan> deliveryManList = File.retrieveList(DELIVERYMANFILE);
         ListInterface<Delivery> deliveryList = File.retrieveList(DELIVERYFILE);
-//        QueueInterface<DeliveryMan> deliveryManQueue = File.retrieveQueue(DELIVERYMANFILE);
         System.out.println("RETRIEVE PENDING DELIVERY");
         System.out.println("=========================");
         System.out.print("Retrieve next pending delivery? (Y=Yes): ");
@@ -1398,11 +1472,7 @@ public class Main {
                     if (deliveryManList.getEntry(i).getWorkingStatus().equals("Available")) {
                         entry = i;
                         isFound = true;
-                    } else {
-                        System.out.println("There are no availalble delivery man");
-                        break;
                     }
-
                 }
                 if (isFound == true) {
                     //store in deliveryman
@@ -1411,19 +1481,15 @@ public class Main {
 
                     //store in delivery
                     delivery.setDeliveryMan(deliveryManList.getEntry(entry));
-                    delivery.setOrder(order);
-                    delivery.setDeliveryDate(order.getOrderDate());
-                    delivery.setDeliveredTime(order.getOrderDate());
-                    delivery.setDeliveryNo(getNext);
-                    delivery.setStatus("delivery");
-                    delivery.setDistanceTravelled(2000);
-                    deliveryList.add(delivery);
-//                        deliveryList.clear();
                     File.storeList(deliveryList, DELIVERYFILE);
 
                     System.out.println("Delivery Man : " + deliveryManList.getEntry(entry).getName());
+                    File.storeQueue(orderQueue, PENDINGDELIVERYFILE);
 
-                    break;
+                } else if (isFound == false) {
+                    System.out.println("Sorry, there are no available delivery man");
+//                    File.storeQueue(orderQueue, PENDINGDELIVERYFILE);
+                    System.exit(0);
                 }
 
                 System.out.println("---------------------------------------------------------------------");
@@ -1431,7 +1497,7 @@ public class Main {
                 getNext = scanner.next().charAt(0);
             } else {
                 System.out.println("Well done!! All pending deliveries have been assigned.");
-                File.storeQueue(orderQueue, PENDINGDELIVERYFILE);
+//                File.storeQueue(orderQueue, PENDINGDELIVERYFILE);
                 break;
             }
         }

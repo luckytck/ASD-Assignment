@@ -2,7 +2,9 @@ package Classes;
 
 import ADTs.CircularDoublyLinkedList;
 import ADTs.CircularDoublyLinkedQueue;
+import ADTs.LinearDoublyLinkedList;
 import ADTs.LinearDoublyLinkedStack;
+import ADTs.LinearDoublyListInterface;
 import ADTs.LinearSinglyLinkedList;
 import ADTs.ListInterface;
 import ADTs.QueueInterface;
@@ -431,5 +433,33 @@ public class File {
             System.out.println("Class not found");
         }
         return queue;
+    }
+    
+        public static <T> void storeToList(LinearDoublyListInterface<T> doublylist, String fileName) {
+        try {
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(fileName));
+            ooStream.writeObject(doublylist);
+            ooStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot save to file");
+        }
+    }
+
+    public static <T> LinearDoublyListInterface<T> retrieveFromList(String fileName) {
+        LinearDoublyListInterface<T> doublylist = new LinearDoublyLinkedList<>();
+        try {
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(fileName));
+            doublylist = (LinearDoublyListInterface<T>) (oiStream.readObject());
+            oiStream.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } catch (IOException ex) {
+            System.out.println("Cannot read from file");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found");
+        }
+        return doublylist;
     }
 }
