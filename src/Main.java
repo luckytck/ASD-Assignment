@@ -463,6 +463,7 @@ public class Main {
                     System.out.print("Choose other beverage? (Y=Yes, N=No)> ");
                     more = scanner.next().charAt(0);
                     scanner.nextLine();
+
                 } while (Character.toUpperCase(more) == 'Y');
             }
         } else if (menu == 2) {
